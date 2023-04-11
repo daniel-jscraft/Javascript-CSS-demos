@@ -22,11 +22,12 @@
 
 	<script type="text/javascript" charset="utf-8">
         class RightClickHolder {
-            constructor(el, callback) {
+            constructor(el, callback, time) {
                 this.el = el
                 this.callback = callback
                 this.isHeld = false
-                this.timeOut = null
+                this.time = time
+                this.timeoutPointer = null
                 this.#setupListeners()
             }
             
@@ -41,23 +42,26 @@
             #onHoldStart() {
                 this.isHeld = true
                 setTimeout(
-                ()=> this.callback()
-                , 2000 )
+                    ()=> this.callback()
+                , this.time )
             }
             
             #onHoldEnd() {
                 this.isHeld = false
             }
             
-            static listen(el, callback) {
-                new RightClickHolder(el, callback)
+            static listen(el, callback, time) {
+                new RightClickHolder(el, callback, time)
             }
         }
 
-        const myDiv = document.querySelector('div')
+        const myDiv = document.querySelector('#myDiv')
         RightClickHolder.listen(
-            myDiv, ()=> myDiv.classList.add("active")
+            myDiv, 
+            ()=> myDiv.classList.add("active"), 
+            2000
         )
+
 	</script>
 
 </body>
