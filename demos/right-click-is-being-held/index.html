@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>
+		Check if right click is being held
+	</title>
+</head>
+<body>
+
+	<h1>
+		...
+	</h1>
+
+	<div></div>
+
+	<script type="text/javascript" charset="utf-8">
+        class RightClickHolder {
+            constructor(el, callback) {
+                this.el = el
+                this.callback = callback
+                this.isHeld = false
+                this.timeOut = null
+                this.#setupListeners()
+            }
+            
+            #setupListeners() {
+                this.el.addEventListener('contextmenu', (e)=> {
+                e.preventDefault()
+                this.#onHoldStart()
+                })
+                this.el.addEventListener('mouseup', this.#onHoldEnd.bind(this))
+            }
+            
+            #onHoldStart() {
+                this.isHeld = true
+                setTimeout(
+                ()=> this.callback()
+                , 2000 )
+            }
+            
+            #onHoldEnd() {
+                this.isHeld = false
+            }
+            
+            static listen(el, callback) {
+                new RightClickHolder(el, callback)
+            }
+        }
+
+        const myDiv = document.querySelector('div')
+        RightClickHolder.listen(
+            myDiv, ()=> myDiv.classList.add("active")
+        )
+	</script>
+
+</body>
+</html>
