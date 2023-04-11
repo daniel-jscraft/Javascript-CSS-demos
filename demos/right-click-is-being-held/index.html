@@ -22,6 +22,7 @@
 
 	<script type="text/javascript" charset="utf-8">
         class RightClickHolder {
+  
             constructor(el, callback, time) {
                 this.el = el
                 this.callback = callback
@@ -41,13 +42,14 @@
             
             #onHoldStart() {
                 this.isHeld = true
-                setTimeout(
-                    ()=> this.callback()
+                this.timeoutPointer = setTimeout(
+                ()=> this.callback()
                 , this.time )
             }
             
             #onHoldEnd() {
                 this.isHeld = false
+                clearTimeout(this.timeoutPointer)
             }
             
             static listen(el, callback, time) {
