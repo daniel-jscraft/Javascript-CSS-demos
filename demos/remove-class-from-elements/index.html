@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove-class-from-elements</title>
+    <style>
+
+        div {
+            max-width: 200px;
+            margin: 0.5rem;
+        }
+        button {
+            display: block;
+            margin: 0.5rem;
+        }
+        .blue-container {
+            padding: 0.5rem;
+            border: 1px solid #4692ec;
+        }
+
+        .red {
+            border: 1px solid orangered;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        Lorem ipsum dolor sit 
+        <span class="red">Temporibus</span>, illo id quas 
+        magnam cum <span class="red">dignissimos</span> reiciendis.
+    </div>
+    <div class="blue-container">
+        <h4>🟦 The blue container</h4>
+        <ul>
+            <li class="red">Item one</li>
+            <li>Item two</li>
+            <li class="red">Item three</li>
+        </ul>
+    </div>
+    <button onclick="removeClassFromOneElement()">
+        Remove .red the 🟦 container
+    </button>
+    <button onclick="removeClassFromAllElements()">
+        Remove .red the 📄 all the page
+    </button>
+
+    <script>
+        const removeClassFromOneElement = (target) => {
+            target = target || document.querySelector('.blue-container')
+            const allElements = target.querySelectorAll('*')
+            allElements.forEach(el => el.classList.remove('red'))
+        }
+
+        const removeClassFromAllElements = () => {
+            const allElements = document.querySelectorAll('*')
+            allElements.forEach(el => el.classList.remove('red'))
+        }
+    </script>
+</body>
+</html>
