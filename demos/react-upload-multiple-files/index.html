@@ -58,13 +58,22 @@
                     <li key={i}>{f.name} - {f.type}</li>
                 ))}
             </ol>)
-        
+
+            const renderButtonStatus = () => (
+                (status === STATUS_IDLE) ? 
+                    'Send to server' : 
+                    <img src = "./load.svg" />
+            )
 
             return (<div>
-                <input type="file" onChange={(e)=> setFiles(e.target.files)} multiple />
+                <input
+                    type="file"
+                    accept="image/*" 
+                    multiple
+                    onChange={(e)=> setFiles(e.target.files)} />
                 {renderFileList()}
                 <button onClick={handleUploadClick}>
-                    {(status === STATUS_IDLE) ? 'Send to server' : <img src = "./load.svg" />}
+                    {renderButtonStatus()}
                 </button>
             </div>)
         }
@@ -81,4 +90,5 @@
     mutiple
     style ?
     Limit file types
+    type of retunred data
 -->
