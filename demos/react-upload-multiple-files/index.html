@@ -12,15 +12,71 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const App = () => <p>Ana are mere</p>
 
-        const root = ReactDOM.createRoot(document.getElementById("root"));
-        root.render(<App />);
+        const API_URL = 'https://httpbin.org/post'
+        const API_METHOD = 'POST'
+        const STATUS_IDLE = 0
+        const STATUS_UPLOADING = 1
+
+        const App = () => {
+            const [files, setFiles] = React.useState([])
+            const [status, setStatus] = React.useState(STATUS_IDLE)
+
+            const uploadFiles = (data)=> {
+                // 👇 Uploading the files using the fetch API to the server
+                setStatus(STATUS_UPLOADING)
+
+                fetch(API_URL, {
+                    method: API_METHOD,
+                    body: data,
+                })
+                .then((res) => res.json())
+                .then((data) => console.log(data))
+                .catch((err) => console.error(err))
+                .finally(() => setStatus(STATUS_IDLE))
+            }
+
+            const packFiles = (files)=> {
+                // 👇 Create new FormData object and append files
+                const data = new FormData();
+                
+                [...files].forEach((file, i) => {
+                    data.append(`file-${i}`, file, file.name)
+                })
+                return data
+            }
+
+            const handleUploadClick = () => {
+                if (files.length) {
+                    const data = packFiles(files)
+                    uploadFiles(data)
+                }
+            }
+
+            const renderFileList = () => (<li>
+                {[...files].map((f, i) => (
+                    <li key={i}>{f.name} - {f.type}</li>
+                ))}
+            </li>)
+        
+
+            return (<div>
+                <input type="file" onChange={(e)=> setFiles(e.target.files)} multiple />
+                {renderFileList()}
+                <button onClick={handleUploadClick}>
+                    {(status === STATUS_IDLE) ? 'Send to server' : 'Uploading' }
+                </button>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
     </script>
 </body>
 </html>
 
 <!--
+    link de la useform
     why use render
     mutiple
     style ?
