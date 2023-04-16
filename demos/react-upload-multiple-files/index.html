@@ -53,18 +53,18 @@
                 }
             }
 
-            const renderFileList = () => (<li>
+            const renderFileList = () => (<ol>
                 {[...files].map((f, i) => (
                     <li key={i}>{f.name} - {f.type}</li>
                 ))}
-            </li>)
+            </ol>)
         
 
             return (<div>
                 <input type="file" onChange={(e)=> setFiles(e.target.files)} multiple />
                 {renderFileList()}
                 <button onClick={handleUploadClick}>
-                    {(status === STATUS_IDLE) ? 'Send to server' : 'Uploading' }
+                    {(status === STATUS_IDLE) ? 'Send to server' : <img src = "./load.svg" />}
                 </button>
             </div>)
         }
