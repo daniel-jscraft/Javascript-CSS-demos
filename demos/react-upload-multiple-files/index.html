@@ -70,7 +70,7 @@
                     multiple
                     onChange={(e)=> setFiles(e.target.files)} />
                 {renderFileList()}
-                <button onClick={handleUploadClick}>
+                <button onClick={handleUploadClick} disabled={status === STATUS_UPLOADING}>
                     {renderButtonStatus()}
                 </button>
             </div>)
