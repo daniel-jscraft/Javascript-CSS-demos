@@ -23,8 +23,7 @@
             const [status, setStatus] = React.useState(STATUS_IDLE)
 
             const uploadFiles = (data)=> {
-                // 👇 Uploading the files using the fetch API to the server
-                setStatus(STATUS_UPLOADING)
+                setStatus(STATUS_UPLOADING);
 
                 fetch(API_URL, {
                     method: API_METHOD,
@@ -37,7 +36,6 @@
             }
 
             const packFiles = (files)=> {
-                // 👇 Create new FormData object and append files
                 const data = new FormData();
                 
                 [...files].forEach((file, i) => {
@@ -83,13 +81,3 @@
     </script>
 </body>
 </html>
-
-<!--
-    link de la useform
-    why use render
-    mutiple
-    style ?
-    Limit file types
-    type of retunred data
-    https://www.js-craft.io/blog/using-url-createobjecturl-to-create-uploaded-image-previews-in-javascript/
--->
