@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-upload-multiple-files</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router@6.1.0/umd/react-router.development.js"></script>
+
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const NavigateLocReplace = ({url}) => {
+            // will not be able to use window back
+            const navigate = ()=> window.location.replace(url)
+            return (<button onClick={navigate}>
+                Navigate using window.location.replace 
+            </button>)
+        }
+
+        const NavigateLocHref = ({url}) => {
+            // ok to use window back
+            const navigate = ()=> window.location.href = url
+            return (<button onClick={navigate}>
+                Navigate using  window.location.href 
+            </button>)
+        }
+
+        const Hello = ()=> <h1>Ana</h1>
+        const Goodbye = ()=> <h1>are mere</h1>
+
+        const RoutedComponent = ()=> {
+            return(<ReactRouter.Router>
+                <ReactRouter.Routes>
+                    <ReactRouter.Route path="/" element={<Hello />} />
+                    <ReactRouter.Route path="about" element={<Goodbye />} />
+                </ReactRouter.Routes>
+            </ReactRouter.Router>)
+        }
+
+        const App = () => { 
+            return (<div>
+                <NavigateLocReplace url="https://codefrontend.com"/>
+                <NavigateLocHref url="https://codefrontend.com"/>
+                <RoutedComponent/>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
