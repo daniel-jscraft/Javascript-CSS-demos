@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>react-nested-object-state</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        const PrettyPrintJson = ({obj}) => (<div>
+            <pre>{ JSON.stringify(obj, null, 2) }</pre>
+        </div>);
+
+        const OneLevelDeepUpdate = ()=> {
+            const [cat, setCat] = useState({
+                name:'Achilles the 😸',
+                origin: 'Greece 🇬🇷',
+                owner: {
+                    name: "Daniel", 
+                    age: 38
+                }
+            })
+
+            const update1LevelDeep = ()=> {
+                setCat(prevCat => ({
+                    ...prevCat,
+                    owner: {
+                        ...prevCat.owner,
+                        name: "Daniel the owner of Achilles"
+                    }
+                }))
+            }
+
+            return <div>
+                <PrettyPrintJson obj={cat} />
+                <button onClick={update1LevelDeep}>Update state obj 1 level deep</button>
+            </div>
+        }
+
+        const TwoLevelsDeepUpdate = ()=> {
+const [cat, setCat] = useState({
+    name:'Achilles the 😸',
+    origin: 'Greece 🇬🇷',
+    owner: {
+        name: "Daniel", 
+        age: 38,
+        job: {
+            title: "Software Developer", 
+            location: "At home"
+        }
+    }
+})
+
+            const update2LevelsDeep = ()=> {
+                setCat(prevCat => ({
+                    ...prevCat,
+                    owner: {
+                        ...prevCat.owner,
+                        job : {
+                            ...prevCat.owner.job,
+                            title: 'Cat slave'
+                        }
+                    }
+                }))
+            }
+
+            return <div>
+                <PrettyPrintJson obj={cat} />
+                <button onClick={update2LevelsDeep}>Update state obj 2 level deep</button>
+            </div>
+        }
+
+        const App = () => { 
+            
+            return (<div>
+                <OneLevelDeepUpdate />
+                <TwoLevelsDeepUpdate />
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
