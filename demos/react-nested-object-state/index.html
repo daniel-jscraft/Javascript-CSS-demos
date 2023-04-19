@@ -45,18 +45,18 @@
         }
 
         const TwoLevelsDeepUpdate = ()=> {
-const [cat, setCat] = useState({
-    name:'Achilles the 😸',
-    origin: 'Greece 🇬🇷',
-    owner: {
-        name: "Daniel", 
-        age: 38,
-        job: {
-            title: "Software Developer", 
-            location: "At home"
-        }
-    }
-})
+            const [cat, setCat] = useState({
+                name:'Achilles the 😸',
+                origin: 'Greece 🇬🇷',
+                owner: {
+                    name: "Daniel", 
+                    age: 38,
+                    job: {
+                        title: "Software Developer", 
+                        location: "At home"
+                    }
+                }
+            })
 
             const update2LevelsDeep = ()=> {
                 setCat(prevCat => ({
