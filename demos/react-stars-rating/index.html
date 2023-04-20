@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-upload-multiple-files</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body{
+            background: #222225;
+            color: white;
+            margin: 100px auto;
+        }
+
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+        }
+
+        .star > input{ display:none;}
+
+        .star > label {
+            position: relative;
+            width: 1.1em;
+            font-size: 15vw;
+            color: yellow;
+            cursor: pointer;
+        }
+
+        .star > label::before{
+            content: "\2605";
+            position: absolute;
+            opacity: 0;
+        }
+
+        .star > label:hover:before,
+        .star > label:hover ~ label:before {
+            opacity: 1 !important;
+        }
+
+        .star > input:checked ~ label:before{
+            opacity:1;
+        }
+
+        .star:hover > input:checked ~ label:before{ opacity: 0.4; }
+    </style>
+
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const Star = ({index})=> (<span className="star">
+            <input type="radio" name="rating" value={index} id={index} />
+            <label htmlFor={index}>☆</label>
+        </span>)
+
+        const StarRating = ({max})=> (<div className="rating">
+            {[...Array(max).keys()].map((i) => (
+                <Star
+                    index={i}
+                    key={i}
+                />
+            ))}
+        </div>)
+
+        const App = () => {
+            return <StarRating />
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
+
+<!--
+    link to https://www.js-craft.io/blog/javascript-using-default-values-for-function-parameters-and-when-destructuring/
+-->
