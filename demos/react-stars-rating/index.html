@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>React-upload-multiple-files</title>
+    <title>react-stars-rating</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-        body{
-            background: #222225;
-            color: white;
-            margin: 100px auto;
+        .rating {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            justify-content: center;
         }
 
-        .rating {
-            display: flex;
+        .star {
+            display: inline-flex;
             flex-direction: row-reverse;
             justify-content: center;
         }
@@ -25,8 +25,8 @@
         .star > label {
             position: relative;
             width: 1.1em;
-            font-size: 15vw;
-            color: yellow;
+            font-size: 1vw;
+            color: orangered;
             cursor: pointer;
         }
 
@@ -53,22 +53,35 @@
     <div id="root"></div>
     <script type="text/babel">
 
-        const Star = ({index})=> (<span className="star">
-            <input type="radio" name="rating" value={index} id={index} />
-            <label htmlFor={index}>☆</label>
-        </span>)
+        const Star = ({index, selected, clickHandler})=> {
+            return <span className="star" onClick={clickHandler(index)}>
+                <input type="radio" value={index} id={index} />
+                <label htmlFor={index}>☆</label>
+            </span>
+        }
 
-        const StarRating = ({max})=> (<div className="rating">
-            {[...Array(max).keys()].map((i) => (
-                <Star
-                    index={i}
-                    key={i}
-                />
-            ))}
-        </div>)
+        const StarRating = ({max = 5, val = 0, clickHandler})=> {
+            return <span className="rating">
+                {[...Array(max).keys()].map((i) => (
+                    <Star 
+                        index={i} 
+                        clickHandler={clickHandler}
+                        key={i} 
+                        selected={i === val} />
+                ))}
+            </span>
+        }
 
         const App = () => {
-            return <StarRating />
+            const [foodRating, setFoodRating] = React.useState(0)
+            const [wineRating, setWineRating] = React.useState(0)
+
+            const clickHandler = () => alert(`🍔 ${foodRating} stars\n🍷 ${wineRating} stars`)
+            return <div>
+                <p>🍔 Food rating: <StarRating clickHandler={setFoodRating} /> </p>
+                <p>🍷 Wine rating: <StarRating clickHandler={setWineRating} /> </p>
+                <button onClick={clickHandler}>Show ratings</button>
+            </div>
         }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
@@ -79,4 +92,11 @@
 
 <!--
     link to https://www.js-craft.io/blog/javascript-using-default-values-for-function-parameters-and-when-destructuring/
+    despre ~ si  >
+    https://www.js-craft.io/blog/the-useid-hook-in-react/
+    https://techbrij.com/css-selector-adjacent-child-sibling
+~ Sign:
+
+poti seta nr max de steulte cu max
+rning: Cannot update a component (`App`) while rendering a different component (`Star`). To locate the bad setState() call inside `Star`, follow the stack t
 -->
