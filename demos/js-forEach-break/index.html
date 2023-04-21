@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forEach-break</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <script>
+
+        const names = [
+            {name: 'Spiros', contry: '🇬🇷'},
+            {name: 'Bjorn', contry: '🇩🇰'},
+            {name: 'Theo', contry: '🇬🇷'},
+        ]
+        console.log(names.find(e => e.contry === '🇬🇷'))
+        console.log(names.find(e => e.name === 'Bjorn'))
+    </script>
+</body>
+</html>
+
+<!--
+    JavaScript-foreach-break
+    Uncaught SyntaxError: Illegal break statement
+
+    Let's say you want to do somehting like this
+
+    Why this happens? 
+-->
