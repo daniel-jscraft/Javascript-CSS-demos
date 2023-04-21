@@ -8,24 +8,26 @@
     </style>
 </head>
 <body>
+    <h1>Open up the dev console to see the output!</h1>
     <script>
 
         const names = [
-            {name: 'Spiros', contry: '🇬🇷'},
-            {name: 'Bjorn', contry: '🇩🇰'},
-            {name: 'Theo', contry: '🇬🇷'},
+            {name: 'Spiros', flag: '🇬🇷'},
+            {name: 'Bjorn', flag: '🇩🇰'},
+            {name: 'Theo', flag: '🇬🇷'},
         ]
-        console.log(names.find(e => e.contry === '🇬🇷'))
-        console.log(names.find(e => e.name === 'Bjorn'))
+
+        /* ⛔️ this will not work
+        names.forEach(n => {
+            if(n.name === 'Bjorn') {
+                console.log(n.flag)
+                break;
+            }
+        })*/
+
+        console.log(names.find(n => n.flag === '🇬🇷'))
+        console.log(names.find(n => n.name === 'Bjorn'))
+        console.log(names.findIndex(n => n.name === 'Theo'))
     </script>
 </body>
 </html>
-
-<!--
-    JavaScript-foreach-break
-    Uncaught SyntaxError: Illegal break statement
-
-    Let's say you want to do somehting like this
-
-    Why this happens? 
--->
