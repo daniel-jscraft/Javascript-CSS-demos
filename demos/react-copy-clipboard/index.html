@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-upload-multiple-files</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        
+
+        const App = () => {
+            const [clipboardVal, setClipboardVal] = React.useState(null)
+            const [code, setCode] = React.useState("123456789")
+
+            const copyOperation = ()=> {
+                if (!navigator.clipboard) {
+                    setClipboardVal(null)
+                    console.warn('Clipboard not supported')
+                    return false
+                }
+                navigator.clipboard.writeText(code)
+                .then(() => setClipboardVal(code))
+                .catch((e) => {
+                    setClipboardVal(null)
+                    console.warn('Clipboard error:' + e)
+                })
+            }
+
+            return (<div>
+                <input type="text" value={code} disabled  />
+                <button onClick={copyOperation}>Copy Code</button>
+                {clipboardVal && <p>✅ Copied to clipboard: {clipboardVal}</p>}
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
