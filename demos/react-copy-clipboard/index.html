@@ -10,12 +10,45 @@
 </head>
 <body>
     <div id="root"></div>
+    <div id="root2"></div>
     <script type="text/babel">
+
+        const useClipboard= () => {
+            const [value, setValue] = React.useState(null)
+
+            const copy = (data) => {
+                if (!navigator.clipboard) {
+                    setValue(null)
+                    console.warn('Clipboard not supported')
+                    return false
+                }
+
+                navigator.clipboard.writeText(data)
+                    .then(() => setValue(data))
+                    .catch((e) => {
+                        setClipboardVal(null)
+                        console.warn('Clipboard error:' + e)
+                    })
+            }
+
+            return [value, copy]
+        }
+
+        const WithHook = () => {
+            const [code, setCode] = React.useState("123456789")
+            const [clipboardVal, copyToCliboard] = useClipboard()
+
+            return (<div>
+                <input type="text" value={code} disabled  />
+                <button onClick={()=> copyToCliboard(code) }>Copy Code</button>
+                {clipboardVal && <p>✅ Copied to clipboard: {clipboardVal}</p>}
+            </div>)
+        }
         
 
         const App = () => {
-            const [clipboardVal, setClipboardVal] = React.useState(null)
             const [code, setCode] = React.useState("123456789")
+            const [clipboardVal, setClipboardVal] = React.useState(null)
 
             const copyOperation = ()=> {
                 if (!navigator.clipboard) {
@@ -40,6 +73,9 @@
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
         root.render(<App />)
+
+        const root2 = ReactDOM.createRoot(document.getElementById("root2"))
+        root2.render(<WithHook />)
     </script>
 </body>
 </html>
