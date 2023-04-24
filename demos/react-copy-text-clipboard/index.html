@@ -11,11 +11,11 @@
 <body>
     <h1>Basic React copy text to clipboard example</h1>
     <div id="root"></div>
-    <h1>Using the useClipboard() hook</h1>
+    <h1>Using the useTextToClipboard() hook</h1>
     <div id="root2"></div>
     <script type="text/babel">
 
-        const useClipboard= () => {
+        const useTextToClipboard= () => {
             const [value, setValue] = React.useState(null)
 
             const copy = (data) => {
@@ -38,7 +38,7 @@
 
         const WithHook = () => {
             const [code, setCode] = React.useState("123456789")
-            const [clipboardVal, copyToCliboard] = useClipboard()
+            const [clipboardVal, copyToCliboard] = useTextToClipboard()
 
             return (<div>
                 <input type="text" value={code} disabled  />
