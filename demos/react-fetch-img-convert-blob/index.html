@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React fetch img convert to blob</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        input, button {
+            display: block;
+            line-height: 2rem;
+            margin: 0.5rem;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>React fetch img convert to blob</h1>
+    <div id="root"></div>
+    <script type="text/babel">
+        const DEFAULT_URL = "https://www.js-craft.io/_public-files/cat.png"
+        const App = () => {
+            const [url, setUrl] = React.useState(DEFAULT_URL)
+
+            const fetchAndCovertToBlob = ()=> {
+                fetch(url)
+                    .then( response => response.blob())
+                    .then( blobData => {
+                        const {size, type} = blobData
+                        alert(` 🌅 IMG Type: ${type} \n 🌌 IMG Size: ${size}`)
+                    });
+            }
+
+            return (<div>
+                <input type="text" value={url} disabled  />
+                <button onClick={fetchAndCovertToBlob}>Fetch img and covert to blob</button>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
