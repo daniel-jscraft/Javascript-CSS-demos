@@ -34,7 +34,7 @@
             }
 
             return (<div>
-                <input type="text" value={url} disabled  />
+                <input type="text" value={url} onChange={e => setUrl(e.target.value)}  />
                 <button onClick={fetchAndCovertToBlob}>Fetch img and covert to blob</button>
             </div>)
         }
