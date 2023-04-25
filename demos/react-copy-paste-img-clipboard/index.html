@@ -15,23 +15,34 @@
             const [imgData, setImgData] = React.useState()
 
             const copyImgToClipboard = async ()=> {
-                const copiedImage = await fetch('https://www.js-craft.io/_public-files/cat.png')
-                const blobData = await copiedImage.blob()
-                const clipboardItemInput = new ClipboardItem({'image/png' : blobData})
-                navigator.clipboard.write([clipboardItemInput])
+                try {
+                    const copiedImage = await fetch('https://www.js-craft.io/_public-files/cat.png')
+                    const blobData = await copiedImage.blob()
+                    const clipboardItemInput = new ClipboardItem({'image/png' : blobData})
+                    navigator.clipboard.write([clipboardItemInput])
+                } catch(e) {
+                    console.log(e)
+                }
             }
 
-            const pasteImg = ()=> {
-                navigator.clipboard.read().then(
-                    (item)=> {
-                        console.log(item)
-                    }
-                )
+            const pasteImg = async ()=> {
+                try {
+                    const clipboardItems = await navigator.clipboard.read()
+                    const blobOutput = await clipboardItems[0].getType('image/png')
+                    const data = URL.createObjectURL(blobOutput)
+                    setImgData(data)
+                } catch(e) {
+                    console.log(e);
+                }
             }
 
             return (<div>
                 <button onClick={copyImgToClipboard}>Copy a 😸 to clipboard</button>
+                <button onClick={copyImgToClipboard}>Copy a 🐶 to clipboard</button>
                 <button onClick={pasteImg}>PASTE</button>
+                <div>
+                    <img src={imgData} />
+                </div> 
             </div>)
         }
 
