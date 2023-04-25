@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-copy-paste-img-clipboard</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const App = () => {
+            const [imgData, setImgData] = React.useState()
+
+            const copyImgToClipboard = async ()=> {
+                const copiedImage = await fetch('https://www.js-craft.io/_public-files/cat.png')
+                const blobData = await copiedImage.blob()
+                const clipboardItemInput = new ClipboardItem({'image/png' : blobData})
+                navigator.clipboard.write([clipboardItemInput])
+            }
+
+            const pasteImg = ()=> {
+                navigator.clipboard.read().then(
+                    (item)=> {
+                        console.log(item)
+                    }
+                )
+            }
+
+            return (<div>
+                <button onClick={copyImgToClipboard}>Copy a 😸 to clipboard</button>
+                <button onClick={pasteImg}>PASTE</button>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
+
+<!--
+    permisions
+    only PNG?
+    https://glitch.com/edit/#!/async-clipboard-api?path=public%2Findex.js%3A1%3A0
+    link spre createObjectURL
+    you can only copy one single img
+-->
