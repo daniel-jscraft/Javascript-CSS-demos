@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>React-copy-img-clipboard</title>
+    <title>Javascript fetch img convert to blob</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-    <h1>Basic React copy text to clipboard example</h1>
+    <h1>Javascript fetch img convert to blob</h1>
     <div id="root"></div>
     <script type="text/babel">
         const App = () => {
             const [code, setCode] = React.useState("123456789")
             const [clipboardVal, setClipboardVal] = React.useState(null)
 
-            const copyOperation = async ()=> {
-                const response = await fetch('https://freepngimg.com/static/img/twitter.png')
-                const blob = await response.blob()
-                console.log(blob)
+            // fetch("https://cdn.glitch.com/4c9ebeb9-8b9a-4adc-ad0a-238d9ae00bb5%2Fmdn_logo-only_color.svg?1535749917189")
+
+            const copyOperation = ()=> {
+                fetch("https://www.js-craft.io/_public-files/cat.png")
+                    .then(function (response) {
+                        console.log(response)
+                        return response.blob();
+                    })
+                    .then(function (blob) {
+                        console.log(blob.size)
+                        console.log(blob.type)
+                        console.log(blob)
+                        navigator.clipboard.write([new ClipboardItem({'image/png': blob})])
+                    });
             }
 
             return (<div>
