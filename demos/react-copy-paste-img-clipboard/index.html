@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React-copy-paste-img-clipboard</title>
+    <style>
+        button {
+            margin: 0.2rem;
+            line-height: 2rem;
+            width: 195px;
+        }
+
+        .btn-paste {
+            display: block;
+            width: 400px;
+        }
+    </style>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -14,9 +26,10 @@
         const App = () => {
             const [imgData, setImgData] = React.useState()
 
-            const copyImgToClipboard = async ()=> {
+            const copyImgToClipboard = async (animal)=> {
+                const URL = `https://www.js-craft.io/_public-files/img-${animal}.png`
                 try {
-                    const copiedImage = await fetch('https://www.js-craft.io/_public-files/cat.png')
+                    const copiedImage = await fetch(URL)
                     const blobData = await copiedImage.blob()
                     const clipboardItemInput = new ClipboardItem({'image/png' : blobData})
                     navigator.clipboard.write([clipboardItemInput])
@@ -37,9 +50,9 @@
             }
 
             return (<div>
-                <button onClick={copyImgToClipboard}>Copy a 😸 to clipboard</button>
-                <button onClick={copyImgToClipboard}>Copy a 🐶 to clipboard</button>
-                <button onClick={pasteImg}>PASTE</button>
+                <button onClick={()=> copyImgToClipboard('cat')}>Copy a 😸 to clipboard</button>
+                <button onClick={()=> copyImgToClipboard('dog')}>Copy a 🐶 to clipboard</button>
+                <button onClick={pasteImg} className="btn-paste">PASTE</button>
                 <div>
                     <img src={imgData} />
                 </div> 
