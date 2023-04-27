@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-disable-link</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+       
+        div {
+            padding: 1rem;
+        }
+
+        button, a {
+            display: block;
+            margin: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const DisableWithCSS = ()=> {
+            const [enabled, setEnabled] = React.useState(true)
+            return (<div>
+                <h4>Disable Link with CSS</h4>
+                <a href="https://www.js-craft.io/"
+                    style={{pointerEvents:enabled ? 'auto': 'none'}}>
+                    Js Craft Website
+                </a>
+                <button onClick={()=> setEnabled(false)}>Disable Link</button>
+            </div>)
+        }
+
+        const DisableWithJs = ()=> {
+            const [enabled, setEnabled] = React.useState(true)
+            return (<div>
+                <h4>Disable Link with HREF</h4>
+                <a href="https://www.js-craft.io/" 
+                    onClick={e => enabled ? true : e.preventDefault()}>
+                    Js Craft Website
+                </a>
+                <button onClick={()=> setEnabled(false)}>Disable Link</button>
+            </div>)
+        }
+        const App = () => {
+            return (<div>
+                <DisableWithCSS/>
+                <DisableWithJs/>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
