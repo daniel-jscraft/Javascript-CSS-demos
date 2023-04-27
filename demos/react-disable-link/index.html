@@ -23,7 +23,7 @@
         }
 
         a.no-click::before {
-            content: "⛔️";
+            content: "🚫";
         }
     </style>
 </head>
@@ -46,7 +46,7 @@
         const DisableWithJs = ()=> {
             const [enabled, setEnabled] = React.useState(true)
             return (<div>
-                <h4>Disable Link with HREF</h4>
+                <h4>Disable Link with onClick()</h4>
                 <a href="https://www.js-craft.io/" 
                     onClick={e => enabled ? true : e.preventDefault()}
                     className={`${enabled ? "" : "no-click"}`}>
