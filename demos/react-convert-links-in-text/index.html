@@ -17,24 +17,22 @@
                 const URL_REGEX = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
                 return word.match(URL_REGEX)
             }
-            const formatWord = word => {
+            const formatWord = (word, i) => {
                 return isUrl(word) ? 
-                    <span key={word}><a href={word}>{word}</a> {' '}</span> :  
+                    <span key={i}><a href={word}>{word}</a> {' '}</span> :  
                     `${word} `
             }
 
             const words = children.split(' ')
             const formatedWords = []
-            for (var i = 0; i < words.length; i++) {
-                formatedWords.push(formatWord(words[i]))
-            }
+            words.forEach((w, i) => formatedWords.push(formatWord(w, i)))
             return <span>{formatedWords}</span>
         }
 
         
 
         const App = () => (<Linkify>
-                This is my site https://www.js-craft.io/ and here is just here.
+                This is my site https://www.js-craft.io/ and other contact info.
             </Linkify>
         )
 
