@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-convert-links-in-text</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // const ConvertLinks = ({children})=> {
+
+        //     const isUrl = word => {
+        //         const URL_REGEX = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+        //         return word.match(URL_REGEX)
+        //     }
+
+        //     const formatWord = word => isUrl(word) ? <a href={word}>{word}</a> : word
+
+        //     const words = children.split(' ')
+        //     const formatedWords = words.map( w => formatWord(w))
+        //     const test = linkify(children)
+
+        //     function linkify(str) {
+        //         var newStr = str.replace(/(<a href=")?((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)))(">(.*)<\/a>)?/gi, function () {
+
+        //             return '<a href="' + arguments[2] + '">' + (arguments[7] || arguments[2]) + '</a>'
+        //         });
+        //         return newStr
+        //     }
+        //     return (<div dangerouslySetInnerHTML={{__html: test}} />)
+        // }
+
+        // const App = () => {
+        //     return (<ConvertLinks>
+        //         This is my site https://www.js-craft.io/ and here is just www.js-craft.io here.
+        //     </ConvertLinks>)
+        // }
+
+        const ConvertLinks = ({children})=> {
+
+            // const isUrl = word => {
+            //     const URL_REGEX = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+            //     return word.match(URL_REGEX)
+            // }
+
+            // const formatWord = word => isUrl(word) ? <a href={word}>{word}</a> : word
+
+            // const words = children.split(' ')
+            // const formatedWords = words.map( w => formatWord(w))
+            // const test = formatedWords.join(' ')
+
+            // return (<div dangerouslySetInnerHTML={{__html: test}} />)
+            // }
+
+            // populateJournal() {
+            //     const j = Object.values(this.state.journal);
+            //     var journalEntries = [];
+            //     for (var i = 0; i < j.length; i++) {
+            //         journalEntries.push(
+            //         <div>
+            //             <h3>{j[i].title} - {j[i].date}</h3>
+            //             <p>{j[i].entry}</p>
+            //         </div>
+            //         );
+            //     }
+                    
+            //     return (<div>{journalEntries}</div>);
+            // }
+
+            const isUrl = word => {
+                const URL_REGEX = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
+                return word.match(URL_REGEX)
+            }
+            const formatWord = word => isUrl(word) ? <a key={word} href={word}>{word}</a> : word + ' '
+
+            const words = children.split(' ')
+            const formatedWords = []
+            for (var i = 0; i < words.length; i++) {
+                formatedWords.push(formatWord(words[i]))
+            }
+
+
+            // return (<div dangerouslySetInnerHTML={{__html: test}} />)
+            return <p>{formatedWords}</p>
+            }
+
+            
+
+            const App = () => {
+            return (<ConvertLinks>
+                This is my site https://www.js-craft.io/ and here is just here.
+            </ConvertLinks>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
+<!--
+    Disable Link with CSS somehow related 
+    children link
+-->
