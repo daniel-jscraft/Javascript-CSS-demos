@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-sticky-element</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        .sidebar, p {
+            border: 1px solid;
+            padding: 1rem;
+            margin: 1rem;
+        }
+
+        .sidebar {
+            background-color: orangered;
+            color: white;
+            right: 1rem;
+        }
+
+        .container {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .is-sticky {
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const {useState, useEffect} = React
+
+        const StickySidebar  = ({offset})=> {
+            const [sidebarTop, setSidebarTop] = useState()
+            const [style, setStyle] = useState({})
+
+            useEffect(() => {
+                const sidebarEl = document.querySelector('.sidebar').getBoundingClientRect();
+                setSidebarTop(sidebarEl.top);
+            }, []);
+
+            useEffect(() => {
+                if (!sidebarTop) return;
+                window.addEventListener('scroll', isSticky);
+                // for cleanup
+                return () => window.removeEventListener('scroll', isSticky)
+            }, [sidebarTop]);
+
+            const makeSticky = () => setStyle({'position': 'fixed', 'top': `${offset}px`})
+            const removeSticky = ()=> setStyle({})
+
+            const isSticky = (e) => {
+                const sidebarEl = document.querySelector('.sidebar')
+                const scrollTop = window.scrollY;
+                (scrollTop + offset > sidebarTop) ? makeSticky() : removeSticky()
+            };
+            
+            return <div className="sidebar" style={style}>
+                Inline styles are defined within the "style" attribute of the relevant element.
+            </div>
+        }
+        const App = () => {
+            return (<div>
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting
+                    industry. Lorem Ipsum has been the industry's standard dummy text
+                    ever since the 1500s.
+                </p>
+                <div className="container">
+                    <div>
+                        {[...Array(20)].map((a, i) => (
+                            <p key={i}>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting
+                                industry. Lorem Ipsum has been the industry's standard dummy text
+                                ever since the 1500s.
+                            </p>
+                        ))}
+                    </div>
+
+                    <StickySidebar offset={10} />
+                </div>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
