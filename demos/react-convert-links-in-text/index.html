@@ -18,23 +18,31 @@
                 return word.match(urlPattern)
             }
 
-            const formatWord = (word, i) => {
+            const addMarkup = word => {
                 return isUrl(word) ? 
-                    <span key={i}><a href={word}>{word}</a> {' '}</span> :  
-                    `${word} `
+                    `<a href="${word}">${word}</a>`:  
+                    word
             }
 
             const words = children.split(' ')
-
-            return <span>
-                {words.map((w, i) => formatWord(w, i))}
-            </span>
+            const formatedWords = words.map((w, i) => addMarkup(w))
+            const html = formatedWords.join(' ')
+            return (<span dangerouslySetInnerHTML={{__html: html}} />)
         }
 
-        const App = () => (<Linkify>
-                This is my site https://www.js-craft.io/ and other contact info.
-            </Linkify>
-        )
+        const App = () => {
+            const text = 'This is my site https://www.js-craft.io/ for other info.'
+
+            return (<div>
+                <p> <b>📄 Original:</b>
+                    {text}
+                </p>
+                <p>
+                    <b>🖇 Add links:</b>
+                    <Linkify>{text}</Linkify>
+                </p>
+            </div>)
+        }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
         root.render(<App />)
