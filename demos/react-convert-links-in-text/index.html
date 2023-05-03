@@ -25,7 +25,7 @@
             }
 
             const words = children.split(' ')
-            const formatedWords = words.map((w, i) => addMarkup(w))
+            const formatedWords = words.map( w => addMarkup(w))
             const html = formatedWords.join(' ')
             return (<span dangerouslySetInnerHTML={{__html: html}} />)
         }
