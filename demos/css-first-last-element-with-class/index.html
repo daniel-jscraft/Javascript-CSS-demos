@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS select first and last element with class</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        div {
+            display: inline;
+            margin: 1rem;
+            width: 75px;
+            height: 75px;
+            display: inline-block;
+        }
+
+        .circle {
+            border-radius: 50%;
+            border: 1px solid;
+        }
+
+        .square {
+            border: 1px solid;
+        }
+
+        /* Using :nth-chil and :nth-last-child to */
+        /* target first el with class ".circle" */
+        .circle:not(.circle ~ *) {
+            background-color: blue;
+        }
+
+        /* target last el with class ".circle" */
+        .circle:not(:has(~ .circle)) {
+            background-color: blue;
+        }
+
+        /* Using :nth-chil and :nth-last-child to */
+        /* 1. target first el with class ".circle" */
+        :nth-child(1 of .circle) {
+            background-color: orangered;
+        }
+
+        /* 2. target last el with class ".circle" */
+        :nth-last-child(1 of .circle) {
+            background-color: orangered;
+        }
+    </style>
+</head>
+<body>
+    <h3>CSS - select first and last element with the .circle class</h3>
+    <div class="circle"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="square"></div>
+</body>
+</html>
