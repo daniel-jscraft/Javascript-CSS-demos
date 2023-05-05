@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css-inline-block-pushed-downward</title>
+    <style>
+        div {
+            margin: 0.2rem;
+            width: 75px;
+            height: 75px;
+            display: inline-flex;
+            border: 1px solid;
+            align-items: center;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <h3>⛔️ Without vertical-align top</h3>
+    <div></div>
+    <div>inline-block with text</div>
+    <div></div>
+    <div>another inline-block with text</div>
+    <div></div>
+    <div></div>
+
+    <h3>✅ With vertical-align top</h3>
+    <div></div>
+    <div style="vertical-align:top">inline-block with text</div>
+    <div></div>
+    <div style="vertical-align:top">another inline-block with text</div>
+    <div></div>
+    <div></div>
+</body>
+</html>
