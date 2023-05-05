@@ -1,1 +1,1 @@
-Full blogpost here: [JS Craft - Select the first and last element with a specific class in CSS](https://www.js-craft.io/blog/css-select-first-last-element-with-class/)
+👨‍💻 Full blogpost here: [JS Craft - Select the first and last element with a specific class in CSS](https://www.js-craft.io/blog/css-select-first-last-element-with-class/)
