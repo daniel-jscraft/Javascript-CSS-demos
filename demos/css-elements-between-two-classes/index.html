@@ -20,6 +20,11 @@
             vertical-align:top;
         }
 
+        /* Select all the elements between the .start and .end classes */
+        .start ~ :not(.end,.end ~ *) {
+            background-color: orangered;
+        }
+
     </style>
 </head>
 <body>
