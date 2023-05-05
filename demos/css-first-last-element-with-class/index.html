@@ -25,13 +25,17 @@
             border: 1px solid;
         }
 
-        /* Using :nth-chil and :nth-last-child to */
-        /* target first el with class ".circle" */
+        /* target first el with class ".circle"
+        select all elements with the "circle" class that 
+        do not have any sibling elements that come after them 
+        and are of any type */
         .circle:not(.circle ~ *) {
             background-color: blue;
         }
 
-        /* target last el with class ".circle" */
+        /* target last el with class ".circle"
+        select all elements with the "circle" class that 
+        do not contain a direct descendant with the "circle" class */
         .circle:not(:has(~ .circle)) {
             background-color: blue;
         }
@@ -46,6 +50,7 @@
         :nth-last-child(1 of .circle) {
             background-color: orangered;
         }
+
     </style>
 </head>
 <body>
