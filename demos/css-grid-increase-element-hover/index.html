@@ -14,19 +14,24 @@
             font-family: sans-serif;
         }
 
-        .grid {
-            display: grid;
+        :root {
             --col1: 1fr;
             --col2: 1fr;
             --col3: 1fr;
             --row1: 1fr;
             --row2: 1fr;
             --row3: 1fr;
+            --cl-main: orangered;
+            --cl-text: white;
+        }
+
+        .grid {
+            display: grid;
             grid-template-columns: var(--col1) var(--col2) var(--col3);
             grid-template-rows: var(--row1) var(--row2) var(--row3);
             height: 100vh;
             transition: all .2s;
-            background-color: orangered;
+            background-color: var(--cl-main);
         }
 
         .grid:has(.item:nth-child(3n+1):hover) {
@@ -51,20 +56,17 @@
             --row3: 3fr;
         }
 
-
-
         .item {
             text-align: center;
             display: grid;
             align-content: center;
             transition: scale .2s;
             overflow: hidden;
-            border: 2px solid white;
-            background-color: orangered;
+            border: 2px solid var(--cl-text);
+            background-color: var(--cl-main);
             font-size: 6rem;
-            color: white;
+            color: var(--cl-text);
         }
-
 
         .item:where(:hover, :focus) {
             scale: 1.1;
