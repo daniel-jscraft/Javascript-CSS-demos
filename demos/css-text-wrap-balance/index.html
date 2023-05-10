@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css-inline-block-pushed-downward</title>
+    <style>
+        div {
+            max-width: 550px;
+            border: 1px solid;
+            padding: 1rem;
+            margin: 2rem;
+            font-size: 200%;
+            text-align: center;
+            background-color: orangered;
+            color: white;
+        }
+
+        .t-balance {
+            text-wrap: balance;
+        }
+
+        p {
+            background-color: yellow;
+            padding: 1rem;
+        }
+
+        @supports (text-wrap: balance) {
+            p { display: none;}
+        }
+
+    </style>
+</head>
+<body>
+    <p> !!! This browser does not support text-wrap: balance. Try the demo in <a href="https://www.google.com/chrome/canary/">Chrome Canary</a> !!!</p>
+    <div>The quick brown fox jumps over the lazy dog.</div>
+    <div class="t-balance">The quick brown fox jumps over the lazy dog</div>
+</body>
+</html>
