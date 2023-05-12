@@ -2,9 +2,52 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>forEach-break</title>
+    <title>digit-pincode-field</title>
     <style>
+        * { box-sizing: border-box; }
 
+        form {
+            border: 1px solid black;
+            padding: 20px;
+            width: 500px;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+
+        .inputs {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 10px;
+        }
+
+        .inputs > * {
+            border: 1px solid black;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        input[type="submit"] {
+            background: black;
+            color: white;
+            font-size: 20px;
+            padding: 20px;
+            border: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        input[type="submit"]:focus {
+            border-color: blue;
+        }
     </style>
 </head>
 <body>
@@ -21,14 +64,13 @@
         const form = document.querySelector('[name="verify"]')
         const inputs = form.querySelectorAll('.inputs input')
 
-        function handleInput(e) {
-            const input = e.target
+        const handleInput = ({target: input}) => {
             if (input.nextElementSibling && input.value) {
                 input.nextElementSibling.focus()
             }
         }
 
-        function handlePaste(e) {
+        const handlePaste = (e) => {
             const paste = e.clipboardData.getData('text')
             inputs.forEach(
                 (input, i) => input.value = paste[i] || ''
