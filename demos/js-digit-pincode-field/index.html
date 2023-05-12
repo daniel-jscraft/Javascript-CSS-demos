@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forEach-break</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <form name="verify">
+        <div class="inputs">
+          <input type="text" name="n1" maxlength="1">
+          <input type="text" name="n2" maxlength="1">
+          <input type="text" name="n3" maxlength="1">
+          <input type="text" name="n4" maxlength="1">
+        </div>
+    </form>
+
+    <script>
+        const form = document.querySelector('[name="verify"]')
+        const inputs = form.querySelectorAll('.inputs input')
+
+        function handleInput(e) {
+            const input = e.target
+            if (input.nextElementSibling && input.value) {
+                input.nextElementSibling.focus()
+            }
+        }
+
+        function handlePaste(e) {
+            const paste = e.clipboardData.getData('text')
+            inputs.forEach(
+                (input, i) => input.value = paste[i] || ''
+            )
+        }
+
+        inputs[0].addEventListener('paste', handlePaste);
+        form.addEventListener('input', handleInput);
+    </script>
+</body>
+</html>
