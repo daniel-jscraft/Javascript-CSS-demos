@@ -4,11 +4,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>digit-pincode-field</title>
     <style>
+        :root {
+            --color__main: #4692ec;
+            --color__secondary: #fff;
+            --unit: 1rem;
+        }
+
         * { box-sizing: border-box; }
 
+        body { background-color: var(--color__main); }
+
         form {
-            border: 1px solid black;
-            padding: 20px;
+            border: 1px solid var(--color__secondary);
+            padding: var(--unit);
             width: 500px;
         }
 
@@ -23,30 +31,14 @@
             display: grid;
             gap: 10px;
             grid-template-columns: repeat(4, 1fr);
-            margin-bottom: 10px;
         }
 
         .inputs > * {
-            border: 1px solid black;
+            border: 1px solid var(--color__secondary);
             width: 100%;
-            padding: 20px;
+            padding: var(--unit);
             text-align: center;
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        input[type="submit"] {
-            background: black;
-            color: white;
-            font-size: 20px;
-            padding: 20px;
-            border: 0;
-            width: 100%;
-            text-align: center;
-        }
-
-        input[type="submit"]:focus {
-            border-color: blue;
+            font-size: var(--unit);
         }
     </style>
 </head>
