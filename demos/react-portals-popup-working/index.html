@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>react-portals-popup</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        html {
+            background-color: #4692ec;
+        }
+
+        body {
+            text-align: center;
+            color: white;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #FFF;
+            padding: 50px;
+            z-index: 1000;
+            color: black;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .7);
+            z-index: 1000;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            padding: 10px;
+            width: 400px;
+            margin: auto;
+        }
+
+        #root {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <div id="popup-container"></div>
+    <div class="main-content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+
+    <script type="text/babel">
+        const {useRef, useState, useEffect} = React;
+        const {createPortal} = ReactDOM;
+
+        const Popup = ({ open, children, onClose }) => {
+            return open && createPortal(<div>
+                <div className="overlay" />
+                <div className="popup">
+                    <button onClick={onClose}>Close</button>
+                    {children}
+                </div>
+            </div>,
+            document.getElementById('popup-container'))
+        }
+
+        const App = ()=> {
+            const [isOpen, setIsOpen] = useState(false)
+            return (<div>
+                <div>
+                    <button onClick={() => setIsOpen(true)}>Open Popup</button>
+
+                    <Popup open={isOpen} onClose={() => setIsOpen(false)}>
+                    <p>Popup content here!</p>
+                    </Popup>
+                </div>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
