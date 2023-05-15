@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - React render element outside component](https://www.js-craft.io/blog/react-render-element-outside-component/)
