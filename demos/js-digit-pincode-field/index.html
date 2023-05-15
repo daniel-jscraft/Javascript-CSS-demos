@@ -60,6 +60,8 @@
                 input.nextElementSibling.focus()
             }
         }
+        form.addEventListener('input', handleInput);
+
 
         const handlePaste = (e) => {
             const paste = e.clipboardData.getData('text')
@@ -67,9 +69,7 @@
                 (input, i) => input.value = paste[i] || ''
             )
         }
-
         inputs[0].addEventListener('paste', handlePaste);
-        form.addEventListener('input', handleInput);
     </script>
 </body>
 </html>
