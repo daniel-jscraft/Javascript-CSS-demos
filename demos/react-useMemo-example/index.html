@@ -14,12 +14,18 @@
     <script type="text/babel">
         const {useState, useMemo} = React;
 
+        const expensiveCalculation = (value)=> {
+            alert('⏳ Running expensive computation')
+            return value * 2
+        }
+
         const UsingMemo = () => {
             const [green, setGreen] = useState(0)
             const [red, setRed] = useState(0)
-            useMemo( ()=> {
-                alert('⏳ Running expensive computation')
+            const result = useMemo( ()=> {
+                return expensiveCalculation(red)
             }, [red])
+            console.log(result)
             return (<div>
                 <h3>Using memo  the expensive computation will run only on 🍎</h3>
                 <p>🍏={green} and 🍎={red}</p>
@@ -35,7 +41,8 @@
         const WithoutUsingMemo = () => {
             const [green, setGreen] = useState(0)
             const [red, setRed] = useState(0)
-            alert('⏳ Running expensive computation')
+            const result = expensiveCalculation(red)
+            console.log(result)
             return (<div>
                 <h3>Without memo  the expensive computation will run on 🍏 and 🍎</h3>
                 <p>🍏={green} and 🍎={red}</p>
