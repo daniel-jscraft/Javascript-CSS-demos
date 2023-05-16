@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React useMemo example</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const {useState, useMemo} = React;
+
+        const UsingMemo = () => {
+            const [green, setGreen] = useState(0)
+            const [red, setRed] = useState(0)
+            useMemo( ()=> {
+                alert('⏳ Running expensive computation')
+            }, [red])
+            return (<div>
+                <h3>Using memo  the expensive computation will run only on 🍎</h3>
+                <p>🍏={green} and 🍎={red}</p>
+                <button onClick = {() => setGreen(val => val+1)}>
+                    Add 🍎 apple 
+                </button>
+                <button onClick = {() => setRed(val => val+1)}>
+                    Add 🍏 apple 
+                </button>
+            </div>)
+        }
+
+        const WithoutUsingMemo = () => {
+            const [green, setGreen] = useState(0)
+            const [red, setRed] = useState(0)
+            alert('⏳ Running expensive computation')
+            return (<div>
+                <h3>Without memo  the expensive computation will run on 🍏 and 🍎</h3>
+                <p>🍏={green} and 🍎={red}</p>
+                <button onClick = {() => setGreen(val => val+1)}>
+                    Add 🍎 apple 
+                </button>
+                <button onClick = {() => setRed(val => val+1)}>
+                    Add 🍏 apple 
+                </button>
+            </div>)
+        }
+
+        const App = ()=> {
+            return (<div>
+                <WithoutUsingMemo />
+                <hr/>
+                <UsingMemo />
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
