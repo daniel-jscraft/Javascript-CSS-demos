@@ -22,18 +22,20 @@
         const UsingMemo = () => {
             const [green, setGreen] = useState(0)
             const [red, setRed] = useState(0)
+
             const result = useMemo( ()=> {
                 return expensiveCalculation(red)
             }, [red])
             console.log(result)
+
             return (<div>
                 <h3>Using memo  the expensive computation will run only on 🍎</h3>
                 <p>🍏={green} and 🍎={red}</p>
                 <button onClick = {() => setGreen(val => val+1)}>
-                    Add 🍎 apple 
+                    Add 🍏 apple 
                 </button>
                 <button onClick = {() => setRed(val => val+1)}>
-                    Add 🍏 apple 
+                    Add 🍎 apple 
                 </button>
             </div>)
         }
@@ -41,16 +43,18 @@
         const WithoutUsingMemo = () => {
             const [green, setGreen] = useState(0)
             const [red, setRed] = useState(0)
+
             const result = expensiveCalculation(red)
             console.log(result)
+
             return (<div>
                 <h3>Without memo  the expensive computation will run on 🍏 and 🍎</h3>
                 <p>🍏={green} and 🍎={red}</p>
                 <button onClick = {() => setGreen(val => val+1)}>
-                    Add 🍎 apple 
+                    Add 🍏 apple 
                 </button>
                 <button onClick = {() => setRed(val => val+1)}>
-                    Add 🍏 apple 
+                    Add 🍎 apple 
                 </button>
             </div>)
         }
