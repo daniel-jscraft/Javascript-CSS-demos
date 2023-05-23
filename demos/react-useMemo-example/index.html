@@ -23,6 +23,8 @@
             const [green, setGreen] = useState(0)
             const [red, setRed] = useState(0)
 
+            /* with useMemo() the expensiveCalculation()
+            will run only when red changes, instead of each render */
             const result = useMemo( ()=> {
                 return expensiveCalculation(red)
             }, [red])
