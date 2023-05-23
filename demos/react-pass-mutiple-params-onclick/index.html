@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>react-portals-popup</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const {useState} = React;
+
+        const fakeItems = [
+            {name: "Ergo keyboard", price: 200, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1625810188933-U8XTJAMWR8A0MJDJ32QA/lain_top.jpg?format=2500w",  id: 1, category: 1, timeAdded: new Date() },
+            {name: "Smallice PCB", price: 120, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1617681008502-BJJPF8TRPN6LNTMUBROR/idi7pnppq0d61.jpg?format=2500w",  id: 2, category: 2, timeAdded: new Date() },
+            {name: "Smallice Acrylic Case", price: 400, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1623041004115-JPO9UY3R357ZTPUAWM2D/PXL_20210601_203954893.PORTRAIT_2.jpg?format=2500w", id: 3, category: 3, timeAdded: new Date()},
+            {name: "Fourier", price: 320, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1606189295901-T565PVE49OZXN9QK82LD/_RO_5289.jpg?format=2500w", id: 4, category: 4, timeAdded: new Date() }
+        ];
+
+        const App = ()=> {
+            const [items, setItems] = useState(fakeItems)
+            const removeItem = (id)=> {
+                alert(id)
+            }
+            return (<div>
+                <ul className="shopping-list">
+                    {items.map((i) => (
+                    <li key={i.id}>
+                        {i.name} - {i.price} -{" "}
+                        <a onClick={() => removeItem(i.id)} href="#">
+                        [Remove]
+                        </a>
+                    </li>
+                    ))}
+                </ul>
+            </div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
