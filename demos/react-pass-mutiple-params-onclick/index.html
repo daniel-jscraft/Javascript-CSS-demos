@@ -12,7 +12,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const {useState} = React;
+        const {useState, useCallback} = React;
 
         const fakeItems = [
             {name: "Ergo keyboard", price: 200, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1625810188933-U8XTJAMWR8A0MJDJ32QA/lain_top.jpg?format=2500w",  id: 1, category: 1, timeAdded: new Date() },
@@ -23,15 +23,15 @@
 
         const App = ()=> {
             const [items, setItems] = useState(fakeItems)
-            const removeItem = (id)=> {
+            const removeItem = useCallback((id)=> {
                 alert(id)
-            }
+            }, [items])
             return (<div>
                 <ul className="shopping-list">
                     {items.map((i) => (
                     <li key={i.id}>
                         {i.name} - {i.price} -{" "}
-                        <a onClick={() => removeItem(i.id)} href="#">
+                        <a onClick={removeItem(i.id, i.category, i.timeAdded)} href="#">
                         [Remove]
                         </a>
                     </li>
