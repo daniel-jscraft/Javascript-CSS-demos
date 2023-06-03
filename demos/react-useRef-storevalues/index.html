@@ -26,23 +26,23 @@
         const {useState, useRef} = React;
 
         const App = ()=> {
-            const [stateVar, setStateVar] = useState(0)
-            const refVar = useRef(0)
+const [stateVar, setStateVar] = useState(0)
+const refVar = useRef(0)
 
-            const incState = () => setStateVar(val => val + 1)
-            const incRef = () => refVar.current += 1
-            return (<div>
-                <ul>
-                    <li>⚽️ useState() var value ={stateVar} </li>
-                    <li>🥎 useRef() var value ={refVar.current} </li>
-                </ul>
-                <button onClick={incState} >
-                    Increment ⚽️ useState() var - rerenders
-                </button>
-                <button onClick={incRef}>
-                    Increment 🥎 useRef() var - will NOT rerender
-                </button>
-            </div>)
+const incState = () => setStateVar(val => val + 1)
+const incRef = () => refVar.current += 1
+return (<div>
+    <ul>
+        <li>⚽️ useState() var value ={stateVar} </li>
+        <li>🥎 useRef() var value ={refVar.current} </li>
+    </ul>
+    <button onClick={incState} >
+        Increment ⚽️ useState() var - rerenders
+    </button>
+    <button onClick={incRef}>
+        Increment 🥎 useRef() var - will NOT rerender
+    </button>
+</div>)
         }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
