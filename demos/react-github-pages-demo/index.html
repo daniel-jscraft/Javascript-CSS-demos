@@ -7,8 +7,10 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
+        const {useState} = React
+
         const App = () => {
-            const [val, setVal] = React.useState(0)
+            const [val, setVal] = useState(0)
             return (<button onClick={()=> setVal(v => v +1)}>
                 Counter is {val}. Click to increment!
             </button>)

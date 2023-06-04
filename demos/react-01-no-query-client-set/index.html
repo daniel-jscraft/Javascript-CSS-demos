@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>react-use-infinite-query</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@tanstack/react-query@4/build/umd/index.production.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // cum se faca importul normal
+        // Uncaught Error: No QueryClient set, use QueryClientProvider to set one
+        const {useQuery, QueryClient, QueryClientProvider} = ReactQuery 
+
+        const queryClient = new QueryClient();
+
+        function App() {
+        // 👇️ Wrap with QueryClientProvider here
+        return (
+            <QueryClientProvider client={queryClient}>
+                <Users />
+            </QueryClientProvider>
+        );
+        }
+
+        function Users() {
+        // 👇️ can use the useQuery hook here
+        const {isLoading, error, data} = useQuery({
+            queryKey: ['usersData'],
+            queryFn: () =>
+            fetch('https://randomuser.me/api').then(res => res.json()),
+        });
+
+        if (isLoading) return 'Loading...';
+
+        if (error) return 'An error has occurred: ' + error.message;
+
+        console.log(data);
+
+        return (
+            <div>
+            {data.results.map(user => (
+                <div key={user.id.value}>
+                <h2>
+                    Name: {user.name.first} {user.name.last}
+                </h2>
+                <h2>Gender: {user.gender}</h2>
+
+                <h2>Phone: {user.phone}</h2>
+                <h2>Email: {user.email}</h2>
+                </div>
+            ))}
+            </div>
+        );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
