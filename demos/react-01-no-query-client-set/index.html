@@ -12,50 +12,27 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        // cum se faca importul normal
-        // Uncaught Error: No QueryClient set, use QueryClientProvider to set one
         const {useQuery, QueryClient, QueryClientProvider} = ReactQuery 
 
         const queryClient = new QueryClient();
 
-        function App() {
-        // 👇️ Wrap with QueryClientProvider here
-        return (
-            <QueryClientProvider client={queryClient}>
-                <Users />
-            </QueryClientProvider>
-        );
-        }
+        const App = () => {
+            const {isLoading, error, data} = useQuery({
+                queryKey: ['usersData'],
+                queryFn: () =>
+                fetch('https://randomuser.me/api').then(res => res.json()),
+            });
 
-        function Users() {
-        // 👇️ can use the useQuery hook here
-        const {isLoading, error, data} = useQuery({
-            queryKey: ['usersData'],
-            queryFn: () =>
-            fetch('https://randomuser.me/api').then(res => res.json()),
-        });
+            if (isLoading) return '⏳ loading...';
+            if (error) return 'An error has occurred!';
 
-        if (isLoading) return 'Loading...';
-
-        if (error) return 'An error has occurred: ' + error.message;
-
-        console.log(data);
-
-        return (
-            <div>
-            {data.results.map(user => (
-                <div key={user.id.value}>
-                <h2>
-                    Name: {user.name.first} {user.name.last}
-                </h2>
-                <h2>Gender: {user.gender}</h2>
-
-                <h2>Phone: {user.phone}</h2>
-                <h2>Email: {user.email}</h2>
-                </div>
-            ))}
-            </div>
-        );
+            return (<div>
+                {data.results.map(user => (
+                    <div key={user.id.value}>
+                        👨‍💻 User: {user.name.first} {user.name.last}
+                    </div>
+                ))}
+            </div>);
         }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
