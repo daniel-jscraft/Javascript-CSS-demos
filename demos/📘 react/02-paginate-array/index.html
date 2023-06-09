@@ -63,10 +63,12 @@
                     </tbody>
                 </table>
                 <p>
-                    <button onClick={previousPage}>
+                    <button onClick={previousPage}
+                        disabled={activePage <= 1}>
                         Previous
                     </button>
-                    <button onClick={nextPage}>
+                    <button onClick={nextPage}
+                        disabled={activePage >= totalPages}>
                         Next</button>
                     <em>(page {activePage}/{totalPages})</em>
                 </p>
