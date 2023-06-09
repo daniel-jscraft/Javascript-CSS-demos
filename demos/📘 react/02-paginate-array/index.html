@@ -6,6 +6,16 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        button {
+            display: inline-block;
+            margin: 0.2rem;
+        }
+
+        table, tbody {
+            border: 1px solid;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -62,8 +72,13 @@
                     </tbody>
                 </table>
                 <p>
-                    <button onClick={prePage}>Previous</button>
-                    <button onClick={nextPage}>Next</button>
+                    <button onClick={prePage}
+                        disabled={page <= 1}>
+                        Previous
+                    </button>
+                    <button onClick={nextPage}
+                        disabled={page >= pageData.totalPages}>
+                        Next</button>
                     <em>(page {page}/{pageData.totalPages})</em>
                 </p>
             </div>
