@@ -29,33 +29,36 @@
             })
         );
 
-        const paginate = (items, page = 1, perPage = 10) => {
-            const offset = perPage * (page - 1);
+        const usePagination = (items, page = 1, perPage = 10) => {
+            const [currentPage, setCurrentPage] = useState(page);
             const totalPages = Math.ceil(items.length / perPage);
-            const paginatedItems = items.slice(offset, perPage * page);
-        
+            const offset = perPage * (currentPage - 1);
+            const paginatedItems = items.slice(offset, perPage * currentPage);
+
+            const nextPage = () => {
+                if (currentPage < totalPages) {
+                setCurrentPage(currentPage + 1);
+                }
+            };
+
+            const previousPage = () => {
+                if (currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+                }
+            };
+
             return {
-                previousPage: page - 1 ? page - 1 : null,
-                nextPage: (totalPages > page) ? page + 1 : null,
-                total: items.length,
-                totalPages: totalPages,
-                items: paginatedItems
+                currentPage,
+                nextPage,
+                previousPage,
+                totalPages,
+                totalItems: items.length,
+                items: paginatedItems,
             };
         };
 
-
         const App = () => {
-            const [page, setPage] = useState(1)
-            const [pageData, setPageData] = useState(paginate(array))
-
-
-            useEffect( ()=> {
-                setPageData(paginate(array, page))
-            }, [page])
-
-            const prePage = () => (page - 1 > 0) ? setPage(p => p -1) : ''
-
-            const nextPage = () => (page < pageData.totalPages) ? setPage(p => p + 1) : ''
+            const { currentPage, nextPage, previousPage, totalPages, totalItems, items } = usePagination(array);
 
             return <div>
                 <h1>Static array paginated in React</h1>
@@ -65,21 +68,19 @@
                         <th>💰 Salary</th>
                     </tr></thead>
                     <tbody>
-                        {pageData.items.map(item => <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.salary}</td>
-                            </tr>)}
+                        {items.map( (item, i) => <tr key={i}>
+                            <td>{item.id}</td>
+                            <td>{item.salary}</td>
+                        </tr>)}
                     </tbody>
                 </table>
                 <p>
-                    <button onClick={prePage}
-                        disabled={page <= 1}>
+                    <button onClick={previousPage}>
                         Previous
                     </button>
-                    <button onClick={nextPage}
-                        disabled={page >= pageData.totalPages}>
+                    <button onClick={nextPage}>
                         Next</button>
-                    <em>(page {page}/{pageData.totalPages})</em>
+                    <em>(page {currentPage}/{totalPages})</em>
                 </p>
             </div>
         }
