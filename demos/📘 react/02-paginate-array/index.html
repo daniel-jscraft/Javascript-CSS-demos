@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-paginate-array</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState, useEffect} = React
+
+        const array = Array.from(
+            {length: 48}, () => ({
+                id: Math.floor(Math.random() * 1024), 
+                salary: Math.floor(Math.random() * 40)
+            })
+        );
+
+        const paginate = (items, page = 1, perPage = 10) => {
+            const offset = perPage * (page - 1);
+            const totalPages = Math.ceil(items.length / perPage);
+            const paginatedItems = items.slice(offset, perPage * page);
+        
+            return {
+                previousPage: page - 1 ? page - 1 : null,
+                nextPage: (totalPages > page) ? page + 1 : null,
+                total: items.length,
+                totalPages: totalPages,
+                items: paginatedItems
+            };
+        };
+
+
+        const App = () => {
+            const [page, setPage] = useState(1)
+            const [pageData, setPageData] = useState(paginate(array))
+
+
+            useEffect( ()=> {
+                setPageData(paginate(array, page))
+            }, [page])
+
+            const prePage = () => (page - 1 > 0) ? setPage(p => p -1) : ''
+
+            const nextPage = () => (page < pageData.totalPages) ? setPage(p => p + 1) : ''
+
+            return <div>
+                <h1>Static array paginated in React</h1>
+                <table>
+                    <thead><tr>
+                        <th>🙂 User ID</th>
+                        <th>💰 Salary</th>
+                    </tr></thead>
+                    <tbody>
+                        {pageData.items.map(item => <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.salary}</td>
+                            </tr>)}
+                    </tbody>
+                </table>
+                <p>
+                    <button onClick={prePage}>Previous</button>
+                    <button onClick={nextPage}>Next</button>
+                    <em>(page {page}/{pageData.totalPages})</em>
+                </p>
+            </div>
+        }
+        
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
