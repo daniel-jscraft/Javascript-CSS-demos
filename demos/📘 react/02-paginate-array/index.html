@@ -30,35 +30,23 @@
         );
 
         const usePagination = (items, page = 1, perPage = 10) => {
-            const [currentPage, setCurrentPage] = useState(page);
-            const totalPages = Math.ceil(items.length / perPage);
-            const offset = perPage * (currentPage - 1);
-            const paginatedItems = items.slice(offset, perPage * currentPage);
-
-            const nextPage = () => {
-                if (currentPage < totalPages) {
-                setCurrentPage(currentPage + 1);
-                }
-            };
-
-            const previousPage = () => {
-                if (currentPage > 1) {
-                setCurrentPage(currentPage - 1);
-                }
-            };
+            const [activePage, setActivePage] = useState(page)
+            const totalPages = Math.ceil(items.length / perPage)
+            const offset = perPage * (activePage - 1)
+            const paginatedItems = items.slice(offset, perPage * activePage)
 
             return {
-                currentPage,
-                nextPage,
-                previousPage,
+                activePage,
+                nextPage: ()=> setActivePage(p => p < totalPages ? p + 1 : p),
+                previousPage: ()=> setActivePage(p => p > 1 ? p - 1 : p),
                 totalPages,
                 totalItems: items.length,
                 items: paginatedItems,
-            };
-        };
+            }
+        }
 
         const App = () => {
-            const { currentPage, nextPage, previousPage, totalPages, totalItems, items } = usePagination(array);
+            const { activePage, nextPage, previousPage, totalPages, totalItems, items } = usePagination(array);
 
             return <div>
                 <h1>Static array paginated in React</h1>
@@ -80,7 +68,7 @@
                     </button>
                     <button onClick={nextPage}>
                         Next</button>
-                    <em>(page {currentPage}/{totalPages})</em>
+                    <em>(page {activePage}/{totalPages})</em>
                 </p>
             </div>
         }
