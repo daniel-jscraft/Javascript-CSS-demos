@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Paginate an array of objects in React](https://www.js-craft.io/blog/react-paginate-array-objects/)
