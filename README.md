@@ -5,5 +5,3 @@ This is a collection of online JavaScript and CSS demos based on my blog posts o
 Basically, all the code is already on my blog; but, I wanted a way to easily create interactive demos that my readers could play with.
 
 ## My JavaScript Demos - I ❤️ JavaScript!
-
-- [HTML-keyboard-shortcut](https://daniel-jscraft.github.io/Javascript-CSS-demos/demos/HTML-keyboard-shortcut/)
