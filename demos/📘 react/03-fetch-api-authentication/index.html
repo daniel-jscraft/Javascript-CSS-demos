@@ -24,13 +24,13 @@
 
        
         const App = () => {
-            const [spoiler, setSpoiler] = useState(null);
+            const [secretData, setSecretData] = useState(null);
 
             const fetchSecretData = ()=> {
                 const headers = { 'Authorization': 'secret_token' };
                 fetch('https://js-craft.io/secret_data.php', {headers})
                     .then(response => response.json())
-                    .then(data => setSpoiler(data.data));
+                    .then(data => setSecretData(data.data));
             }
 
             return (
@@ -38,7 +38,7 @@
                     <button onClick={fetchSecretData}>
                         🔐 Press here for a secret movie spoiler
                     </button>
-                    <h3>{spoiler}</h3>
+                    <h3>{secretData}</h3>
                 </div>
             );
         }
