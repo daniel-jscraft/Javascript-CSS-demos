@@ -24,25 +24,21 @@
 
        
         const App = () => {
-            const [product, setProduct] = useState(null);
+            const [spoiler, setSpoiler] = useState(null);
 
-            useEffect(() => {
+            const fetchSpoiler = ()=> {
                 const headers = { 'Authorization': 'secret_token' };
-                fetch('https://js-craft.io/secret_data.php', { headers })
-                    .then(response => {
-                        console.log(response)
-                        return response.json()
-                    })
-                    .then(data => {
-                        setProduct(data)
-                        console.log(data)
-                    });
-            }, []);
+                fetch('https://js-craft.io/secret_data.php', {headers})
+                    .then(response => response.json())
+                    .then(data => setSpoiler(data.data));
+            }
 
             return (
                 <div>
-                    <h3 className="p-3 text-center">React Bearer Token with Fetch</h3>
-                    
+                    <button onClick={fetchSpoiler}>
+                        🔐 Press here for a secret movie spoiler
+                    </button>
+                    <h3>{spoiler}</h3>
                 </div>
             );
         }
