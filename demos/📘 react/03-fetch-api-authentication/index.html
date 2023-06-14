@@ -27,8 +27,8 @@
             const [product, setProduct] = useState(null);
 
             useEffect(() => {
-                const headers = { 'Authorization': 'Bearer my-token' };
-                fetch('https://js-craft.io/service.php')
+                const headers = { 'Authorization': 'secret_token' };
+                fetch('https://js-craft.io/secret_data.php', { headers })
                     .then(response => {
                         console.log(response)
                         return response.json()
