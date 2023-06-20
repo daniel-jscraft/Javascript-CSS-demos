@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-obj-clone-remove-prop</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <h1>👨‍💻 Open up the dev console to see the output!</h1>
+    <script>
+
+        const ingredients = {
+            apples: '🍎', 
+            chicken: '🍗',
+            bread: '🥖',
+            broccoli: '🥦', 
+            milk: '🥛'
+        }
+
+        //const {chicken, ...noMeat} = ingredients
+        
+        const {milk, chicken, ...vegetarian} = ingredients
+
+        console.log(vegetarian)
+    </script>
+</body>
+</html>
