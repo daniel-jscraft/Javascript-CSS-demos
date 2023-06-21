@@ -1,3 +1,7 @@
+Blog post here: [https://www.js-craft.io/blog/nextjs-13-server-actions-fetching-data-with-form-parameter](https://www.js-craft.io/blog/nextjs-13-server-actions-fetching-data-with-form-parameter)
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
