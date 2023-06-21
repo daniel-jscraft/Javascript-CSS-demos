@@ -1,4 +1,5 @@
-button {
-    width: 80%;
-    line-height: 2rem;
+select, button {
+    display: inline-block;
+    margin: 0.75rem;
+    line-height: 1rem;
 }
