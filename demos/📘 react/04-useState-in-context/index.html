@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-useState-in-context</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState, createContext, useContext} = React
+        
+        const AppContext = createContext({})
+        const AppContextProvider = ({children}) => {
+            const [ctxValue, setCtxValue] = useState(0)
+            return (<AppContext.Provider value={{ctxValue, setCtxValue}}>
+                {children}
+            </AppContext.Provider>)
+        }
+
+        const SomeComponent = ()=> {
+            const {ctxValue, setCtxValue} = useContext(AppContext)
+            return <div>
+                <p>The context value: {ctxValue}</p>
+                <button onClick={() => setCtxValue(v => v +1) }>
+                    Incremenet myValue
+                </button>
+            </div>
+        }
+
+        const App = () => {
+            return (
+                <AppContextProvider>
+                    <SomeComponent />
+                </AppContextProvider>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
