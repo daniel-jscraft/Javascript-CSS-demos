@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - A CSS margin-trim example](https://www.js-craft.io/blog/css-margin-trim-example/)
