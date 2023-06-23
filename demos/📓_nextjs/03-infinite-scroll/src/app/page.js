@@ -30,17 +30,6 @@ const MyComponent = ()=> {
     }
   }, [myRef])
 
-  const loadMoreBtnText = ()=> {
-    if (isFetchingNextPage) {
-      return '⏳ Fetching posts'
-    }
-    let lastPage = data?.pages[data?.pages.length-1]
-    if(!lastPage?.length) {
-      return 'Nothing left to load'
-    }
-    return 'Load more'
-  }
-
   return <>
     <h1>📖 Post list</h1>
     <div className="container">
