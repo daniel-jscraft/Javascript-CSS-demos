@@ -22,8 +22,8 @@ const MyComponent = ()=> {
   )
 
   useEffect(()=> {
-    const observer = new IntersectionObserver( (entries) => {
-      entries.forEach( entry => fetchNextPage())
+    const observer = new IntersectionObserver( 
+      (entries) => {entries.forEach( e => fetchNextPage())
     })
     if (myRef.current) {
       observer.observe(myRef.current)
