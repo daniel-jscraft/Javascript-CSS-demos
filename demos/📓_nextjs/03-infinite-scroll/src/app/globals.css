@@ -1,0 +1,13 @@
+li {
+    line-height: 3rem;
+    width: 80%;
+    margin: 1rem;
+    border: 1px solid #ccc;
+}
+
+.container {
+    padding: 1rem;
+    border: 2px solid;
+    max-height: 300px;
+    overflow: scroll;
+}
