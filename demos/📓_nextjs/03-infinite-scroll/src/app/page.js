@@ -5,8 +5,7 @@ import { useState, useRef, useEffect } from "react"
 
 const fetchData = async (page) => {
   const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5&_page=' + page)
-  const posts = (await response.json())
-  return posts;
+  return await response.json();
 }
 
 const queryClient = new QueryClient();
@@ -17,24 +16,16 @@ const MyComponent = ()=> {
 
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     ['query'], 
-    async ({pageParam = 1}) => {
-      const response = await fetchData(pageParam)
-      return response
-    }, 
+    async ({pageParam = 1}) => await fetchData(pageParam), 
     {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1
-      }
+      getNextPageParam: (_, pages) => pages.length + 1
     }
   )
 
   useEffect(()=> {
     const observer = new IntersectionObserver( (entries) => {
-        entries.forEach((entry)=> {
-            fetchNextPage()
-            console.log("is on screen = " + entry.isIntersecting)
-        });
-    });
+      entries.forEach( entry => fetchNextPage())
+    })
     if (myRef.current) {
       observer.observe(myRef.current)
     }
