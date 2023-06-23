@@ -12,7 +12,6 @@ const queryClient = new QueryClient();
 
 const MyComponent = ()=> {
   const myRef = useRef(null)
-  const [isVisible, setIsVisible] = useState(false)
 
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     ['query'], 
