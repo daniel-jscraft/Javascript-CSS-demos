@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-obj-clone-remove-prop</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <p>🗓 Current date: <span id="current-date"></span></p>
+    <label for="format-select"> 🖋 Choose a date format:</label>
+    <select name="format-select" id="format-select">
+        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+        <option value="DD MMM YYYY">DD MMM YYYY</option>
+        <option value="MMMM DD, YYYY">MMMM DD, YYYY</option>
+    </select>
+    <p>🖋 Formated date: <span id="formated-date"></span></p>
+    
+    <script>
+        const currentDate = new Date()
+
+        const cdContainer = document.querySelector('#current-date')
+        cdContainer.textContent = currentDate
+        
+        const fdContainer = document.querySelector('#formated-date')
+
+        document.querySelector('#format-select').addEventListener('change', 
+            (e)=> {
+                const newFormat = e.target.value
+                fdContainer.textContent = formatDate(newFormat, currentDate)
+            }
+        )
+
+        const formatDate = (format, date) => {
+            if(format == 'MMMM DD, YYYY') {
+                const options = { month: 'long', day: 'numeric', year: 'numeric' }
+                return date.toLocaleDateString(undefined, options)
+            }
+            return 'xxx'
+        }
+
+        /* javascript format date without libraries
+        it will do the format 
+        it is not worth it to add a lib just for this
+
+        // Format the date to YYYY-MM-DD
+        const formattedDate = date.toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        }).split('/').reverse().join('-');
+
+        // MM/DD/YYYY
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+        });
+
+        https://www.thomasledoux.be/blog/formatting-dates-javascript-without-library
+        https://reacthustle.com/blog/react-format-date-ultimate-guide
+        */
+
+    </script>
+</body>
+</html>
