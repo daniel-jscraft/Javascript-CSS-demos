@@ -11,8 +11,9 @@
     <p>🗓 Current date: <span id="current-date"></span></p>
     <label for="format-select"> 🖋 Choose a date format:</label>
     <select name="format-select" id="format-select">
+        <option value="">--- Select a format ---</option>
         <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
         <option value="DD MMM YYYY">DD MMM YYYY</option>
         <option value="MMMM DD, YYYY">MMMM DD, YYYY</option>
     </select>
@@ -34,11 +35,33 @@
         )
 
         const formatDate = (format, date) => {
+            if(format == 'YYYY-MM-DD') {
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit'}
+                return date.toLocaleDateString('en-GB', options).split('/').reverse().join('-')
+            }
+
+            if(format == 'DD MMM YYYY') {
+                const options = { day: '2-digit', month: 'short', year: 'numeric' }
+                const formattedDate = date.toLocaleDateString('en-US', options)
+                const [m, d, y] = formattedDate.split(' ')
+                return `${d} ${m.toUpperCase()} ${y}`
+            }
+
             if(format == 'MMMM DD, YYYY') {
                 const options = { month: 'long', day: 'numeric', year: 'numeric' }
                 return date.toLocaleDateString(undefined, options)
             }
-            return 'xxx'
+            
+            
+            if(format == 'MM/DD/YYYY') {
+                const options = { month: '2-digit', day: '2-digit', year: 'numeric' }
+                return date.toLocaleDateString('en-US', options)
+            }
+            if(format == 'DD/MM/YYYY') {
+                return date.toLocaleDateString('en-GB')
+            }
+            
+            return '⛔️ No valid format'
         }
 
         /* javascript format date without libraries
