@@ -1,4 +1,4 @@
-Blog post and example here: [Make an infinite scroll in NextJs 13 with useInfiniteQuery()](https://www.js-craft.io/blog/infinite-scroll-nextjs-13-useinfinitequery)
+Blog post and example here: [Make an infinite scroll in NextJs 13 with useInfiniteQuery()](https://www.js-craft.io/blog/infinite-scroll-nextjs-useinfinitequery)
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
