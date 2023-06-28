@@ -1,3 +1,5 @@
+Blog post and example here: [Fixing the NextJs Error: Invalid src prop on `next/image`, hostname is not configured under images](https://www.js-craft.io/blog/nextjs-error-invalid-src-prop-on-next-image-hostname-is-not-configured-under-images/)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
