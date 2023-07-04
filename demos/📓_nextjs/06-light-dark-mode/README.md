@@ -1,3 +1,6 @@
+Blog post and example here: [NextJs 13 - adding a simple light-dark mode]( https://www.js-craft.io/blog/nextjs-light-dark-mode/).
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
