@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoped CSS</title>
+    <style>
+
+        p {
+            color: blue;
+        }
+
+        @scope (.afla) {
+            /* targets the actual .afla element */
+            :scope {
+                border: 1px solid;
+            }
+            /* targets the paragrahs in the .afla scope  */
+            p {
+                color: red;
+            }
+        }
+
+        @scope (.beta) {
+            /* targets the actual .beta element */
+            :scope {
+                border: 1px dashed;
+            }
+            /* targets the paragrahs in the .beta scope  */
+            p {
+                color: green;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>This paragrah gets its color from the general CSS.</p>
+    </div>
+    <div class="afla">
+        <p>This paragrah gets its color from the .afla scope.</p>
+    </div>
+
+    <div class="beta">
+        <p>This paragrah gets its color from the .beta scope.</p>
+    </div>
+</body>
+</html>
