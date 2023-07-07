@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - What is the @scope rule in CSS?](https://www.js-craft.io/blog/scope-rule-css/)
