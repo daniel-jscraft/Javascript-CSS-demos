@@ -8,8 +8,11 @@
     </style>
 </head>
 <body>
-    <button>Call serverless Cloudflare function</button>
+    <button id="btn">Call serverless Cloudflare function</button>
     <script>
+        document.querySelector('#btn').addEventListener('click', (e) => {
+            alert('call')
+        })
     </script>
 </body>
 </html>
