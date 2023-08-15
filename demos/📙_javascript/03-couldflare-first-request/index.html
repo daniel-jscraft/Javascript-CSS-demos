@@ -10,7 +10,7 @@
         document.getElementById('btn').addEventListener('click', () => {
           fetch('https://js-craft-first.js-craft-feed.workers.dev')
             .then(response => response.json())
-            .then(data => alert(data))
+            .then(data => alert(data.message))
             .catch(error => alert('⛔️ Error fetching data:', error));
         })
     </script>
