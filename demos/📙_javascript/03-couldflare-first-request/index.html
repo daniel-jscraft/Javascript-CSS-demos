@@ -8,7 +8,7 @@
     <button id="btn">Call serverless Cloudflare function</button>
     <script>
         document.getElementById('btn').addEventListener('click', () => {
-          fetch('https://js-craft-first.js-craft-feed.workers.dev/')
+          fetch('https://js-craft-first.js-craft-feed.workers.dev')
             .then(response => response.json())
             .then(data => alert(data))
             .catch(error => console.error('Error fetching data:', error));
