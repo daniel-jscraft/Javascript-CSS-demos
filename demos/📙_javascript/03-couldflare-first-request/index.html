@@ -11,7 +11,7 @@
           fetch('https://js-craft-first.js-craft-feed.workers.dev')
             .then(response => response.json())
             .then(data => alert(data))
-            .catch(error => console.error('Error fetching data:', error));
+            .catch(error => alert('⛔️ Error fetching data:', error));
         })
     </script>
 </body>
