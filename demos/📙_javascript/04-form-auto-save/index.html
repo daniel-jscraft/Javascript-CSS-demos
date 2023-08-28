@@ -27,7 +27,7 @@
     let autoSaveTimer = null;
 
     const setupAutoSaveTimeout = () => {
-        // at form update be sure to cancel other pending auto ssave timeouts
+        // at form update be sure to cancel other pending auto save timeouts
         clearTimeout(autoSaveTimer)
         autoSaveTimer = setTimeout( doAutoSave, DELAY_ML)
     }
@@ -44,7 +44,7 @@
     }
 
     const form = document.querySelector( "form" )
-    // 0.5 seconds after the form si updated autosave the data
+    // 0.5 seconds after the form is updated autosave the data
     form.addEventListener( "input", setupAutoSaveTimeout )
     form.addEventListener( "submit", () => clearTimeout(autoSaveTimer))
 </script>
