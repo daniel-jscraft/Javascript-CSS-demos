@@ -5,46 +5,45 @@
     <title>04-form-auto-save</title>
 </head>
 <body>
+<form method="post" action="https://jsonplaceholder.typicode.com/users">
+    <input type="hidden" name="submitted" value="true" />
 
-    <form method="post" action="https://jsonplaceholder.typicode.com/users">
-        <input type="hidden" name="submitted" value="true" />
-       
-        <label for="name">😊 Name:</label>
-        <input name="name"/>
-    
-        <label for="phone">☎️ Phone:</label>
-        <input name="phone" />
-        
-        <button type="submit" name="action" value="save">
-            💾 Save user
-        </button>
-    </form>
+    <label for="name">😊 Name:</label>
+    <input name="name"/>
+
+    <label for="phone">☎️ Phone:</label>
+    <input name="phone" />
+
+    <button type="submit" name="action" value="save">
+        💾 Save user
+    </button>
+</form>
 
 
-	<script type="text/javascript">
-        let autoSaveTimer = null;
+<script type="text/javascript">
+    let autoSaveTimer = null;
 
-		const setupAutoSaveTimeout = () => {
-            // at form update be sure to cancel other pending auto ssave timeouts
-			clearTimeout(autoSaveTimer)
-			autoSaveTimer = setTimeout( doAutoSave, 500 )
-		}
-		
-		const doAutoSave = () => {
-			const action = form.getAttribute( "action" )
-			const formData = new FormData( form )
-			fetch( action, {
-                method: form.getAttribute( "method" ),
-                body: formData
-            }).catch( 
-                err => console.error(err)
-            );
-		}
+    const setupAutoSaveTimeout = () => {
+        // at form update be sure to cancel other pending auto ssave timeouts
+        clearTimeout(autoSaveTimer)
+        autoSaveTimer = setTimeout( doAutoSave, 500 )
+    }
 
-		const form = document.querySelector( "form" );
-        // 0.5 seconds after the form si updated autosave the data
-		form.addEventListener( "input", setupAutoSaveTimeout );
-		form.addEventListener( "submit", () => clearTimeout(autoSaveTimer));
-	</script>
+    const doAutoSave = () => {
+        const action = form.getAttribute( "action" )
+        const formData = new FormData( form )
+        fetch( action, {
+            method: form.getAttribute( "method" ),
+            body: formData
+        }).catch( 
+            err => console.error(err)
+        );
+    }
+
+    const form = document.querySelector( "form" )
+    // 0.5 seconds after the form si updated autosave the data
+    form.addEventListener( "input", setupAutoSaveTimeout )
+    form.addEventListener( "submit", () => clearTimeout(autoSaveTimer))
+</script>
 </body>
 </html>
