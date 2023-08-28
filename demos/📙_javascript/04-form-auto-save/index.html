@@ -22,12 +22,14 @@
 
 
 <script type="text/javascript">
+
+    const DELAY_ML = 500
     let autoSaveTimer = null;
 
     const setupAutoSaveTimeout = () => {
         // at form update be sure to cancel other pending auto ssave timeouts
         clearTimeout(autoSaveTimer)
-        autoSaveTimer = setTimeout( doAutoSave, 500 )
+        autoSaveTimer = setTimeout( doAutoSave, DELAY_ML)
     }
 
     const doAutoSave = () => {
