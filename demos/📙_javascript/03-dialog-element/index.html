@@ -4,7 +4,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dialogs</title>
     <style>
+        dialog {
+	        border: 5px solid orangered;
+            border-radius: 5px;
+            text-align: center;
+        }
 
+        dialog::backdrop {
+	        background-color: rgba(0, 0, 0, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -14,7 +22,7 @@
     <dialog id="cat-dialog">
         <form method="dialog">
             <input type="text"
-                id="cat" 
+                id="cat"
                 name="cat"
                 placeholder="Who is your favorite cat?"
                 oninput="this.form.elements.confirm.value=this.value;">
@@ -43,5 +51,5 @@
 <!--
     styling (backdrop)
     reading values
-    opening a modal and nong modal
+    opening a modal and nong modal (backdrop will not work for non modal)
 -->
