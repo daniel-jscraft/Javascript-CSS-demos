@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-form-auto-save</title>
+</head>
+<body>
+<form method="post" action="https://jsonplaceholder.typicode.com/users">
+    <input type="hidden" name="submitted" value="true" />
+    <p>
+        <label for="name">😊 Name:</label>
+        <input name="name"/>
+    </p>
+    <p>
+        <label for="phone">☎️ Phone:</label>
+        <input name="phone" />
+    </p>
+    <button type="submit" name="action" value="save">
+        💾 Save user
+    </button>
+</form>
+
+
+<script type="text/javascript">
+
+    const DELAY_ML = 500
+    let autoSaveTimer = null;
+
+    const setupAutoSaveTimeout = () => {
+        // at form update be sure to cancel other pending auto save timeouts
+        clearTimeout(autoSaveTimer)
+        autoSaveTimer = setTimeout( doAutoSave, DELAY_ML)
+    }
+
+    const doAutoSave = () => {
+        const action = form.getAttribute( "action" )
+        const formData = new FormData( form )
+        fetch( action, {
+            method: form.getAttribute( "method" ),
+            body: formData
+        }).catch( 
+            err => console.error(err)
+        );
+    }
+
+    const form = document.querySelector( "form" )
+    // 0.5 seconds after the form is updated autosave the data
+    form.addEventListener( "input", setupAutoSaveTimeout )
+    form.addEventListener( "submit", () => clearTimeout(autoSaveTimer))
+</script>
+</body>
+</html>

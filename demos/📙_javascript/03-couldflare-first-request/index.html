@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03-couldflare-first-request</title>
+</head>
+<body>
+    <button id="btn">Call serverless Cloudflare function</button>
+    <script>
+        document.getElementById('btn').addEventListener('click', () => {
+          fetch('https://js-craft-first.js-craft-feed.workers.dev')
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => alert('⛔️ Error fetching data:', error));
+        })
+    </script>
+</body>
+</html>
