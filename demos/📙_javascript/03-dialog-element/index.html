@@ -29,11 +29,9 @@
     <button data-non-modal>Open Non-Modal Dialog</button>
 
     <script>
-        
         let btnShowModal = document.querySelector('[data-modal]')
         let btnShowNonModal = document.querySelector('[data-non-modal]')
         let modal = document.querySelector('#cat-dialog')
-
        
         btnShowModal.addEventListener('click', () => modal.showModal())
         btnShowNonModal.addEventListener('click', () => modal.show())
