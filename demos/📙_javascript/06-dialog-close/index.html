@@ -1,0 +1,55 @@
+<!--
+    subtitle
+        Option 1: Close the dialog via the Javascript x method
+        Option 2: 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialogs</title>
+    <style>
+        dialog {
+	        border: 5px solid orangered;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        dialog::backdrop {
+	        background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis molestiae molestias facilis quibusdam error aliquam dignissimos unde maxime incidunt dicta, magni, maiores quaerat quae mollitia praesentium nisi, atque alias. Maxime.
+    </p>
+    <dialog id="cat-dialog">
+        <form method="dialog">
+            <input type="text"
+                id="cat"
+                name="cat"
+                placeholder="Who is your favorite cat?"
+                oninput="this.form.elements.confirm.value=this.value;">
+            <p>
+                <button id="confirm" value="confirm">Submit</button>
+                <button value="cancel">Cancel</button>
+            </p>
+        </form>
+    </dialog>
+
+    <button data-modal>Open Modal Dialog</button>
+    <button data-non-modal>Open Non-Modal Dialog</button>
+
+    <script>
+        let btnShowModal = document.querySelector('[data-modal]')
+        let btnShowNonModal = document.querySelector('[data-non-modal]')
+        let modal = document.querySelector('#cat-dialog')
+       
+        btnShowModal.addEventListener('click', () => modal.showModal())
+        btnShowNonModal.addEventListener('click', () => modal.show())
+        modal.addEventListener('close', ()=> console.log(modal.returnValue))
+    </script>
+</body>
+</html>
