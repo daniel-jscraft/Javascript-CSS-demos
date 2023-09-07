@@ -29,19 +29,19 @@
     </style>
 </head>
 <body>
-    <dialog id="my-dialog">
-        <form method="dialog">
-            <button type="submit" autofocus>❌</button>
-            <p>This modal can be closed using both the <code>close()</code> method or using a <code>submit</code> button.</p>
-            <a href="#">Close modal using Javascript</a>
-        </form>
-    </dialog>
-    <button data-modal>Open the dialog</button>
+<dialog id="my-dialog">
+    <form method="dialog">
+        <button type="submit">❌</button>
+        <p>This modal can be closed using both the <code>close()</code> method or using a <code>submit</code> button.</p>
+        <a href="#">Close modal using Javascript</a>
+    </form>
+</dialog>
+<button data-modal>Open the dialog</button>
 
-    <script>
-        let btnShowModal = document.querySelector('[data-modal]')
-        let modal = document.querySelector('#my-dialog')
-        btnShowModal.addEventListener('click', () => modal.showModal())
-    </script>
+<script>
+    let btnShowModal = document.querySelector('[data-modal]')
+    let modal = document.querySelector('#my-dialog')
+    btnShowModal.addEventListener('click', () => modal.showModal())
+</script>
 </body>
 </html>
