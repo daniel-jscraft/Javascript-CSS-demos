@@ -26,19 +26,21 @@
 <dialog id="my-dialog">
     <form method="dialog">
         <button type="submit">❌</button>
-        <p>This modal can be closed using both the <code>close()</code> method or using a <code>submit</code> button.</p>
-        <a href="#" data-modal-with-js>Close modal using Javascript</a>
+        <p>This dialog can be closed using both the <code>close()</code> method or using a <code>submit</code> button.</p>
+        <a href="#" data-dialog-with-js>Close dialog using Javascript</a>
     </form>
 </dialog>
-<button data-modal>Open the dialog</button>
+<button data-open-dialog>Open the dialog</button>
 
 <script>
-    const btnShowModal = document.querySelector('[data-modal]')
-    const modal = document.querySelector('#my-dialog')
-    btnShowModal.addEventListener('click', () => modal.showModal())
+    // open the dialog
+    const btnShowDialog = document.querySelector('[data-open-dialog]')
+    const dialog = document.querySelector('#my-dialog')
+    btnShowDialog.addEventListener('click', () => dialog.showModal())
 
-    const closeModalWithJs = document.querySelector('[data-modal-with-js]')
-    closeModalWithJs.addEventListener('click', () => modal.close())
+    // close the dialog with Javascipt
+    const closeDialogWithJs = document.querySelector('[data-dialog-with-js]')
+    closeDialogWithJs.addEventListener('click', () => dialog.close())
 </script>
 </body>
 </html>
