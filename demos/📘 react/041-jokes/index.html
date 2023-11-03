@@ -19,23 +19,27 @@
 
         const App = () => {
             const [joke, setJoke] = useState('no joke yet')
+            const [isFetching, setIsFetching] = useState(false)
 
             const retriveJoke = () => {
+                setIsFetching(true)
                 fetch('https://icanhazdadjoke.com/', {
-                    headers: {
-                        Accept: 'application/json'
-                    }
+                    headers: { Accept: 'application/json' }
                 })
                 .then(resp => resp.json())
                 .then(json => {
                     console.log(json)
                     setJoke(json.joke)
                 })
+                .finally(()=> setIsFetching(false))
             }
 
             return (<div>
-                <button onClick={retriveJoke}>Tell a joke</button>
-                <p>{joke}</p>
+                <button disabled={isFetching} 
+                    onClick={retriveJoke}>
+                    Tell a joke
+                </button>
+                <p>{isFetching ? 'Loading ... ' : joke}</p>
             </div>);
         }
 

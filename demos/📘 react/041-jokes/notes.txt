@@ -5,4 +5,7 @@ basic reguli pentru hooks
     need to be first in a function
     need to use it in a function (exemplu daca il scot din app componenent)
 const { useState } = React in mod normal ar fi import useState from React
+<script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> este necesar pentru JSX ?
+
+ 
     
