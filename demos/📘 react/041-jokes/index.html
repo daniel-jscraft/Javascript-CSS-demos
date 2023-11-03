@@ -40,11 +40,8 @@
             }
 
             return (<div>
-                <form>
-                    <input onChange={ e => setSubject(e.target.value) } 
-                        placeholder='🔎 Search a joke about ...' />
-                    <button>Search for jokes</button>
-                </form>
+                <input onChange={ e => setSubject(e.target.value) } 
+                    placeholder='🔎 Search a joke about ...' />
                 <button disabled={isFetching} 
                     onClick={getData}>
                     Tell a single joke
