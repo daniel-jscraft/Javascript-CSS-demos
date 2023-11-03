@@ -13,12 +13,15 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
+        // this does now works
+        // let joke = 'no joke yet'
         const { useState } = React
 
         const App = () => {
+            const [joke, setJoke] = useState('no joke yet')
+
             const retriveJoke = () => {
                 fetch('https://icanhazdadjoke.com/', {
-                    method: 'GET',
                     headers: {
                         Accept: 'application/json'
                     }
@@ -26,12 +29,14 @@
                 .then(resp => resp.json())
                 .then(json => {
                     console.log(json)
+                    setJoke(json.joke)
                 })
             }
 
-            return (
-                <button onClick={retriveJoke}>Get a joke</button>
-            );
+            return (<div>
+                <button onClick={retriveJoke}>Tell a joke</button>
+                <p>{joke}</p>
+            </div>);
         }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))

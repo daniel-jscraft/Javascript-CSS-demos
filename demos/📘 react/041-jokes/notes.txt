@@ -1,1 +1,8 @@
-despre noa versiune a create root
+despre noua versiune a create root si avantaje de peromanta ; link spre articol ?
+se poate scoate   method: 'GET', din fetch
+basic reguli pentru hooks 
+    start with use 
+    need to be first in a function
+    need to use it in a function (exemplu daca il scot din app componenent)
+const { useState } = React in mod normal ar fi import useState from React
+    
