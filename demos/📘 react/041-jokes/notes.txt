@@ -7,5 +7,21 @@ basic reguli pentru hooks
 const { useState } = React in mod normal ar fi import useState from React
 <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> este necesar pentru JSX ?
 
+in loc de onChange sa pui useRef?
+pas 1: add <form> ...
+pas 2 <input onChange={ e => console.log(e.target.value) } />
+pas 3: const [subject, setSubject] = useState('')
+    onChange={ e => setSubject(e.target.value) }
+    fetch('https://icanhazdadjoke.com/search?term=' + subject
+     <p>{subject}</p>
+    it does not work, it does not do a fetch
+pas 4: add useEffect pentru useEffect(() => { getData()}, [subject])
+poti sa remove form-ul de aici, nu e musai
+
+
+
+great if you want to start with react in 2024 , or if you want a refresher
+
+on errror?
  
     
