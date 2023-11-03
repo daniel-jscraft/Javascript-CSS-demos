@@ -17,11 +17,16 @@
         // let joke = 'no joke yet'
         const { useState, useEffect, useRef } = React
 
+        const JokesList = ({data}) => <ul>
+            {data.map( (d, i)=> <li key={i}>{d.joke}</li> )}
+        </ul>
+
         const App = () => {
             const [joke, setJoke] = useState('no joke yet')
             const [isFetching, setIsFetching] = useState(false)
             const [subject, setSubject] = useState('')
             const inputRef = useRef()
+            const [data, setData] = useState([])
 
             useEffect(() => {
                 getData()
@@ -33,10 +38,7 @@
                     headers: { Accept: 'application/json' }
                 })
                 .then(resp => resp.json())
-                .then(json => {
-                    console.log(json)
-                    setJoke(json.joke)
-                })
+                .then(json => setData(json.results))
                 .finally(()=> setIsFetching(false))
             }
 
@@ -44,20 +46,18 @@
                 event.preventDefault()
                 setSubject(inputRef.current.value)
                 inputRef.current.value = ''
-                //event.target.reset()
             }
 
             return (<div>
                     <form onSubmit={doSearch}>
                         <input ref={inputRef} />
-                        <button>Search</button>
+                        <button disabled={isFetching} >Search</button>
                     </form>
                 <button disabled={isFetching} 
                     onClick={getData}>
                     Tell a single joke
                 </button>
-                <p>{isFetching ? 'Loading ... ' : joke}</p>
-                <p>{subject}</p>
+               {isFetching ? <p>'Loading ... '</p> : <JokesList data={data} />}
             </div>);
         }
 

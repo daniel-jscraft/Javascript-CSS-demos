@@ -30,6 +30,18 @@ sau inputRef.current.value = ''
 TODO trebuie sa pun const inputRef = useRef(null) sau const inputRef = useRef()???
 
 
+pas 1: const [data, setData] = useState([])
+pas 2: {isFetching ? <p>'Loading ... '</p> : <ul>
+            {data.map( (d, i)=> console.log(d.joke) )}}
+pas 3: extract const JokesList = ({data}) => <ul>
+            {data.map( (d, i)=> console.log(d.joke) )}
+        </ul>
+pas 4: Warning: Each child in a list should have a unique "key" prop.
+
+
+
+
+
 no setup needed. no redux, no npm , no create react app
 just you borwser and a code editor
 great if you want to start with react in 2024 , or if you want a refresher
@@ -42,9 +54,10 @@ SETUP
         onClick={getData}>
     remove ;
 - auto close tags
-- define a function const doSearch = () => {
-                
-            }
+- define a function const doSearch = ($1) => {
+    $2
+}
+- define inline function ( ($1) =>  $2)
 
  
     
