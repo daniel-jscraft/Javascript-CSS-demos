@@ -18,10 +18,33 @@ pas 3: const [subject, setSubject] = useState('')
 pas 4: add useEffect pentru useEffect(() => { getData()}, [subject])
 poti sa remove form-ul de aici, nu e musai
 
+nu ne place sa faceam search la fiecare key pres
+putem face ceva gen https://www.js-craft.io/blog/react-useeffect-debounce/
+pas 1:  <form onSubmit={doSearch}>
+pas 2: event.preventDefault()
+pas 3: mutiple ways, but we will use useRef so that we can play with another hook
+        const inputRef = useRef() ; si console.log(inputRef.current.value) in doSearch
+pas 4:  setSubject(inputRef.current.value)
+pas 5: reset fields event.target.reset() // all
+sau inputRef.current.value = ''
+TODO trebuie sa pun const inputRef = useRef(null) sau const inputRef = useRef()???
 
 
+no setup needed. no redux, no npm , no create react app
+just you borwser and a code editor
 great if you want to start with react in 2024 , or if you want a refresher
 
 on errror?
+
+SETUP
+- pritier:
+     <button disabled={isFetching} 
+        onClick={getData}>
+    remove ;
+- auto close tags
+- define a function const doSearch = () => {
+                
+            }
+
  
     

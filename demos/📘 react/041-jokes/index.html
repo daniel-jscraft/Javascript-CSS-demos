@@ -15,12 +15,13 @@
     <script type="text/babel">
         // this does now works
         // let joke = 'no joke yet'
-        const { useState, useEffect } = React
+        const { useState, useEffect, useRef } = React
 
         const App = () => {
             const [joke, setJoke] = useState('no joke yet')
             const [isFetching, setIsFetching] = useState(false)
             const [subject, setSubject] = useState('')
+            const inputRef = useRef()
 
             useEffect(() => {
                 getData()
@@ -39,9 +40,18 @@
                 .finally(()=> setIsFetching(false))
             }
 
+            const doSearch = (event) => {
+                event.preventDefault()
+                setSubject(inputRef.current.value)
+                inputRef.current.value = ''
+                //event.target.reset()
+            }
+
             return (<div>
-                <input onChange={ e => setSubject(e.target.value) } 
-                    placeholder='🔎 Search a joke about ...' />
+                    <form onSubmit={doSearch}>
+                        <input ref={inputRef} />
+                        <button>Search</button>
+                    </form>
                 <button disabled={isFetching} 
                     onClick={getData}>
                     Tell a single joke
