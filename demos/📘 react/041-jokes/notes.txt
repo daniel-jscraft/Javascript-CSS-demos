@@ -38,8 +38,8 @@ pas 3: extract const JokesList = ({data}) => <ul>
         </ul>
 pas 4: Warning: Each child in a list should have a unique "key" prop.
 
-
-
+** get pictures free api for examples no auth **
+github?
 
 
 no setup needed. no redux, no npm , no create react app
