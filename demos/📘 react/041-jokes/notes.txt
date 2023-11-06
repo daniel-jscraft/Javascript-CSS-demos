@@ -59,5 +59,9 @@ SETUP
 }
 - define inline function ( ($1) =>  $2)
 
+
+https://github.com/daniel-jscraft
+www.js-craft.io
+https://youtu.be/zDhVHPRzW6I?si=LTc1ClPXDbBRT5LA
  
     

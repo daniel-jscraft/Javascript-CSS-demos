@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What are Javascript symbols?</title>
+    <style>
+    </style>
+</head>
+<body>
+<h1>What are Javascript symbols?</h1>
+<i>The code for this example is in the script tag of this file.</i>
+<script>
+
+    /*
+        const user = {
+            name: 'Daniel ',
+            site: 'www.js-craft.io'
+        }
+
+        const libOne = (obj) => {
+            obj.newProperty = 'Property from LibOne'
+        }
+    
+        const libTwo = (obj) => {
+            obj.newProperty = function() {
+                return 'some string value from LibTwo'
+            }
+        }
+
+
+        // 😞 BAD: the property from libTwo will  
+        // override the property from libOne
+        libOne(user)
+        libTwo(user)
+        console.log(user)
+    */
+
+
+    /*
+        const uniquePropName = () => Math.random().toString(36).substring(7)
+
+        const user = {
+            name: 'Daniel ',
+            site: 'www.js-craft.io'
+        }
+
+        const libOne = (obj) => {
+            obj[uniquePropName()] = 'Property from LibOne'
+        }
+
+        const libTwo = (obj) => {
+            obj[uniquePropName()] = function() {
+                return 'some string value from LibTwo'
+            }
+        }
+
+
+        // 😐 SLIGHTLY BETTER: the properties from LibOne  
+        // and LibTwo will not colide with eachother, 
+        // but their names will be random
+        libOne(user)
+        libTwo(user)
+        console.log(user)
+    */
+
+    const user = {
+        name: 'Daniel ',
+        site: 'www.js-craft.io'
+    }
+
+    const libOne = (obj) => {
+        obj[Symbol('newProperty')] = 'Property from LibOne'
+    }
+
+    const libTwo = (obj) => {
+        obj[Symbol('newProperty')] = function() {
+            return 'some string value from LibTwo'
+        }
+    }
+
+
+    // 😃 GOOD: using Symbols the properties from LibOne  
+    // and LibTwo will not colide, and we can
+    // the use the same description from both of them
+    libOne(user)
+    libTwo(user)
+    console.log(user)
+
+    
+
+</script>
+</body>
+</html>
