@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-useState-in-context</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // this does now works
+        // let joke = 'no joke yet'
+        const { useState, useEffect, useRef } = React
+
+        const User = ({login}) => (<div>
+            {login}
+        </div>)
+
+        const UsersList = ({data}) => (data && <ol>
+            {data.map( (d, i)=> <User key={i} {...d} /> )}
+        </ol>)
+
+        const App = () => {
+            const [joke, setJoke] = useState('No results yet!')
+            const [isFetching, setIsFetching] = useState(false)
+            const [subject, setSubject] = useState()
+            const inputRef = useRef()
+            const [data, setData] = useState([])
+
+            useEffect(() => {
+                getData()
+            }, [subject])
+
+            const getData = () => {
+                setIsFetching(true)
+                // https://api.github.com/users
+                fetch('https://api.github.com/search/users?q=' + subject, {
+                    headers: { Accept: 'application/json' }
+                })
+                .then(resp => resp.json())
+                .then(json => {
+                    console.log(json)
+                    setData(json.items)
+                })
+                .finally(()=> setIsFetching(false))
+            }
+
+            const doSearch = (event) => {
+                event.preventDefault()
+                setSubject(inputRef.current.value)
+                inputRef.current.value = ''
+            }
+
+            return (<div>
+                <form onSubmit={doSearch}>
+                    <input ref={inputRef} />
+                    <button disabled={isFetching} >Search</button>
+                </form>
+               {isFetching ? <p>'Loading ... '</p> : <UsersList data={data} />}
+            </div>);
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
