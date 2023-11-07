@@ -7,7 +7,71 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-       
+
+        body {
+            background-color: #001233;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            padding: 1rem;
+        }
+
+        form {
+            margin-bottom: 1rem;
+
+            & input,
+            & button {
+                line-height: 2rem;
+            }
+
+            & button {
+                background-color: #0466c8;
+                color: white;
+                border: 2px solid #0466c8;
+                width: 5rem;
+                margin-left: 0.5rem;
+                display: inline-block;
+            }
+
+            & input {
+                background-color: #002855;
+                color: white;
+                border: 1px solid #002855;
+                border-bottom: 2px solid #0466c8;
+                width: calc( 100% - 6rem );
+            }
+        }
+
+       .user-card {
+            margin: 1rem;
+            text-align: center;
+            background-color: #002855;
+            border: 1px solid #33415c;
+            min-width: 15rem;
+            display: inline-block;
+
+            & img {
+                border: 1px solid;
+                border-radius: 50%;
+                height: 5rem;
+                width: 5rem;
+            }
+
+            & a {
+                background-color: #0466c8;
+                color: white;
+                display: block;
+                line-height: 2rem;
+                text-decoration: none;
+            }
+       }
+
+       .main {
+        text-align: center;
+       }
+
+
+
     </style>
 </head>
 <body>
@@ -17,13 +81,17 @@
         // let joke = 'no joke yet'
         const { useState, useEffect, useRef } = React
 
-        const User = ({login}) => (<div>
-            {login}
-        </div>)
+        const User = ({login, html_url, avatar_url}) => (
+            <div className='user-card'>
+                <img src={avatar_url} />
+                <h4>{login}</h4>
+                <a href={html_url}>View full profile</a>
+            </div>
+        )
 
-        const UsersList = ({data}) => (data && <ol>
+        const UsersList = ({data}) => (data && <div className='main'>
             {data.map( (d, i)=> <User key={i} {...d} /> )}
-        </ol>)
+        </div>)
 
         const App = () => {
             const [joke, setJoke] = useState('No results yet!')
