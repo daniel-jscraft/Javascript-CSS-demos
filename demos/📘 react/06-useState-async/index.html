@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-useState-in-context</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React
+
+        // ✋🛑 Don't do this
+        /* const App = () => {
+            const [query, setQuery] = useState('')
+            const [jokes, setJokes] = useState([])
+
+            const search = (e) => {
+                setQuery(e.target.value)
+                fetch('https://icanhazdadjoke.com/search?term=' + query, {
+                    headers: { Accept: 'application/json' }
+                })
+                .then(resp => resp.json())
+                .then(json => {
+                    console.log(json)
+                    setJokes(json.results)
+                })
+            }
+
+            return (<div>
+                <input value={query} onChange={search} />
+                <p>Found {jokes.length} jokes about "<b>{query}</b>"!</p>
+            </div>);
+        } */
+
+        /*
+            you want someting like setQuery(e.target.value).then({
+                fetch ...
+            })
+        */
+
+
+
+        // 👍 Do this
+        const App = () => {
+            const [query, setQuery] = useState('')
+            const [jokes, setJokes] = useState([])
+
+            useEffect(() => {
+                fetch('https://icanhazdadjoke.com/search?term=' + query, {
+                    headers: { Accept: 'application/json' }
+                })
+                .then(resp => resp.json())
+                .then(json => {
+                    console.log(json)
+                    setJokes(json.results)
+                })
+            }, [query])
+
+            const search = (e) => setQuery(e.target.value)
+
+            return (<div>
+                <input value={query} onChange={search} />
+                <p>Found {jokes.length} jokes about "<b>{query}</b>"!</p>
+            </div>);
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+
+    </script>
+</body>
+</html>
+
