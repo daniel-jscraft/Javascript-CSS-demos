@@ -15,42 +15,25 @@
     <script type="text/babel">
         const { useState, useEffect } = React
 
-        // ✋🛑 Don't do this
-        /* const App = () => {
-            const [query, setQuery] = useState('')
-            const [jokes, setJokes] = useState([])
-
-            const search = (e) => {
-                setQuery(e.target.value)
-                fetch('https://icanhazdadjoke.com/search?term=' + query, {
-                    headers: { Accept: 'application/json' }
-                })
-                .then(resp => resp.json())
-                .then(json => {
-                    console.log(json)
-                    setJokes(json.results)
-                })
-            }
-
-            return (<div>
-                <input value={query} onChange={search} />
-                <p>Found {jokes.length} jokes about "<b>{query}</b>"!</p>
-            </div>);
-        } */
-
-        /*
-            you want someting like setQuery(e.target.value).then({
-                fetch ...
-            })
-        */
-
-
-
-        // 👍 Do this
+        
         const App = () => {
             const [query, setQuery] = useState('')
             const [jokes, setJokes] = useState([])
 
+            // ✋🛑 Don't do this
+            // const search = (e) => {
+            //     setQuery(e.target.value)
+            //     fetch('https://icanhazdadjoke.com/search?term=' + query, {
+            //         headers: { Accept: 'application/json' }
+            //     })
+            //     .then(resp => resp.json())
+            //     .then(json => {
+            //         console.log(json)
+            //         setJokes(json.results)
+            //     })
+            // }
+            
+            // 👍 Do this instead
             useEffect(() => {
                 fetch('https://icanhazdadjoke.com/search?term=' + query, {
                     headers: { Accept: 'application/json' }
@@ -72,7 +55,6 @@
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
         root.render(<App />)
-
     </script>
 </body>
 </html>
