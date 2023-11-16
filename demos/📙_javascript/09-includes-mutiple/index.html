@@ -9,21 +9,21 @@
 <body>
 <h1>⚠️ Open up the console to see the result!</h1>
 <script>
-    const products = ['🍋 lemon', '🥕 carrot', '🍎 apple', '🥦 broccoli']
-    const fruits = ['🍋 lemon', '🍎 apple']
-    const veggies = ['🥦 broccoli', '🧅 onion']
+    const products = ['🍎 apple', '🥬 kale', '🍐 pear', '🌽 corn']
+    const fruits = ['🍐 pear', '🍎 apple']
+    const veggies = ['🥬 kale', '🧅 onion']
 
     //1. checking if AT LEAST ONE value is in the array
-    const hasAtLeastOneFruit = fruits.some(i => products.includes(i))
-    console.log(hasAtLeastOneFruit) // true
-    const hasAtLeastOneVeggie = veggies.some(i => products.includes(i))
-    console.log(hasAtLeastOneVeggie) // true
+    const atLeastOneFruit = fruits.some(i => products.includes(i))
+    console.log(atLeastOneFruit) // true
+    const atLeastOneVeggie = veggies.some(i => products.includes(i))
+    console.log(atLeastOneVeggie) // true
 
     //2. checking if ALL THE values are in the array
-    const hasAllTheFruits = fruits.every(i => products.includes(i))
-    console.log(hasAllTheFruits) // true
-    const hasAllTheVeggies = veggies.every(i => products.includes(i))
-    console.log(hasAllTheVeggies) // false, the '🧅 onion' is missing
+    const allTheFruits = fruits.every(i => products.includes(i))
+    console.log(allTheFruits) // true
+    const allTheVeggies = veggies.every(i => products.includes(i))
+    console.log(allTheVeggies) // false, the '🧅 onion' is missing
 </script>
 </body>
 </html>
