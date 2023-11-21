@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixing the Jump target cannot cross function boundary error</title>
+    <style>
+    </style>
+</head>
+<body>
+<h1>⚠️ Open up the console to see the result!</h1>
+<script>
+    const cars = ['Audi', 'BMW', 'Honda', 'Ford', 'Doge']
+    
+    // ⛔️ using break forEach with cause the
+    // "Jump target cannot cross function boundary" error
+    // cars.forEach(carName => {
+    //     console.log(carName)
+    //     if(carName === 'BMW') {
+    //         break
+    //     }
+    // })
+
+    // 👍 Solution: use the return statement
+    for(let carName of cars) {
+        console.log(carName)
+        if(carName === 'BMW') {
+            break
+        }
+    }
+</script>
+</body>
+</html>
