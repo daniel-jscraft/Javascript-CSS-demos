@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Fixing the Jump target cannot cross function boundary in Javascript](https://www.js-craft.io/blog/jump-target-cannot-cross-function-boundary-javascript-error/)
