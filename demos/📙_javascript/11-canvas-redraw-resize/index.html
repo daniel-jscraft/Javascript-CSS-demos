@@ -21,6 +21,8 @@
     img.onload = ()=> {
         // first draw of the image
         drawCanvas()
+        // watch for window resize
+        setResizeHandler()
     }
 
     function drawCanvas() {
@@ -33,6 +35,23 @@
             canvas.height = img.naturalHeight;
         }
         canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height );
+    }
+
+    function setResizeHandler() {
+        let timerId = null;
+        window.addEventListener('resize', () => {
+            if (timerId) {
+                clearTimeout(timerId);
+                timerId = undefined;
+            }
+
+            // 1.5sec after the  user stoped the resize
+            // redraw the canvas on the new size
+            timerId = setTimeout(() => {
+                timerId = undefined;
+                drawCanvas();
+            }, 1500);
+        });
     }
 </script>
 </body>
