@@ -4,14 +4,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fixing the Jump target cannot cross function boundary error</title>
     <style>
+        img { display: none}
     </style>
 </head>
 <body>
+<h1>Resize the window and the HTML Canvas will redraw the image</h1>
+<canvas id="canvas"></canvas>
 <img id="img" src="test.jpg" />
-<script>
+
+
+<script type="text/javascript">
     const img = document.querySelector('#img')
+    const canvas = document.querySelector('#canvas')
+    const canvasContext = canvas.getContext("2d")
+
     img.onload = ()=> {
-        console.log('---------')
+        // first draw of the image
+        drawCanvas()
+    }
+
+    function drawCanvas() {
+        if (img.naturalWidth > window.innerWidth) {
+            canvas.width = window.innerWidth;
+            canvas.height = img.naturalHeight * ( window.innerWidth / img.naturalWidth );
+        }
+        else {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+        }
+        canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height );
     }
 </script>
 </body>
