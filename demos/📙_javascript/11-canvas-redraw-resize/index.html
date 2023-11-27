@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixing the Jump target cannot cross function boundary error</title>
+    <style>
+    </style>
+</head>
+<body>
+<img id="img" src="test.jpg" />
+<script>
+    const img = document.querySelector('#img')
+    img.onload = ()=> {
+        console.log('---------')
+    }
+</script>
+</body>
+</html>
