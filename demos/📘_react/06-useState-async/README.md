@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Is setState in React asyc? A practical example](https://www.js-craft.io/blog/is-setstate-in-react-asyc-practical-example/)
