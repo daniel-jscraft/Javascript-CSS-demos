@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-useState-in-context</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React
+
+        const BrokenTimer = () => {
+            const [counter, setCounter] = useState(0)
+            useEffect(() => {
+                setInterval(() => setCounter(c => c + 1), 1000)
+            }, [])
+
+            return (<div> ❌ Broken Timer: {counter} </div>)
+        }
+
+        const GoodTimer = ()=> {
+            const [counter, setCounter] = useState(0)
+            useEffect(() => {
+                let int = setInterval(() => setCounter(c => c + 1), 1000)
+                return () => clearInterval(int)
+            }, [])
+
+            return (<div> 👍 Good Timer: {counter} </div>)
+        }
+
+        const App = () => (<div>
+            <BrokenTimer/>
+            <GoodTimer/>
+        </div>)
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<React.StrictMode>
+            <App />
+        </React.StrictMode>)
+    </script>
+</body>
+</html>
+
