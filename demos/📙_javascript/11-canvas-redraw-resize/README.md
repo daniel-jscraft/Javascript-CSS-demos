@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - HTML canvas redraw image on resize](https://www.js-craft.io/blog/html-canvas-redraw-image-on-resize/)
