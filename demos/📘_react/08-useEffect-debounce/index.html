@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-useState-in-context</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <style>
+        html { background-color: #4692ec; }
+        body {
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <br/>
+    <em>Be sure to have your console open to see the message!</em>
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React
+
+        const App = ({wait = 1000}) => {
+            const [query, setQuery] = useState("abc");
+            const ref = useRef();
+
+            const onChange = () => console.log("query = ", query)
+
+            useEffect(() => {
+                ref.current = onChange
+            }, [onChange]);
+
+            const doCallbackWithDebounce = useMemo(() => {
+                const callback = () => ref.current()
+                return _.debounce(callback, wait);
+            }, []);
+
+            return (<div>
+                <p>Input debounced for {wait} ms:</p>
+                <input
+                    value={query}
+                    onChange={(e) => {
+                        doCallbackWithDebounce();
+                        setQuery(e.target.value);
+                    }} />
+            </div>);
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App wait={1000} />)
+    </script>
+</body>
+</html>
+
