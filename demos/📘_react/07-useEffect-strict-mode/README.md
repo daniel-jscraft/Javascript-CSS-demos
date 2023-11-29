@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Catching errors with the double call of useEffect of React StrictMode](https://www.js-craft.io/blog/catching-errors-double-call-useeffect-react-strictmode/)

@@ -17,7 +17,7 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const { useState, useEffect } = React
+        const { useState, useEffect, StrictMode } = React
 
         const BrokenTimer = () => {
             const [counter, setCounter] = useState(0)
@@ -38,15 +38,11 @@
             return (<div> 👍 Good Timer: {counter} </div>)
         }
 
-        const App = () => (<div>
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<StrictMode>
             <BrokenTimer/>
             <GoodTimer/>
-        </div>)
-
-        const root = ReactDOM.createRoot(document.getElementById("root"))
-        root.render(<React.StrictMode>
-            <App />
-        </React.StrictMode>)
+        </StrictMode>)
     </script>
 </body>
 </html>
