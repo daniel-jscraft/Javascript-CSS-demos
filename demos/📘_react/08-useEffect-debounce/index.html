@@ -6,7 +6,6 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script crossorigin src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
     <style>
         html { background-color: #4692ec; }
         body {
@@ -22,6 +21,17 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo } = React
 
+        function debounce(callback, time) {
+            let interval;
+            return () => {
+                clearTimeout(interval)
+                interval = setTimeout(() => {
+                        interval = null
+                        callback(arguments)
+                    }, time)
+            }
+        }
+
         const App = ({wait = 1000}) => {
             const [query, setQuery] = useState("abc");
             const ref = useRef();
@@ -34,7 +44,7 @@
 
             const doCallbackWithDebounce = useMemo(() => {
                 const callback = () => ref.current()
-                return _.debounce(callback, wait);
+                return debounce(callback, wait);
             }, []);
 
             return (<div>
