@@ -1,3 +1,8 @@
+
+👨‍💻 Full blogpost here: [JS Craft - Client components and the “use client” directive in NextJs 13](https://www.js-craft.io/blog/client-components-use-client-directive-nextjs-13/)
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
