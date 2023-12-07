@@ -14,9 +14,10 @@
     <h1>Using the useTextToClipboard() hook</h1>
     <div id="root2"></div>
     <script type="text/babel">
+        const {useState} = React
 
         const useTextToClipboard= () => {
-            const [value, setValue] = React.useState(null)
+            const [value, setValue] = useState(null)
 
             const copy = (data) => {
                 if (!navigator.clipboard) {
@@ -37,7 +38,7 @@
         }
 
         const WithHook = () => {
-            const [code, setCode] = React.useState("123456789")
+            const [code, setCode] = useState("123456789")
             const [clipboardVal, copyToCliboard] = useTextToClipboard()
 
             return (<div>
@@ -50,7 +51,7 @@
 
         const App = () => {
             const [code, setCode] = React.useState("123456789")
-            const [clipboardVal, setClipboardVal] = React.useState(null)
+            const [clipboardVal, setClipboardVal] = useState(null)
 
             const copyOperation = ()=> {
                 if (!navigator.clipboard) {
