@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Javascript clamp numbers</h1>
+<h3>⚠️ Open up the console to see the results!</h3>
+<script type="text/javascript">
+/*
+clamp(val, min, max) - caps val between the [min, max] limits
+
+for example:
+    - clamp(10, 50, 100) returns 50
+    - clamp(20, 1, 15) returns  15
+    - clamp(8, 4, 12) returns 8
+*/
+
+/* function clamp(val, min, max) {
+    // makes sure we don't go below the bottom limit
+    const lowerLimit = Math.max(val, min)
+
+    // makes sure we don't go above the top limit
+    const result = Math.min(lowerLimit, max)
+
+    return result
+} */
+
+const clamp = (val, min, max)=> Math.min(Math.max(val, min), max)
+
+console.log( clamp(10, 50, 100) )
+console.log( clamp(20, 1, 15) )
+console.log( clamp(8, 4, 12) )
+
+</script>
+</body>
+</html>

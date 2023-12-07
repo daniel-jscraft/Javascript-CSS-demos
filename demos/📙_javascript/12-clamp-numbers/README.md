@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Clamp numbers in JavaScript](https://www.js-craft.io/blog/clamp-numbers-in-javascript/)
