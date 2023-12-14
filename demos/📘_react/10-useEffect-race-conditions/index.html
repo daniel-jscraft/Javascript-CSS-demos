@@ -15,11 +15,10 @@
 
         const App = () => {
             const [id, setId] = useState(1)
-
             const handleClick = ()=> setId(prev => prev + 1)
             return <div>
-                <button onClick={handleClick}>Next</button>
                 <Article id={id} />
+                <button onClick={handleClick}>Get Next Article</button>
             </div>
         }
 
@@ -27,9 +26,13 @@
             const [text, setText] = useState('')
 
             useEffect(()=> {
-                fetch('https://jsonplaceholder.typicode.com/posts/' + id)
-                    .then( resp => resp.json())
-                    .then( resp => setText(resp.body))
+                const abortCtrl = new AbortController()
+                const fetchOtps = {signal: abortCtrl.signal}
+                fetch('https://jsonplaceholder.typicode.com/posts/' + id, 
+                    {signal: abortCtrl.signal})
+                        .then( resp => resp.json())
+                        .then( resp => setText(resp.body))
+                return () => abortCtrl.abort()
             }, [id])
 
             return (<div>{text}</div>)
