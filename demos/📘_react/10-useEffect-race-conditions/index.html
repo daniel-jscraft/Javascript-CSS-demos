@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Conditions in useEffect</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState, useEffect} = React
+
+        const App = () => {
+            const [id, setId] = useState(1)
+
+            const handleClick = ()=> setId(prev => prev + 1)
+            return <div>
+                <button onClick={handleClick}>Next</button>
+                <Article id={id} />
+            </div>
+        }
+
+        const Article = ({id}) => {
+            const [text, setText] = useState('')
+
+            useEffect(()=> {
+                fetch('https://jsonplaceholder.typicode.com/posts/' + id)
+                    .then( resp => resp.json())
+                    .then( resp => setText(resp.body))
+            }, [id])
+
+            return (<div>{text}</div>)
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
