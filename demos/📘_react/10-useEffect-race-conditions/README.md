@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [Optimizing React useEffect: preventing multiple API calls (fetch race conditions)]( https://www.js-craft.io/blog/react-useeffect-multiple-api-calls-fetch-race-conditions)

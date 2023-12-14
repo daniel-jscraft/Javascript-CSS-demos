@@ -32,6 +32,9 @@
                     {signal: abortCtrl.signal})
                         .then( resp => resp.json())
                         .then( resp => setText(resp.body))
+                
+                // the cleanup function runs 
+                // each time useEffect() is exectued
                 return () => abortCtrl.abort()
             }, [id])
 
