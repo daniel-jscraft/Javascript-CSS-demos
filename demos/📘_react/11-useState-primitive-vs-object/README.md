@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [React useState() - primitives vs objects in component rerendering]( https://www.js-craft.io/blog/react-usestate-primitives-objects-rerendering)
