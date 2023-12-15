@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React useState: Primitives vs Objects</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 1rem;
+        }
+        .comp {
+            border: 1px solid;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h3><em>⚠️ Open up the console to see the results!</em></h3>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState} = React
+
+        const WithObject = ()=> {
+            const [objVal, setObjVal] = useState({name: 'foo'})
+            const handleClick = () => setObjVal({name: 'foo'})
+            console.log('Re-rendering 📦 WithObject')
+            return <div className='comp'>
+                <h1>📦 Object val: {JSON.stringify(objVal)}</h1>
+                <button onClick={handleClick}>
+                    State value to {JSON.stringify({name: 'foo'})}
+                </button>
+            </div>
+        } 
+
+        const WithPrimitive = ()=> {
+            const [primVal, setPrimVal] = useState(1)
+            const handleClick = () => setPrimVal(1)
+            console.log('Re-rendering 🗿 WithPrimitive')
+            return <div className='comp'>
+                <h1>🗿 Primitive val: {primVal}</h1>
+                <button onClick={handleClick}>
+                    State value to 1
+                </button>
+            </div>
+        } 
+
+        const App = () => (<div className='grid'>
+                <WithPrimitive />
+                <WithObject />
+        </div>)
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
