@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Scroll to Bottom in React</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        html {background-color: #4692ec;}
+        body { text-align: center; color: white; }
+        ul { list-style-type: none; display: grid; gap: 1rem}
+        li { display: block; border: 1px solid; padding: 1rem;}
+        button { position: fixed; top: 10px; left: 10px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState, useEffect, useRef} = React
+
+        const getNewRandomItem = () => ({
+            id: Math.random().toString(16).substr(2),
+            label: 'LABEL: ' + Math.random().toString(16).substr(2)
+        }) 
+
+        const App = ()=> {
+            const listRef = useRef(null);
+            const [items, setItems] = useState([]);
+            
+            useEffect(() => {           
+                const last = listRef.current.lastElementChild
+                if (last) last.scrollIntoView()
+            }, [items]);
+
+            const handleAddClick = () => {
+                setItems((items) => [
+                    ...items, 
+                    getNewRandomItem()
+                ]);
+            };
+
+            return (<div>
+                <ul ref={listRef}>
+                    {items.map( i => (
+                        <li key={i.id}>{i.label}</li>
+                    ))}
+                </ul>
+                <button onClick={handleAddClick}>Add item ({items.length})</button>
+            </div>);
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
