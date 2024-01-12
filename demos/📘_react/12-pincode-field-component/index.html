@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Scroll to Bottom in React</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            background-color: orangered;
+        }
+
+        input {
+            width: 50px;
+            height: 50px;
+            margin: 0.5rem;
+            padding: 0.5rem;
+            border: 2px solid white;
+            text-align: center;
+            font-size: 5rem;
+            color: white;
+            background-color: orangered;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {useState, useEffect, useRef, forwardRef} = React
+
+        const Digit = forwardRef(({ num, onDigitAdded }, ref) => {
+            const keyUpHandler = (e) => onDigitAdded(e.target);
+
+            return (
+                <input
+                onKeyUp={keyUpHandler}
+                type="password"
+                maxLength="1"
+                data-index={num}
+                ref={ref}
+                />
+            )
+        })
+
+        const PinCode = ({ length, onPinEntered }) => {
+            let [pin, setPin] = useState("")
+            const digits = useRef([])
+
+            useEffect(() => {
+                if (pin.length === length) {
+                onPinEntered(pin)
+                }
+            }, [pin, onPinEntered, length])
+
+            const focusNextDigit = (d) => {
+                const index = parseInt(d.dataset.index)
+                const nextDigit = digits.current[index + 1]
+                if (nextDigit) nextDigit.focus()
+            }
+
+            const onDigitAdded = (d) => {
+                setPin(pin + d.value)
+                focusNextDigit(d)
+            }
+
+            const onClickHandler = () => {
+                if (pin !== "") {
+                setPin("")
+                digits.current.forEach((d) => {
+                    if (d) d.value = ""
+                })
+                }
+                digits.current[0].focus()
+            }
+
+            return (
+                <div onClick={onClickHandler}>
+                {[...Array(length).keys()].map((i) => (
+                    <Digit
+                    ref={(d) => digits.current.push(d)}
+                    key={i}
+                    num={i}
+                    onDigitAdded={onDigitAdded}
+                    />
+                ))}
+                </div>
+            )
+        }
+
+        const App = ()=> {
+            return (
+                <div className="App">
+                <PinCode length={5} onPinEntered={(pin) => alert("Pin : " + pin)} />
+                </div>
+            )
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"))
+        root.render(<App />)
+    </script>
+</body>
+</html>
