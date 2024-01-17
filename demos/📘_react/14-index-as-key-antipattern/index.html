@@ -26,14 +26,23 @@
                 setFruits(newFruits)
             }
 
-            return (<div>
-                {fruits.map((f, i)=> {
-                    return <p key={i}>
+            return (<form>
+                <fieldset>
+                    <legend>❌ Using indexes as keys</legend>
+                    {fruits.map((f, i)=> (<p key={i}>
                         {f.description} <input />
-                    </p>
-                })}
-                <button onClick={addPears}>Add pears</button>
-            </div>)
+                    </p>))}
+                    <button type="button" onClick={addPears}>Add pears</button>
+                </fieldset>
+
+                <fieldset>
+                    <legend>👍 Using unique ids as keys</legend>
+                    {fruits.map( f=> (<p key={f.id}>
+                        {f.description} <input />
+                    </p>))}
+                    <button type="button" onClick={addPears}>Add pears</button>
+                </fieldset>
+            </form>)
         }
 
         const root = ReactDOM.createRoot(document.getElementById("root"))
