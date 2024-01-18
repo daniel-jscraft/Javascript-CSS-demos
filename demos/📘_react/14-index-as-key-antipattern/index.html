@@ -7,6 +7,11 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
+        form {
+            display: grid;
+            grid-template-columns: auto auto;
+            padding: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -21,7 +26,7 @@
             ])
 
             const addPears = ()=> {
-                const newFruits = fruits.slice()
+                const newFruits = [...fruits]
                 newFruits.unshift({id:56, description: '🍐 pear'})
                 setFruits(newFruits)
             }
