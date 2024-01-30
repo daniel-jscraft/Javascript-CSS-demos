@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Black-White Image Generation in JavaScript and Canvas](https://www.js-craft.io/blog/black-white-image-javascript/)

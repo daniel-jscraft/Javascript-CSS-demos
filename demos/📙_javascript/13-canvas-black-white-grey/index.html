@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Black-White Image Generation in JavaScript and Canvas</h1>
+<input id="inp" type='file' accept='image/*' capture='camera'/>
+
+<img id="img" />
+
+<canvas id="can-bw" width="200" height="200"></canvas>
+<canvas id="can-bwg" width="200" height="200"></canvas>
+
+<script type="text/javascript">
+    const input = document.querySelector('#inp')
+    const img = document.querySelector('#img')
+    const ID_BLACK_WHITE_CANVAS = 'can-bw'
+    const ID_GRAY_CANVAS = 'can-bwg'
+
+    input.addEventListener('change', () => {
+    const url = URL.createObjectURL(input.files[0])
+    img.src = url
+    })
+
+    img.onload = ()=> {
+    setupCanvas(ID_BLACK_WHITE_CANVAS, toBlackAndWhite)
+    setupCanvas(ID_GRAY_CANVAS, toBlackWhiteGray)
+    }
+
+    const setupCanvas = (id, pFunction)=> {
+    const canvas = document.getElementById(id)
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0)
+    processCanvas(canvas, ctx, pFunction)
+    }
+
+    const processCanvas = (canvas, ctx, pFunction)=> {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    imgData.data = processImgData(imgData, pFunction)
+    ctx.putImageData(imgData, 0, 0)
+    }
+
+    const processImgData = ({data}, pFunction) => {
+    for (i = 0; i < data.length; i += 4) {
+        const color = pFunction(data[i], data[i+1], data[i+2])
+        data[i] = color
+        data[i + 1] = color
+        data[i + 2] = color
+        data[i + 3] = 255
+    }
+    return data
+    }
+
+    const toBlackAndWhite = (red, green, blue) => {
+    const count = red + green + blue
+    const colour = count < 383 ? 0 : 255
+    return colour
+    }
+
+    const toBlackWhiteGray = (red, green, blue) => {
+    const count = red + green + blue
+    let colour = 0
+    if (count > 510) colour = 255
+    else if (count > 255) colour = 127.5
+    return colour
+    }
+</script>
+</body>
+</html>
