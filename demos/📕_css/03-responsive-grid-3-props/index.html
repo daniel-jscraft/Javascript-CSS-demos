@@ -4,6 +4,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resposive CSS grid</title>
     <style>
+        .footer,
+        .header {
+            background-color: red;
+            min-height: 60px;
+        }
+
+        .art {
+            background-color: yellow;
+            min-height: 120px;
+        }
+
+        .container {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-areas: "h  h  h"
+                                "a1 a2 a3"
+                                "f  f  f"; 
+        }
+
+        .header { grid-area: h; }
+        .art.first { grid-area: a1; }
+        .art.second { grid-area: a2; }
+        .art.third { grid-area: a3; }
+        .footer { grid-area: f; }
+
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                    grid-template-areas: "h"
+                                        "a1"
+                                        "a2"
+                                        "a3"
+                                        "f";
+                }
+        }
     </style>
 </head>
 <body>
