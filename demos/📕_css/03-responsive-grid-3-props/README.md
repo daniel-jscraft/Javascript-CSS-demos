@@ -1,0 +1,1 @@
+👨‍💻 Full blogpost here: [JS Craft - Craft a Responsive CSS Grid with just 3 properties](https://www.js-craft.io/blog/making-a-responsive-css-grid-layout-with-just-3-properties/)
