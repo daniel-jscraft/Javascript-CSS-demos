@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+       img {
+            width: 200px;
+            height: auto;
+        }
+
+        input, a {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<h1>Javascript - invert the colors of a picture on a canvas</h1>
+<input id="inp" type='file' accept='image/*' capture='camera'/>
+<a id='lnk' download>Save the img</a>
+<img id="img" />
+
+<canvas id="can" width="200" height="200">
+
+<script type="text/javascript">
+    const input = document.querySelector('#inp')
+    const img = document.querySelector('#img')
+    const link = document.querySelector('#lnk')
+    const canvas = document.querySelector('#can')
+    const ctx = canvas.getContext("2d")
+
+    input.addEventListener('change', () => {
+        const url = window.URL.createObjectURL(input.files[0])
+        img.src = url
+    })
+
+    let reverseColors = ({data}) => {
+        console.log(data)
+        for (i = 0; i < data.length; i += 4) {
+            data[i] = 255 - data[i];
+            data[i + 1] = 255 - data[i + 1];
+            data[i + 2] = 255 - data[i + 2];
+            data[i + 3] = 255;
+        }
+        return data
+    }
+
+    img.onload = ()=> {
+        ctx.drawImage(img, 0, 0)
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        imgData.data = reverseColors(imgData)
+        ctx.putImageData(imgData, 0, 0)
+        link.href = canvas.toDataURL()
+    }
+</script>
+</body>
+</html>
