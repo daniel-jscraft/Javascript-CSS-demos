@@ -57,7 +57,7 @@
                 ))}
             </ol>)
 
-            const renderButtonStatus = () => (
+            const getButtonStatusText = () => (
                 (status === STATUS_IDLE) ? 
                     'Send to server' : 
                     <img src = "./load.svg" />
@@ -70,8 +70,10 @@
                     multiple
                     onChange={(e)=> setFiles(e.target.files)} />
                 {renderFileList()}
-                <button onClick={handleUploadClick} disabled={status === STATUS_UPLOADING}>
-                    {renderButtonStatus()}
+                <button 
+                    onClick={handleUploadClick} 
+                    disabled={status === STATUS_UPLOADING}>
+                        {getButtonStatusText()}
                 </button>
             </div>)
         }
