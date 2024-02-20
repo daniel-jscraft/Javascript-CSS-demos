@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChatOpenAI } from "@langchain/openai";
 
-const API_KEY = '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'
-
 function App() {
   const model = useRef(null)
   const [answer, setAnswer] = useState('')
 
   useEffect(()=> {
     model.current = new ChatOpenAI({
-      openAIApiKey: API_KEY
+      openAIApiKey: import.meta.env.VITE_OPENAI_KEY
     })
   }, [])
 
