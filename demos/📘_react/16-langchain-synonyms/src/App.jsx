@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChatOpenAI } from "@langchain/openai";
+import { useEffect, useRef, useState } from 'react'
+import { ChatOpenAI } from "@langchain/openai"
+import { ChatPromptTemplate } from "@langchain/core/prompts"
 
 function App() {
   const model = useRef(null)
@@ -12,10 +13,19 @@ function App() {
   }, [])
 
   const askGPT = async (word, lang) => {
-    const question = "Find 5 synonyms for " + word
-    const response = await model.current.invoke(question)
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        "system",
+        "Give 3 synonyms, for {word} in the {language}",
+      ],
+      ["human", "{word}", "{language}"],
+    ])
+
+    const chain = prompt.pipe(model)
+
+    const response = await chain.invoke({ word: word,  language: lang})
     console.log(response)
-    setAnswer(response.content)
+    setAnswer(response.current.content)
   }
 
   const onSubmitHandler = (event)=> {
@@ -28,7 +38,7 @@ function App() {
   return (
     <>
       <h1>🤖 GPT synonyms generator</h1>
-      <p>This app uses a GPT model to generate 5 synonyms for a word in the given language.</p>
+      <p>This app uses a GPT model to generate 3 synonyms for a word in the given language.</p>
       <form onSubmit={onSubmitHandler}>
         <label htmlFor="word">Word:</label>
         <input name='word' placeholder='ask a question' />
