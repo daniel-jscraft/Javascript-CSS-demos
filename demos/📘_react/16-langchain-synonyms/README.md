@@ -1,8 +1,19 @@
-# React + Vite
+👨‍💻 Full blogpost here:[ JS-Craft: A first example using Langchain and ReactJs](https://www.js-craft.io/blog/reactjs-langchain-example)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+Remember to create a `.eng` file where to set your `VITE_OPENAI_KEY` key. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Example:
+```jsx
+// 📁 file path: .env 
+VITE_OPENAI_KEY = 'PUT_API_KEY_HERE'
+```
+
+You can get your key from here: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys).
+
+You can start the app with `npm run dev`. 
+
+
+
+
+
