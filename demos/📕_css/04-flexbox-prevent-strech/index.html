@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox prevent strech</title>
+    <style>
+        body {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container-flex {
+            display: flex;
+            padding: 1rem;
+            border: 1px dashed;
+            line-height: 2rem;
+        }
+
+        img {
+            border: 1px solid;
+        }
+
+        .do-not-strech {
+            align-self: baseline;
+        }
+    </style>
+</head>
+<body>
+    <h1>👎 Unwanted strech in Flexbox element </h1>
+    <div class="container-flex">
+        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce 
+            non lacus nunc. Etiam luctus, metus eu hendrerit volutpat, 
+            ipsum dui semper mauris, eget dignissim lectus augue vel mauris. 
+            Cras placerat dapibus sem eu maximus.
+        </div>
+        <img src="tom-jerry.jpeg" />
+    </div>
+
+    <h1>👍 Use align-self or  prevent element strech</h1>
+    <div class="container-flex">
+        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce 
+            non lacus nunc. Etiam luctus, metus eu hendrerit volutpat, 
+            ipsum dui semper mauris, eget dignissim lectus augue vel mauris. 
+            Cras placerat dapibus sem eu maximus.
+        </div>
+        <img src="tom-jerry.jpeg" class="do-not-strech" />
+    </div>
+</body>
+</html>
