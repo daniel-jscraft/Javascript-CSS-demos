@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Switch from a List to a 2, 3 or a multi column CSS Grid</title>
+    <style>
+        body {
+            padding: 2rem;
+        }
+        button {
+            font-size: 150%;
+        }
+        .container {
+            border: 2px solid orangered;
+            margin-top: 1rem;
+            
+
+            &.grid-2-col {
+                display: grid;
+                transition: 300ms;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            &.grid-3-col {
+                display: grid;
+                transition: 300ms;
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            &.grid-n-col {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))
+            }
+        }
+
+        .item {
+            background-color: orangered;
+            height: 3rem;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<!-- switch css grid button adding transition animations ?-->
+<script>
+    const removeGridClasses = (container)=> {
+        container.classList.remove(
+            'grid-2-col', 
+            'grid-3-col', 
+            'grid-n-col'
+        )
+    }
+
+    const setGridColumns = (num)=> {
+        const container = document.getElementById("main")
+        removeGridClasses(container)
+        if (num !== 0) container.classList.add(`grid-${num}-col`)
+    }
+
+</script>
+<div class="buttons">
+    <button onclick="setGridColumns(0)">☰ List</button>
+    <button onclick="setGridColumns(2)">☷ Grid 2 columns</button>
+    <button onclick="setGridColumns(3)">☷ Grid 3 columns</button>
+    <button onclick="setGridColumns('n')"> ▦ Grid multi columns</button>
+</div>
+<div id="main" class="container">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+</div>
+</body>
+</html>
