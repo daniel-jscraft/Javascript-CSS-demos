@@ -11,38 +11,39 @@
         button {
             font-size: 150%;
         }
-        .container {
-            border: 2px solid orangered;
-            margin-top: 1rem;
-            
+.container {
+    border: 2px solid orangered;
+    margin-top: 1rem;
+    
+    &.grid-2-col {
+        display: grid;
 
-            &.grid-2-col {
-                display: grid;
-                transition: 300ms;
-                grid-template-columns: 1fr 1fr;
-            }
+        grid-template-columns: 1fr 1fr;
 
-            &.grid-3-col {
-                display: grid;
-                transition: 300ms;
-                grid-template-columns: 1fr 1fr 1fr;
-            }
+    }
 
-            &.grid-n-col {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))
-            }
-        }
+    &.grid-3-col {
+        display: grid;
 
-        .item {
-            background-color: orangered;
-            height: 3rem;
-            margin: 0.5rem;
-        }
+        grid-template-columns: 1fr 1fr 1fr;
+
+    }
+
+    &.grid-n-col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+    }
+}
+
+.item {
+    background-color: orangered;
+    height: 3rem;
+    margin: 0.5rem;
+}
     </style>
 </head>
 <body>
-<!-- switch css grid button adding transition animations ?-->
 <script>
     const removeGridClasses = (container)=> {
         container.classList.remove(
@@ -51,7 +52,6 @@
             'grid-n-col'
         )
     }
-
     const setGridColumns = (num)=> {
         const container = document.getElementById("main")
         removeGridClasses(container)
