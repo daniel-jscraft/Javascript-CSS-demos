@@ -8,14 +8,12 @@
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    overflow: hidden;
     background: green;
     font-family: sans-serif;
 }
 
 .grid > * {
     padding: 10px;
-    position: relative;
     text-align: center;
 }
 
@@ -24,42 +22,25 @@
     color: #fff;
     font-size: 150%;
 }
-
-.row span {
-    position: relative;
-    z-index: 2;
-}
-
-.row:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -1000%;
-    left: -1000%;
-    z-index: 1;
-    background-color: green;
-}
-
-.row:hover::before {
-    background-color: orange;
-}
 </style>
 </head>
 <body>
 <div class="grid">
     <div class="heading">🙂 Name:</div>
     <div class="heading">🎾 Points:</div>
-    <div class="heading">🧭 Country:</div>
-    <div class="row"><span>Novak Djokovic</span></div>
-    <div class="row"><span>9675</span></div>
-    <div class="row"><span>🇷🇸 Serbia</span></div>
-    <div class="row"><span>Carlos Alcaraz</span></div>
-    <div class="row"><span>8805</span></div>
-    <div class="row"><span>🇪🇸 Spain</span></div>
-    <div class="row"><span>Jannik Sinner</span></div>
-    <div class="row"><span>8270</span></div>
-    <div class="row"><span>🇮🇹 Italy</span></div>
+    <div class="heading">🌎 Country:</div>
+
+    <div class="cell">Novak Djokovic</div>
+    <div class="cell">9675</div>
+    <div class="cell">🇷🇸 Serbia</div>
+
+    <div class="cell">Carlos Alcaraz</div>
+    <div class="cell">8805</div>
+    <div class="cell">🇪🇸 Spain</div>
+
+    <div class="cell">Jannik Sinner</div>
+    <div class="cell">8270</div>
+    <div class="cell">🇮🇹 Italy</div>
 </div>
 </body>
 </html>
