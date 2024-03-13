@@ -25,23 +25,25 @@
     font-size: 150%;
 }
 
-.cell span {
-    position: relative;
-    z-index: 1;
-}
+.cell {
+    span {
+        position: relative;
+        z-index: 1;
+    }
 
-.cell:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -1000%;
-    left: -1000%;
-    background-color: green;
-}
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -1000%;
+        left: -1000%;
+        background-color: green;
+    }
 
-.cell:hover::before {
-    background-color: orange;
+    &:hover::before {
+        background-color: orange;
+    }
 }
 </style>
 </head>
