@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChatOpenAI } from "@langchain/openai"
 import { ChatPromptTemplate } from "@langchain/core/prompts"
-import { CommaSeparatedListOutputParser } from "@langchain/core/output_parsers"
 import { ConversationChain } from "langchain/chains";
 import { BufferMemory } from "langchain/memory";
 import { BaseMessage } from "@langchain/core/messages"
+import {
+  CommaSeparatedListOutputParser,
+  StringOutputParser,
+} from "@langchain/core/output_parsers";
 
 const memory = new BufferMemory();
 
@@ -14,6 +17,13 @@ const model = new ChatOpenAI({
 
 const chain = new ConversationChain({ llm: model, memory })
 
+
+const AnswerResult = (result) => {
+  if (!result) {
+    return ""
+  }
+  return <h1>{result}</h1>
+}
 function App() {
   const [domain, setDomain ] = useState('history')
   const [question, setQuestion] = useState()
@@ -21,9 +31,12 @@ function App() {
   const [result, setResult] = useState(null)
 
   const gptAskQuestion = async () => {
-    const response = await chain.call({
-      input: `Give me an easy trivia question from ${domain}.` 
+    const outputParser = new StringOutputParser()
+
+    const response = await chain.invoke({
+      input: `Give me an easy random trivia question from ${domain}.` 
     })
+    
     console.log(response)
     setQuestion(response.response)
     setResult(null)
@@ -34,14 +47,31 @@ function App() {
   /*
   Give me a just a hint for {question}, but not the answer
   "Give me a another, different from the last one, for {question}, but not the answer"
+  an app where the AI will act as a trivia game host
   */
 
   const gptHint = async () => {
-    const response = await chain.call({
-      input: `Give me a just a hint for the last question, but not the answer.` 
+    const response = await chain.invoke({
+      input: `Give me a just a hint for the last question, but not the actual answer.` 
     })
     console.log(response)
     setHint(response.response)
+  }
+
+  const gptJoke = async ()=> {
+    const response = await chain.invoke({
+      input: `Tell me a joke about my name. If you don't know my name reply with ASK NAME.` 
+    })
+    if(response.response === 'ASK NAME') {
+      const userName = prompt("Please enter your name", "Daniel")
+      await chain.invoke({
+        input: `My name is ${userName}.` 
+      })
+      gptJoke()
+    }
+    else {
+      console.log(response.response)
+    }
   }
 
   const onDomainChangeHandler = (evt) => setDomain(evt.target.value)
@@ -50,8 +80,8 @@ function App() {
     event.preventDefault()
     const answer = event.target.answer.value
 
-    const response = await chain.call({
-      input: `Is ${answer} the correct answer for the question? Just reply with correct or  incorrect.` 
+    const response = await chain.invoke({
+      input: `Is ${answer} the correct answer for the question? Reply with correct or incorrect.` 
     })
     console.log(response)
     setResult(response.response)
@@ -80,10 +110,13 @@ function App() {
             placeholder='answer ...'  />
           <button>Check answer</button>
         </form>
-        <button onClick={gptHint}>🤨 Give me a Hint please!</button>
+        <br/>
+        <button onClick={gptHint}> 💡 Give me a Hint please</button>
+        <button onClick={gptJoke}> 😂 Tell a Joke about my name</button>
 
         <p>{hint}</p>
-        <p>{result && (result.toLowerCase() === 'correct' ? '✅ That is Correct!' : '❌ Nope, this is false!')}</p>
+        <p>{result && ( (result.toLowerCase().includes('incorrect')) ? `❌ ${result}` : `✅ ${result}` )}</p>
+      
       </div>}
     </>
   )
