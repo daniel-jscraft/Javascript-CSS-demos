@@ -1,0 +1,197 @@
+{
+	// Place your Javascript-CSS-demos workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+// "log": {
+// 	"prefix": "log",
+// 	"body": [
+// 		"$2"
+// 	],
+// },
+"onChange": {
+	"scope": "javascript,typescript",
+	"prefix": "q1",
+	"body": [
+		"onChange={(e)=> setFiles(e.target.files)}",
+	],
+}, 
+"renderFileList": {
+	"scope": "javascript,typescript",
+	"prefix": "q2",
+	"body": [
+		"const renderFileList = () => (<ol>", 
+		"	{[...files].map((f, i) => (", 
+		"		<li key={i}>{f.name} - {f.type}</li>",
+		"	))}"
+		"</ol>)",
+	],
+}, 
+"API_URL": {
+	"scope": "javascript,typescript",
+	"prefix": "q3",
+	"body": [
+		"const API_URL = 'https://httpbin.org/post'",
+		"const API_METHOD = 'POST'",
+	],
+}, 
+"packMethod": {
+	"scope": "javascript,typescript",
+	"prefix": "q4",
+	"body": [
+		"const packFiles = (files)=> {",
+		"	const data = new FormData();",
+		"",
+		"	[...files].forEach((file, i) => {",
+		"		data.append('file'+i, file, file.name)",
+		"	})",
+		"	return data",
+		"}",
+	],
+}, 
+"packFiles": {
+	"scope": "javascript,typescript",
+	"prefix": "q5",
+	"body": [
+		"if (files.length) {",
+		"    const data = packFiles(files)",
+		"}",
+	],
+}, 
+"uploadFiles": {
+	"scope": "javascript,typescript",
+	"prefix": "q6",
+	"body": [
+		"const uploadFiles = (data)=> {",
+		"	fetch(API_URL, {",
+		"		method: API_METHOD,",
+		"		body: data,",
+		"	})",
+		"	.then((res) => res.json())",
+		"	.then((data) => console.log(data))",
+		"	.catch((err) => console.error(err))",
+		"}"
+	],
+}, 
+"defineStatusVars": {
+	"scope": "javascript,typescript",
+	"prefix": "q7",
+	"body": [
+		"const STATUS_IDLE = 0",
+		"const STATUS_UPLOADING = 1"
+	],
+}, 
+"q8": {
+	"scope": "javascript,typescript",
+	"prefix": "q8",
+	"body": [
+		"const [status, setStatus] = React.useState(STATUS_IDLE)",
+	],
+}, 
+"q88": {
+	"scope": "javascript,typescript",
+	"prefix": "q88",
+	"body": [
+		".finally(() => setStatus($1))",
+	],
+}, 
+"q89": {
+	"scope": "javascript,typescript",
+	"prefix": "q89",
+	"body": [
+		"disabled={status === STATUS_UPLOADING}",
+	],
+}, 
+"q9": {
+	"scope": "javascript,typescript",
+	"prefix": "q9",
+	"body": [
+		"const getButtonStatusText = () => (",
+		"	(status === STATUS_IDLE) ? ",
+		"		'Send to server' : ",
+		"		<img src = './load.svg' />",
+		")",
+	],
+}, 
+
+"gr": {
+	"prefix": "gr",
+	"body": [
+		".grid {",
+			"	grid-template-columns: 1fr 1fr 1fr;",
+			"	display: grid;",
+			"	background-color: green;",
+			"	font-family: sans-serif;"
+		"}"
+	],
+},
+
+
+"pad": {
+	"prefix": "pad",
+	"body": [
+		".grid > * {",
+		"	padding: 10px;",
+		"	text-align: center;",
+		"}"
+	],
+},
+
+"hed": {
+	"prefix": "hed",
+	"body": [
+		".heading {",
+		"	background: black;",
+    	"	color: #fff;",
+    	"	font-size: 150%;",
+		"}"
+	],
+},
+
+"cb": {
+	"prefix": "cb",
+	"body": [
+		".cell::before {",
+		"    content: '';",
+		"    position: absolute;",
+		"    top: 0;",
+		"    bottom: 0;",
+		"    right: -1000%;",
+		"    left: -1000%;",
+		"    background-color: green;",
+		"}"
+	],
+},
+
+"cpr": {
+	"prefix": "cpr",
+	"body": [
+		".cell {",
+		"    position: relative;",
+		"}"
+	],
+},
+
+"hov": {
+	"prefix": "hov",
+	"body": [
+		".cell:hover::before {",
+		"    background-color: orange;",
+		"}"
+	],
+},
+
+"spa": {
+	"prefix": "spa",
+	"body": [
+		".cell span {",
+		"	position: relative;",
+		"	z-index: 1;"
+		"}"
+	],
+},
+
+}
