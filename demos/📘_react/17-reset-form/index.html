@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-reset-form</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+</head>
+<body>
+
+<div id="root"></div>
+<script type="text/babel">
+    const {useState} = React
+
+    const useForm = (initialState) => {
+        const [formValues, setFormValues] = useState(initialState)
+        const handleChange = (e) => {
+            const { name, value } = e.target
+            setFormValues({ ...formValues, [name]: value })
+        }
+        const resetForm = () => setFormValues(initialState)
+        return { formValues, handleChange, resetForm }
+    }
+
+    const App = ()=> {
+        // default form values
+        const defaultValues = {
+            model: "",
+            manufacturer: "",
+            engine: null
+        }
+
+        // Use the useForm hook to manage form state
+        const { formValues, handleChange, resetForm } = useForm(defaultValues)
+        const [records, setRecords] = useState([])
+
+        const handleSubmit = (e) => {
+            e.preventDefault()
+            setRecords([...records, formValues])
+            resetForm()
+        }
+
+        console.log(records)
+
+        return (
+            <div>
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <input
+                        placeholder="Car model ..."
+                        name="model"
+                        value={formValues.model}
+                        onChange={handleChange}
+                    />
+                    <br />
+                    <select
+                        name="manufacturer"
+                        value={formValues.manufacturer}
+                        onChange={handleChange}>
+                            <option>Select manufacturer ...</option>
+                            <option>Doge</option>
+                            <option>BMW</option>
+                            <option>Ford</option>
+                    </select>
+                    <br />
+                    <input name="engine" value="electric" id='electric'
+                        type="radio"
+                        checked={formValues.engine === "electric"}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="electric">Electric</label>
+                    <input name="engine" value="petrol" id='petrol'
+                        type="radio"
+                        checked={formValues.engine === "petrol"}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="petrol">Petrol</label>
+
+                    <br /><br />
+                    <button type="submit">Submit and Reset</button>
+                </form>
+            </div>
+        )
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"))
+    root.render(<App />)
+</script>
+
+</body>
+</html>
