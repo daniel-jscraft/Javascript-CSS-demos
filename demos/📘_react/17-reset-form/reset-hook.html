@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React-reset-form</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+</head>
+<body>
+
+<div id="root"></div>
+<script type="text/babel">
+    const {useState} = React
+
+const useResetableForm = (initialState) => {
+    const [formValues, setFormValues] = useState(initialState)
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormValues({ ...formValues, [name]: value })
+    }
+    const resetForm = () => setFormValues(initialState)
+    return { formValues, handleChange, resetForm }
+}
+
+const App = ()=> {
+    // default form values
+    const defaultValues = {
+        model: "",
+        manufacturer: "",
+    }
+
+    // Use the useResetableForm hook to manage form state
+    const { formValues, handleChange, resetForm } = useResetableForm(defaultValues)
+    const [data, setData] = useState([])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setData([...data, formValues])
+        resetForm()
+    }
+
+    return (
+        <div className="App">
+        <form onSubmit={(e) => handleSubmit(e)}>
+            <input
+                placeholder="Car model ..."
+                value={formValues.model}
+                name="model"
+                onChange={handleChange}
+            />
+            
+            <br />
+            <input
+                placeholder="Car manufacturer ..."
+                value={formValues.manufacturer}
+                name="manufacturer"
+                onChange={handleChange}
+            />
+            <br/>
+            <button type="submit">Save</button>
+        </form>
+    </div>)
+}
+
+    const root = ReactDOM.createRoot(document.getElementById("root"))
+    root.render(<App />)
+</script>
+
+</body>
+</html>
