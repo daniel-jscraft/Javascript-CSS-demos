@@ -8,35 +8,34 @@ import {
   CommaSeparatedListOutputParser,
   StringOutputParser,
 } from "@langchain/core/output_parsers";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
-const memory = new BufferMemory();
 
 const model = new ChatOpenAI({
   openAIApiKey: import.meta.env.VITE_OPENAI_KEY, 
 })
 
-const chain = new ConversationChain({ llm: model, memory })
+const chain = new ConversationChain({ llm: model })
+const chatHistory = [new AIMessage('You are a Trivia Game host.')]
 
-
-const AnswerResult = (result) => {
-  if (!result) {
-    return ""
-  }
-  return <h1>{result}</h1>
-}
 function App() {
   const [domain, setDomain ] = useState('history')
   const [question, setQuestion] = useState()
   const [hint, setHint] = useState(null)
   const [result, setResult] = useState(null)
 
-  const gptAskQuestion = async () => {
-    const outputParser = new StringOutputParser()
+  console.log(chatHistory)
 
+  const gptAskQuestion = async () => {
+    const question = `Give me an easy random trivia question from ${domain}.` 
     const response = await chain.invoke({
-      input: `Give me an easy random trivia question from ${domain}.` 
+      input: question,
+      chat_history: chatHistory,
     })
-    
+
+    chatHistory.push(new HumanMessage(question))
+    chatHistory.push(new AIMessage(response.response))
+
     console.log(response)
     setQuestion(response.response)
     setResult(null)
@@ -51,23 +50,36 @@ function App() {
   */
 
   const gptHint = async () => {
+    const question = `Give me a just a hint for the last question, but not the actual answer.` 
     const response = await chain.invoke({
-      input: `Give me a just a hint for the last question, but not the actual answer.` 
+      input: question,
+      chat_history: chatHistory
     })
+
+    chatHistory.push(new HumanMessage(question))
+    chatHistory.push(new AIMessage(response.response))
+
     console.log(response)
     setHint(response.response)
   }
 
   const gptJoke = async ()=> {
+    const question = `Tell me a joke about my name. If you don't know my name reply with ASK NAME.` 
+
     const response = await chain.invoke({
-      input: `Tell me a joke about my name. If you don't know my name reply with ASK NAME.` 
+      input: question,
+      chat_history: chatHistory
     })
+
+    chatHistory.push(new HumanMessage(question))
+    chatHistory.push(new AIMessage(response.response))
+
     if(response.response === 'ASK NAME') {
-      const userName = prompt("Please enter your name", "Daniel")
+      const userName = prompt("Sorry, I don't know your name. \n Please enter your name:", "Daniel")
       await chain.invoke({
         input: `My name is ${userName}.` 
       })
-      gptJoke()
+      chatHistory.push(new HumanMessage(`My name is ${userName}.`))
     }
     else {
       console.log(response.response)
@@ -115,7 +127,10 @@ function App() {
         <button onClick={gptJoke}> 😂 Tell a Joke about my name</button>
 
         <p>{hint}</p>
-        <p>{result && ( (result.toLowerCase().includes('incorrect')) ? `❌ ${result}` : `✅ ${result}` )}</p>
+        <p>{result && ( (result.toLowerCase().includes('incorrect')) ? 
+          (<i style={{color: 'red'}}>❌ {result}</i>) : 
+          (<i style={{color: 'green'}}>✅ {result}</i>) 
+        )}</p>
       
       </div>}
     </>
