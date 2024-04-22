@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .red {
+            border: 2px solid red;
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="red-div">ID starts with 'red': </div>
+<div id="div-red">ID ends with 'red': </div>
+<div id="the-red-div">ID constains 'red': </div>    
+<div id="uppercase-RED">ID is uppercase 'RED': </div>   
+
+<script>
+// 1️⃣ id starts with 'red'
+const elements = document.querySelectorAll('[id^="red"]')
+elements.forEach(e => e.classList.add('red'))
+
+// 2️⃣ id ends with 'red'
+
+// 3️⃣ id contains 'red', no matter where
+
+// 4️⃣ case insensitive (eq: 'red',  'Red' or 'RED')
+
+// 5️⃣ mutiple values (eq: starts with & ends with)
+
+</script>
+</body>
+</html>
+
+<!--
+^ caret
+link in the description, full code, 
+REPLACE  ~ with *
+open getElementById, getElementsByTagName, getElementsByClassName
+what we have here ... the html and selection class, or name
+https://www.youtube.com/watch?v=5eko6eXAzjs anthing is possbile with CSS is possbile with querySelector
+all that I say now for the div you can exchnage with class
+The querySelectorAll() consolidated all the methods such as 
+getElementById(), 
+getElementsByTagName() or 
+getElementsByClassName() into just one single universal tool. 
+It became the ultimate selector method!
+
+// 1️⃣ id starts with 'red'
+// 2️⃣ id ends with 'red'
+// 3️⃣ id contains 'red'
+// 4️⃣ case insensitive (eq: 'red',  'Red' or 'RED') 
+By default querySelectorAll() is case-sensitive. Therefore if we apply:
+
+
+-->
