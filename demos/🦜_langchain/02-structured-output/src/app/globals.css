@@ -1,0 +1,22 @@
+h1 {
+    text-decoration:  underline;
+    text-align: center;
+}
+
+button {
+    line-height: 2rem;
+    width: 50%;
+    margin: 1rem auto 2rem;
+    display: block;
+}
+
+table {
+    width: 75%;
+    margin: 1rem auto;
+    border-collapse: collapse;
+
+    td {
+        border: 1px solid;
+        padding: 0.5rem;
+    }
+}
