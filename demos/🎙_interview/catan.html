@@ -1,0 +1,29 @@
+
+<script type="text/javascript">
+class Node {
+    constructor(val) {
+        this.val = val
+        this.links = []
+    }
+}
+
+let head = new Node('*')
+
+let l1n1 = new Node(6)
+let l1n2 = new Node(3)
+let l1n3 = new Node(8)
+head.links = [l1n1, l1n2, l1n3]
+
+let vals = [2, 4, 5, 8]
+
+function addLevel( level, vals ) {
+    for(let i = 0; i < level.length; i++){
+        let node = level[i]
+        const r = vals[1 + i - vals.length + level.length]
+        const l = vals[2 + i - vals.length + level.length]
+        node.links = [r, l]
+    }
+}
+addLevel(head.links, vals)
+
+</script>
