@@ -31,7 +31,43 @@
 // console.log(response)
 
 
-// or we can extract / merge content from the RunnableSequence into a separte chain. The second chain will use the input from the first chain.
+// or we can extract / merge content from the RunnableSequence into a separte chain. The second chain will use the input from the first chain. 
+// import { ChatOpenAI } from "@langchain/openai"
+// import { StringOutputParser } from "@langchain/core/output_parsers"
+// import { PromptTemplate } from "@langchain/core/prompts"
+// import { RunnableSequence } from "@langchain/core/runnables"
+// import * as dotenv from "dotenv"
+
+// dotenv.config()
+
+// const model = new ChatOpenAI()
+
+// const prompt1 = PromptTemplate.fromTemplate(
+//     `Which country has the highest population in Latin America? Respond only with the name of the country.`
+// )
+
+// const chain1 = prompt1
+//                 .pipe(model)
+//                 .pipe(new StringOutputParser())
+
+// const prompt2 = PromptTemplate.fromTemplate(
+//     `Tell me the currency of {country}?`
+// )
+
+// const chain2 = prompt2
+//                 .pipe(model)
+//                 .pipe(new StringOutputParser())
+
+// const completeChain = RunnableSequence.from([
+//     { country: chain1 },
+//     chain2
+// ])
+
+// const response = await completeChain.invoke()
+// console.log(response)
+
+// pass mutiple paramters to the nestad chains. 
+// ⛔️ Add picture ?
 import { ChatOpenAI } from "@langchain/openai"
 import { StringOutputParser } from "@langchain/core/output_parsers"
 import { PromptTemplate } from "@langchain/core/prompts"
@@ -51,7 +87,7 @@ const chain1 = prompt1
                 .pipe(new StringOutputParser())
 
 const prompt2 = PromptTemplate.fromTemplate(
-    `Tell me the currency of {country}?`
+    `Tell me the {word} of {country}?`
 )
 
 const chain2 = prompt2
@@ -59,10 +95,14 @@ const chain2 = prompt2
                 .pipe(new StringOutputParser())
 
 const completeChain = RunnableSequence.from([
-    { country: chain1 },
+    {
+        country: chain1, 
+        word: input => input.word
+    },
     chain2
 ])
 
-const response = await completeChain.invoke()
-console.log(response)
 
+// ⛔️ const response = await completeChain.invoke({word: 'capital'})
+const response = await completeChain.invoke({word: 'currency'})
+console.log(response)
