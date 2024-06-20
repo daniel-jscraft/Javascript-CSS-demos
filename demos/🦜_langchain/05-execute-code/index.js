@@ -16,6 +16,9 @@ const model = new ChatOpenAI({
 /*
 while you want it to be creative on some parst, you don't want to have a creative math equation AI
 there are cases hwere you want to run local , not very perofrmat modesl 
+
+langchain execute code javascript 
+
 */
 
 
@@ -27,5 +30,20 @@ const chain = prompt
                 .pipe(model)
                 .pipe(new StringOutputParser())
 
-const response = await chain.invoke()
-console.log(response)
+const code = await chain.invoke()
+console.log(code)
+
+const cleanCode = code.replace('javascript', '').replaceAll('```', '')
+console.log(cleanCode)
+
+
+const promptExec = PromptTemplate.fromTemplate(
+    `Execute the below JavaScript code tell me the result: \n ${cleanCode}`
+)
+
+const chainExec = promptExec
+                .pipe(model)
+                .pipe(new StringOutputParser())
+
+const result = await chainExec.invoke()
+console.log(result)
