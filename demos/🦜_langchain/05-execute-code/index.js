@@ -8,42 +8,33 @@ dotenv.config()
 
 const model = new ChatOpenAI({
     modelName: "gpt-4o",
-    temperature: 0
+    temperature: 0.75
 })
 
-// TODO Fix this 
-// const question = "What is (4 ^ 3 * 5 + 109 * 99 - 102 / 1000) / (2 ^ 5 * 3 - 10 + sqrt(81)). Just tell me the result."
-/*
-while you want it to be creative on some parst, you don't want to have a creative math equation AI
-there are cases hwere you want to run local , not very perofrmat modesl 
-
-langchain execute code javascript 
-
-*/
-
+const cleanCode = (code) => {
+    return code.replace('javascript', '').replaceAll('```', '') 
+}
 
 const prompt = PromptTemplate.fromTemplate(
-    `You are an expert at writing correct executable JavaScript code. \n Generate JavaScript code to solve the the below question. Return the JavaScript code only, with no other explanation.  \n \n What is (4 ^ 3 * 5 + 109 * 99 - 102 / 1000) / (2 ^ 5 * 3 - 10 + sqrt(81))?`
+`You are an expert at writing correct executable JavaScript code.
+Generate the JavaScript code to solve the the below question. 
+Return the JavaScript function code only and call it with no other explanation or log statments.
+\n\n
+What is (5 ^ 2 * 40 + sqrt(9) + 350) /  (3 ^ 2 * 20 + 102 / 1000 + 80 * 72)?`
 )
 
 const chain = prompt
                 .pipe(model)
                 .pipe(new StringOutputParser())
 
-const code = await chain.invoke()
-console.log(code)
+const generatedCode = await chain.invoke()
 
-const cleanCode = code.replace('javascript', '').replaceAll('```', '')
-console.log(cleanCode)
+const codeClean = cleanCode(generatedCode)
 
-
-const promptExec = PromptTemplate.fromTemplate(
-    `Execute the below JavaScript code tell me the result: \n ${cleanCode}`
-)
-
-const chainExec = promptExec
-                .pipe(model)
-                .pipe(new StringOutputParser())
-
-const result = await chainExec.invoke()
-console.log(result)
+try {
+    const result = eval(codeClean)
+    console.log('Math operation result = ' + result)
+}
+catch {
+    console.error('Got an exception while running the code')
+}
