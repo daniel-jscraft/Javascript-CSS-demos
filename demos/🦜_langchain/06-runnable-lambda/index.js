@@ -24,8 +24,6 @@ console.log(resultLambda)
 
 let's first take a look at RunnableLambda in a sterile enviroment
 
-
-
 ‼️ vezi neaparat textul de pe youtube
 
 In python ai | operator (ex cod) 
