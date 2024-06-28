@@ -5,9 +5,8 @@ const chain1 = new RunnablePassthrough()
                 .pipe(new RunnablePassthrough())
                 .pipe(new RunnablePassthrough())
 
-const resultPassThrough = await chain1.invoke('Hi there, friend 👋 !!!')
-console.log(resultPassThrough)
-
+const result1 = await chain1.invoke('Hi there, friend 👋 !!!')
+console.log(result1)
 
 const toUpperCase = input => input.toUpperCase()
 
@@ -16,9 +15,9 @@ const chain2 = new RunnablePassthrough()
                         func: toUpperCase
                     }))
                     .pipe(new RunnablePassthrough())
-
-const resultLambda = await chain2.invoke('Hi there, friend 👋 !!!')
-console.log(resultLambda)
+                    
+const result2 = await chain2.invoke('Hi there, friend 👋 !!!')
+console.log(result2)
 
 /* 📒 NOTES
 

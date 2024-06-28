@@ -8,25 +8,25 @@ import * as dotenv from "dotenv"
 dotenv.config()
 const model = new ChatOpenAI({ modelName: "gpt-4o"})
 
-const jokePromt = ChatPromptTemplate.fromTemplate(
-    "Tell me a joke about {topic}"
+const cityPromt = ChatPromptTemplate.fromTemplate(
+  "What is the biggest city in {country}"
 )
 
-const analysisPrompt = ChatPromptTemplate.fromTemplate(
-  "is this a funny joke? {joke}"
+const factPrompt = ChatPromptTemplate.fromTemplate(
+  "Tell me an interestign fact about {city}"
 )
 
 const composedChain = new RunnableLambda({
-  func: async (input) => {
-    const chain = jokePromt
+  func: async input => {
+    const chain = cityPromt
             .pipe(model)
             .pipe(new StringOutputParser())
     const result = await chain.invoke(input)
-    return { joke: result }
-  },
+    return { city: result }
+  }
 })
-  .pipe(analysisPrompt)
+  .pipe(factPrompt)
   .pipe(model)
   .pipe(new StringOutputParser())
 
-console.log(await composedChain.invoke({ topic: "bears" }))
+console.log(await composedChain.invoke({ country: "Spain" }))
