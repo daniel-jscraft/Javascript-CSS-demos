@@ -28,18 +28,22 @@ Explanation: You will always arrive at index 3 no matter what. Its maximum jump 
 
 let input = [2,3,1,1,4]
 let index = 0
+let currentIndex = 0
 
-let nextStep = 0
-while (nextStep <= input.length) {
+while((currentIndex + input[currentIndex]) <= input.length) {
     let max = 0
-    index = nextStep
-    for (let i = index + 1; i < input[input[index] - 1] ; i++) {
-        if (max < input[i])
+    maxJumpLength = input[currentIndex]
+    console.log('maxJumpLength = ' + maxJumpLength)
+    for (let i = currentIndex + 1; i <= maxJumpLength ; i++) {
+        if (max < input[i]) {
+            console.log(`MAX = ${input[i]}, I = ${i}`)
             max = input[i]
+            currentIndex = i
+        }
     }
-    nextStep = max
-    console.log(nextStep)
+    console.log(currentIndex)
 }
+   
 
 
 
