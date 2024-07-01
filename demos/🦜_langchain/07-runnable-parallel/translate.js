@@ -12,14 +12,14 @@ const frChain = ChatPromptTemplate.fromTemplate(
     `Translate this to French {input}`
 ).pipe(model).pipe(new StringOutputParser())
 
-const itPromt = ChatPromptTemplate.fromTemplate(
+const itChain = ChatPromptTemplate.fromTemplate(
     `Translate this to Italian {input}`
 ).pipe(model).pipe(new StringOutputParser())
 
 
 const chain = RunnableMap.from({
     "FR": frChain, 
-    "IT": itPromt
+    "IT": itChain
 })
 
 const result = await chain.invoke({input: 'Good morning, friend!'})
