@@ -1,55 +1,53 @@
 import { ChatOpenAI } from "@langchain/openai"
 import { StringOutputParser } from "@langchain/core/output_parsers"
-import { ChatPromptTemplate } from "@langchain/core/prompts"
+import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts"
 import { 
     RunnableLambda, RunnablePassthrough 
 } from "@langchain/core/runnables"
 import * as dotenv from "dotenv"
 
+const TOPIC_CARROTS = `Carrots`
+const TOPIC_LASAGNA = `Lasagna`
+
 dotenv.config()
-
 const model = new ChatOpenAI({})
+const stringParser = new StringOutputParser()
 
-const carTemplate = `You are an expert in automobiles. You have extensive knowledge about car mechanics, \
-models, and automotive technology. You provide clear and helpful answers about cars.
+const carotsTemplate = `You are an expert in carots.
+Always answer questions starting with "As 🐇 Bugs Bunny says: 
 
-Here is a question:
-{query}`
+Respond to the folowing question:
+{question}`
 
-const restaurantTemplate = `You are a knowledgeable food critic and restaurant reviewer. You have a deep understanding of \
-different cuisines, dining experiences, and what makes a great restaurant. You answer questions about restaurants insightfully.
+const lasagnaTemplate = `You are an expert in lasagna.
+Always answer questions starting with "As 😸 Garfield says: 
 
-Here is a question:
-{query}`
+Respond to the folowing question:
+{question}`
 
-const technologyTemplate = `You are a tech expert with in-depth knowledge of the latest gadgets, software, \
-and technological trends. You provide insightful and detailed answers about technology.
+const generalTemplate = `Respond to the folowing question: {question}`
 
-Here is a question:
-{query}`
-
-const classificationChain = ChatPromptTemplate.fromTemplate(
+const classificationChain = PromptTemplate.fromTemplate(
 `You are good at classifying a question.
-Given the user question below, classify it as either being about "Car", "Restaurant", or "Technology".
 
-<If the question is about car mechanics, models, or automotive technology, classify it as 'Car'>
-<If the question is about cuisines, dining experiences, or restaurant services, classify it as 'Restaurant'>
-<If the question is about gadgets, software, or technological trends, classify it as 'Technology'>
+Given the user question below, classify it as either being about ${TOPIC_CARROTS}, ${TOPIC_LASAGNA}, or "Other".
+
+Do not respond with more that one word.
 
 <question>
 {question}
 </question>
 
 Classification:`
-).pipe(model).pipe(new StringOutputParser())
+).pipe(model).pipe(stringParser)
 
 const promptRouter = async (question) => {
-    console.log('heeere')
-    const type = await classificationChain.invoke({question})
-    if (type === "Car") {
-        console.log("🚗 Car")
-        return ChatPromptTemplate.fromTemplate(carTemplate)
-    }
+    const type = await classificationChain.invoke(question)
+    if (type === TOPIC_CARROTS) 
+        return PromptTemplate.fromTemplate(carotsTemplate)
+    if (type === TOPIC_LASAGNA)
+        return PromptTemplate.fromTemplate(lasagnaTemplate)
+    return PromptTemplate.fromTemplate(generalTemplate)
 }
 
 // 📍 P1 promptRouter only 
@@ -61,11 +59,21 @@ const promptRouter = async (question) => {
 const chain = new RunnablePassthrough()
                 .pipe(new RunnableLambda({func: promptRouter}))
                 .pipe(model)
-                .pipe(new StringOutputParser())
-const result = await chain.invoke("What is the best BMW model ever made?")
+                .pipe(stringParser)
+const result = await chain.invoke({question: `What makes a good lasagna?`})
 console.log(result)
+// What makes a good lasagna?
 
 /*
+
+LangChain - Dynamic Routing - Retrieve data from different databases
+vezi continuare https://www.youtube.com/watch?v=nko60eGSYn4&list=PLcNE223Nb52Zjr-POzYLYk2LSpow0VeWI&index=4
+
+RunnableBranch
+https://www.youtube.com/watch?v=zREUGA_v3xc&list=PLcNE223Nb52Zjr-POzYLYk2LSpow0VeWI&index=11
+
+
+we can mix it with map https://www.js-craft.io/blog/runnablemap-runnableparallel-langchain-js/
 exploreaza 
 print("Unexpected classification:", classification)
         return None
