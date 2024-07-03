@@ -6,9 +6,6 @@ import {
 } from "@langchain/core/runnables"
 import * as dotenv from "dotenv"
 
-const TOPIC_CARROTS = `Carrots`
-const TOPIC_LASAGNA = `Lasagna`
-
 dotenv.config()
 const model = new ChatOpenAI({})
 const stringParser = new StringOutputParser()
@@ -25,13 +22,19 @@ Always answer questions starting with "As 😸 Garfield says:
 Respond to the folowing question:
 {question}`
 
-const generalTemplate = `Respond to the folowing question: {question}`
+const generalTemplate = `Yu are a helpful assistant.
+Respond to the folowing question: 
+{question}`
+
+const TOPIC_CARROTS = `Carrots`
+const TOPIC_LASAGNA = `Lasagna`
 
 const classificationChain = PromptTemplate.fromTemplate(
 `You are good at classifying a question.
-
-Given the user question below, classify it as either being about ${TOPIC_CARROTS}, ${TOPIC_LASAGNA}, or "Other".
-
+Given the user question below, classify it as either being about:
+- ${TOPIC_CARROTS}
+- ${TOPIC_LASAGNA}
+- or "Other".
 Do not respond with more that one word.
 
 <question>
@@ -50,41 +53,9 @@ const promptRouter = async (question) => {
     return PromptTemplate.fromTemplate(generalTemplate)
 }
 
-// 📍 P1 promptRouter only 
-// const result = await classificationChain.invoke({
-//     question: `What are the latest trends in electric cars?`
-// })
-// console.log(result)
-
 const chain = new RunnablePassthrough()
                 .pipe(new RunnableLambda({func: promptRouter}))
                 .pipe(model)
                 .pipe(stringParser)
 const result = await chain.invoke({question: `What makes a good lasagna?`})
 console.log(result)
-// What makes a good lasagna?
-
-/*
-
-LangChain - Dynamic Routing - Retrieve data from different databases
-vezi continuare https://www.youtube.com/watch?v=nko60eGSYn4&list=PLcNE223Nb52Zjr-POzYLYk2LSpow0VeWI&index=4
-
-RunnableBranch
-https://www.youtube.com/watch?v=zREUGA_v3xc&list=PLcNE223Nb52Zjr-POzYLYk2LSpow0VeWI&index=11
-
-
-we can mix it with map https://www.js-craft.io/blog/runnablemap-runnableparallel-langchain-js/
-exploreaza 
-print("Unexpected classification:", classification)
-        return None
-        
-extract Car, Restaurant and Technology to CONST
-titlu - use a variable/dynamic prompt in langchain based on the question type
-this is alos called routing
-
-ex cu 1 singur
-
-or , we can do this wiht mutiple questions using ParalesRunnable
-
-vezi ala cu fesu
-*/
