@@ -12,17 +12,15 @@ const stringParser = new StringOutputParser()
 
 const carotsTemplate = `You are an expert in carots.
 Always answer questions starting with "As 🐇 Bugs Bunny says: 
-
 Respond to the folowing question:
 {question}`
 
 const lasagnaTemplate = `You are an expert in lasagna.
 Always answer questions starting with "As 😸 Garfield says: 
-
 Respond to the folowing question:
 {question}`
 
-const generalTemplate = `Yu are a helpful assistant.
+const generalTemplate = `You are a helpful assistant.
 Respond to the folowing question: 
 {question}`
 
@@ -54,8 +52,9 @@ const promptRouter = async (question) => {
 }
 
 const chain = new RunnablePassthrough()
-                .pipe(new RunnableLambda({func: promptRouter}))
+                .pipe(RunnableLambda.from(promptRouter))
                 .pipe(model)
                 .pipe(stringParser)
+           
 const result = await chain.invoke({question: `What makes a good lasagna?`})
 console.log(result)
