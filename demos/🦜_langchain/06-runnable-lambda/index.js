@@ -11,9 +11,7 @@ console.log(result1)
 const toUpperCase = input => input.toUpperCase()
 
 const chain2 = new RunnablePassthrough()
-                    .pipe(new RunnableLambda({
-                        func: toUpperCase
-                    }))
+                    .pipe(RunnableLambda.from(toUpperCase))
                     .pipe(new RunnablePassthrough())
                     
 const result2 = await chain2.invoke('Hi there, friend 👋 !!!')
