@@ -1,6 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai"
 import { StringOutputParser } from "@langchain/core/output_parsers"
-import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts"
+import { PromptTemplate } from "@langchain/core/prompts"
 import { 
     RunnableLambda, RunnablePassthrough 
 } from "@langchain/core/runnables"
