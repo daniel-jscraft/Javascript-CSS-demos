@@ -46,7 +46,7 @@ const branch = RunnableBranch.from([
 const fullChain = RunnableSequence.from([
     {
       topic: classificationChain,
-      question: input => input.question,
+      question: new RunnablePassthrough(),
     },
     branch,
 ])
@@ -62,24 +62,9 @@ console.log(result1)
 const result2 = await fullChain.invoke({
     question: "What is the age of Chewbacca?",
 })
-// will use the generalChain 
+// will use the starWarsChain 
 console.log(result2)
 // outputs - As Yoda told me: Age of Chewbacca, a mystery it is. 
 // Much older than seems, he is. Wisdom of many years, in him it resides.
 
-
-
-/*
-aks if Using a RunnableBranch is legacy; vazut aici https://js.langchain.com/v0.2/docs/how_to/routing/#using-a-runnablebranch
-intro pentru what is clasificaion
-
-https://v02.api.js.langchain.com/classes/langchain_core_runnables.RunnableBranch.html
-
-Routing allows you to create non-deterministic chains where the output of a previous step defines the next step. Routing helps provide structure and consistency around interactions with LLMs.
-
-There are two ways to perform routing:
-
-Conditionally return runnables from a RunnableLambda (recommended)
-Using a RunnableBranch (legacy)
-*/
 
