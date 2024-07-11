@@ -1,17 +1,17 @@
 import { ChatOpenAI } from "@langchain/openai"
-import { StringOutputParser } from "@langchain/core/output_parsers"
+import { CustomListOutputParser } from "@langchain/core/output_parsers"
 import { ChatPromptTemplate } from "@langchain/core/prompts"
-import { RunnableBranch, RunnableSequence } from "@langchain/core/runnables"
-import * as dotenv from "dotenv"
 import { HumanMessage, AIMessage } from "@langchain/core/messages"
 import fs from 'fs'
+import * as dotenv from "dotenv"
+
 
 const convertImageToBase64 = filePath => {
   const imageData = fs.readFileSync(filePath)
   return imageData.toString('base64')
 }
 
-const base64String = convertImageToBase64('food.jpeg')
+const base64String = convertImageToBase64('food.jpg')
 
 dotenv.config()
 
@@ -27,7 +27,7 @@ let prompt = ChatPromptTemplate.fromMessages([
   new HumanMessage({
       content: [
           { "type": "text", 
-            "text": "Identify all items on the this image which are food related and provide a list of what you see."
+            "text": "Identify all items on the this image which are food related and provide a list of what you see. Just say the name of the food."
           },
           {
               "type": "image_url",
@@ -39,14 +39,22 @@ let prompt = ChatPromptTemplate.fromMessages([
   })
 ])
 
-// const stringParser = new StringOutputParser()
-
-let chain = prompt.pipe(model)
+let chain = prompt
+              .pipe(model)
+              .pipe(new CustomListOutputParser({separator: `\n` }))
 let response = await chain.invoke()
 
 console.log(response)
+/* titlul ? use langchain lcel with  vision api 
+next we can pick up this respond and ask another model to teel use what dish can we make from these inggreidents
 
-/* titlul ? use langchain lcel with  vision api */
+remeber how hard was to do this with tensorflowjs
+and it could only see just a few classes of images
+
+https://www.js-craft.io/blog/tensorflowjs-detect-multiple-objects-from-image-coco-ssd-2/
+https://www.js-craft.io/blog/tensorflowjs-detect-multiple-objects-from-image-coco-ssd-1/
+
+*/
 
 
 
