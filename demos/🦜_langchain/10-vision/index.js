@@ -46,17 +46,6 @@ let response = await chain.invoke()
 
 console.log(response)
 
-/* titlul ? use langchain lcel with  vision api 
-next we can pick up this respond and ask another model to teel use what dish can we make from these inggreidents
-
-remeber how hard was to do this with tensorflowjs
-and it could only see just a few classes of images
-
-https://www.js-craft.io/blog/tensorflowjs-detect-multiple-objects-from-image-coco-ssd-2/
-https://www.js-craft.io/blog/tensorflowjs-detect-multiple-objects-from-image-coco-ssd-1/
-
-*/
-
 
 
 
