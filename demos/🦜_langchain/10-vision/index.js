@@ -45,6 +45,7 @@ let chain = prompt
 let response = await chain.invoke()
 
 console.log(response)
+
 /* titlul ? use langchain lcel with  vision api 
 next we can pick up this respond and ask another model to teel use what dish can we make from these inggreidents
 
