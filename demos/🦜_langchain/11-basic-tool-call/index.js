@@ -11,85 +11,75 @@ const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
  * Note that the descriptions here are crucial, as they will be passed along
  * to the model along with the class name.
  */
-const calculatorSchema = z.object({
-  operation: z
-    .enum(["add", "subtract", "multiply", "divide"])
-    .describe("The type of operation to execute."),
-  number1: z.number().describe("The first number to operate on."),
-  number2: z.number().describe("The second number to operate on."),
-});
+const weatherApiSchema = z.object({
+  city: z.string().describe("The name of the city")
+})
 
-const calculatorTool = tool(
-  async ({ operation, number1, number2 }) => {
-    // Functions must return strings
-    if (operation === "add") {
-      return `${number1 + number2}`;
-    } else if (operation === "subtract") {
-      return `${number1 - number2}`;
-    } else if (operation === "multiply") {
-      return `${number1 * number2}`;
-    } else if (operation === "divide") {
-      return `${number1 / number2}`;
-    } else {
-      throw new Error("Invalid operation.");
-    }
+// Functions must return strings
+const weatherApiTool = tool(
+  async ({ city }) => {
+    return `The weather in ${city} is Snow, -20°C`
   },
   {
-    name: "calculator",
-    description: "Can perform mathematical operations.",
-    schema: calculatorSchema,
+    name: "weatherApi",
+    description: "Check the weather in a specified city.",
+    schema: weatherApiSchema,
   }
 );
 
-const stockPriceSchema = z.object({
-  ticker: z.string().describe("The ticker of a stock"),
+const hotelsAvailabilitySchema = z.object({
+  city: z.string().describe("The name of the city"),
 });
 
-const stockPriceTool = tool(
-  async ({ ticker }) => {
-    return `The price ${ticker} is 25 USD`
+const hotelsAvailabilityTool = tool(
+  async ({ city }) => {
+    return `Hotel in ${city} are available.`
   },
   {
-    name: "stockPrice",
-    description: "Check the stock price of a given ticker.",
-    schema: stockPriceSchema,
+    name: "hotelsAvailability",
+    description: "Check if hotels are available in a given city.",
+    schema: hotelsAvailabilitySchema,
   }
 );
 
 const llmWithTools = llm.bindTools([
-  calculatorTool,
-  stockPriceTool
+  weatherApiTool,
+  hotelsAvailabilityTool
 ]);
 
 let messages = [
-  new HumanMessage('I have 800USD. How many MSFT stocks can I buy?')
+  new HumanMessage('How will the weather be in Valencia this weekend? I would like to go for weekend long hike and book one room for Saturday night.')
 ]
 
 let llmOutput = await llmWithTools.invoke(messages)
 messages.push(llmOutput)
 
 let toolMapping = {
-  "calculator": calculatorTool,
-  "stockPrice": stockPriceTool
+  "weatherApi": weatherApiTool,
+  "hotelsAvailability": hotelsAvailabilityTool
 }
 
-
-while(llmOutput.response_metadata.finish_reason === 'tool_calls') {
-  for await (let toolCall of llmOutput.tool_calls) {
-    let tool = toolMapping[toolCall["name"]] 
-    let toolOutput = await tool.invoke(toolCall.args)
-    let newTM = new ToolMessage({
-      tool_call_id: toolCall.id,
-      content: toolOutput
-    })
-    messages.push(newTM)
-  }
-  
-  llmOutput = await llmWithTools.invoke(messages)
+for await (let toolCall of llmOutput.tool_calls) {
+  let tool = toolMapping[toolCall["name"]] 
+  let toolOutput = await tool.invoke(toolCall.args)
+  let newTM = new ToolMessage({
+    tool_call_id: toolCall.id,
+    content: toolOutput
+  })
+  messages.push(newTM)
 }
 
+llmOutput = await llmWithTools.invoke(messages)
 
-console.log(llmOutput.response_metadata.finish_reason)
+console.log(llmOutput)
+
+/*
+
+ "content": "The weather in Valencia this weekend is expected to be snowy with a temperature of -20°C. It might not be the best conditions for a hike. However, hotels in Valencia are available for booking on Saturday night."
+ 
+return "Snow, -2°C"
+The weather in Valencia this weekend is expected to be snowy with a temperature of -2°C. It might not be the best conditions for a hike.
+*/
 
 /*
 Invalid parameter: messages with role 'tool' must be a response to a preceeding message with 'tool_calls'
