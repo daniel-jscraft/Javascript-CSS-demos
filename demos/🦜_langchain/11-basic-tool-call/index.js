@@ -41,42 +41,59 @@ const calculatorTool = tool(
   }
 );
 
-const llmWithTools = llm.bindTools([calculatorTool]);
+const stockPriceSchema = z.object({
+  ticker: z.string().describe("The ticker of a stock"),
+});
 
-// let chain = llmWithTools.pipe(new StringOutputParser())
-// let chain = llmWithTools
+const stockPriceTool = tool(
+  async ({ ticker }) => {
+    return `The price ${ticker} is 25 USD`
+  },
+  {
+    name: "stockPrice",
+    description: "Check the stock price of a given ticker.",
+    schema: stockPriceSchema,
+  }
+);
 
-// let response = await chain.invoke('how much is 2 + 3')
-
-// console.log(response)
-// console.log(response.tool_calls)
+const llmWithTools = llm.bindTools([
+  calculatorTool,
+  stockPriceTool
+]);
 
 let messages = [
-  new HumanMessage('how much is 2 + 3?')
+  new HumanMessage('I have 800USD. How many MSFT stocks can I buy?')
 ]
 
 let llmOutput = await llmWithTools.invoke(messages)
 messages.push(llmOutput)
 
 let toolMapping = {
-  "calculator": calculatorTool
+  "calculator": calculatorTool,
+  "stockPrice": stockPriceTool
 }
 
-console.log(llmOutput)
 
-for await (let toolCall of llmOutput.tool_calls) {
-  let tool = calculatorTool
-  let toolOutput = await tool.invoke(toolCall.args)
-  let newTM = new ToolMessage({
-    tool_call_id: toolCall.id,
-    content: toolOutput
-  })
-  messages.push(newTM)
+while(llmOutput.response_metadata.finish_reason === 'tool_calls') {
+  for await (let toolCall of llmOutput.tool_calls) {
+    let tool = toolMapping[toolCall["name"]] 
+    let toolOutput = await tool.invoke(toolCall.args)
+    let newTM = new ToolMessage({
+      tool_call_id: toolCall.id,
+      content: toolOutput
+    })
+    messages.push(newTM)
+  }
+  
+  llmOutput = await llmWithTools.invoke(messages)
 }
 
-llmOutput = await llmWithTools.invoke(messages)
 
-console.log(llmOutput)
+console.log(llmOutput.response_metadata.finish_reason)
+
+/*
+Invalid parameter: messages with role 'tool' must be a response to a preceeding message with 'tool_calls'
+*/
 
 
 /*
