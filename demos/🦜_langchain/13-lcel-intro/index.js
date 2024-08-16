@@ -17,4 +17,3 @@ const response = await chain.invoke({
     fact: `population`
 })
 console.log(response)
-// Shakira is from Colombia. The population of Colombia is approximately 50 million.
