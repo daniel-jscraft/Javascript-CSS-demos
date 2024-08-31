@@ -38,13 +38,7 @@ const arrayBuffer = await image.arrayBuffer();
 // await tslab.display.png(new Uint8Array(arrayBuffer))
 // await fs.writeFile('output.png', new Uint8Array(arrayBuffer))
 
-fs.writeFile('output.png', new Uint8Array(arrayBuffer), (err) => {
-    if (err) {
-      console.error('Error writing file:', err);
-      return;
-    }
-    console.log('File written successfully');
-  });
+await fs.writeFileSync('graph-struct.png', new Uint8Array(arrayBuffer))
 
 let result = await runnable.invoke("a")
 
