@@ -1,5 +1,6 @@
-import { END, START, MessageGraph } from "@langchain/langgraph";
-
+import { END, START, MessageGraph } from "@langchain/langgraph"
+// npm i tslab
+import * as tslab from "tslab"
 
 function addOne(input) {
     input[0].content = input[0].content + "a";
@@ -26,6 +27,10 @@ graph.addEdge(START, "branch_a")
 // note this
 // graph.setEntryPoint("branch_a")
 
+const image = await graph.drawMermaidPng();
+const arrayBuffer = await image.arrayBuffer();
+
+await tslab.display.png(new Uint8Array(arrayBuffer))
 
 let runnable = graph.compile()
 

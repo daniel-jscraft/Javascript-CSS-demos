@@ -15,6 +15,7 @@
     "@langchain/langgraph": "^0.1.9",
     "@langchain/openai": "^0.2.8",
     "dotenv": "^16.4.5",
-    "langchain": "^0.2.13"
+    "langchain": "^0.2.13",
+    "tslab": "^1.0.22"
   }
 }
