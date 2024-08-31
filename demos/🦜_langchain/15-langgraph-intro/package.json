@@ -11,9 +11,9 @@
   "description": "",
   "type": "module",
   "dependencies": {
-    "@langchain/anthropic": "^0.2.15",
-    "@langchain/groq": "^0.0.16",
-    "@langchain/openai": "^0.2.6",
+    "@langchain/community": "^0.2.31",
+    "@langchain/langgraph": "^0.1.9",
+    "@langchain/openai": "^0.2.8",
     "dotenv": "^16.4.5",
     "langchain": "^0.2.13"
   }

@@ -1,21 +1,44 @@
-import { ChatGroq } from "@langchain/groq"
-import { ChatAnthropic } from "@langchain/anthropic"
+import { END, START, MessageGraph } from "@langchain/langgraph";
 
-// force a an error by passing a wrong API key
-const llmAnthropic = new ChatAnthropic({
-    anthropicApiKey: 'invalid_api_key'
-})
 
-// the backup LLM
-const llmGroq = new ChatGroq({
-    apiKey: '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'
-})
+function addOne(input) {
+    input[0].content = input[0].content + "a";
+    return input;
+}
 
-const llmWithFallback = llmAnthropic.withFallbacks({
-    // if llmAnthropic fails use llmGroq
-    fallbacks: [llmGroq]
-})
-  
-const response = await llmWithFallback.invoke('Tell me about yourself')
 
-console.log(response)
+let graph = new MessageGraph() 
+
+graph.addNode("branch_a", addOne)
+graph.addEdge("branch_a", "branch_b")
+graph.addEdge("branch_a", "branch_c")
+
+graph.addNode("branch_b", addOne)
+graph.addNode("branch_c", addOne)
+
+graph.addEdge("branch_b", "final_node")
+graph.addEdge("branch_c", "final_node")
+
+graph.addNode("final_node", addOne)
+graph.addEdge("final_node", END)
+
+graph.addEdge(START, "branch_a")
+// note this
+// graph.setEntryPoint("branch_a")
+
+
+let runnable = graph.compile()
+
+let result = await runnable.invoke("a")
+
+console.log(result)
+
+/*
+[
+  HumanMessage {
+    "id": "18afcb3b-55fd-460d-87a3-ddf482e70f8a",
+    "content": "aaaaa",
+    "additional_kwargs": {},
+    "response_metadata": {}
+}]
+*/
