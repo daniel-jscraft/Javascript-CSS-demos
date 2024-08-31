@@ -1,6 +1,6 @@
 import { END, START, MessageGraph } from "@langchain/langgraph"
 // npm i tslab
-import * as tslab from "tslab"
+import * as fs from "fs"
 
 function addOne(input) {
     input[0].content = input[0].content + "a";
@@ -27,12 +27,24 @@ graph.addEdge(START, "branch_a")
 // note this
 // graph.setEntryPoint("branch_a")
 
-const image = await graph.drawMermaidPng();
-const arrayBuffer = await image.arrayBuffer();
 
-await tslab.display.png(new Uint8Array(arrayBuffer))
 
 let runnable = graph.compile()
+
+const x = runnable.getGraph();
+const image = await x.drawMermaidPng();
+const arrayBuffer = await image.arrayBuffer();
+
+// await tslab.display.png(new Uint8Array(arrayBuffer))
+// await fs.writeFile('output.png', new Uint8Array(arrayBuffer))
+
+fs.writeFile('output.png', new Uint8Array(arrayBuffer), (err) => {
+    if (err) {
+      console.error('Error writing file:', err);
+      return;
+    }
+    console.log('File written successfully');
+  });
 
 let result = await runnable.invoke("a")
 
