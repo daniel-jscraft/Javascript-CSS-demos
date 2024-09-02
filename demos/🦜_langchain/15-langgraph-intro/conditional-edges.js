@@ -1,9 +1,9 @@
 import { END, START, MessageGraph } from '@langchain/langgraph'
 
-const funcA = input => { input[0].content += 'Result A'; return input }
-const funcB = input => { input[0].content += 'Result B'; return input }
+const funA = input => { input[0].content += 'Result A'; return input }
+const funB = input => { input[0].content += 'Result B'; return input }
 
-const funcDecision = input => 
+const funDecision = input => 
     input[0].content.includes('action A') ? 
         'actionA':
         'actionB'
@@ -11,15 +11,15 @@ const funcDecision = input =>
 const graph = new MessageGraph()
 
 // setup nodes
-graph.addNode('decision', funcDecision)
-    .addNode('actionA', funcA)
-    .addNode('actionB', funcB)
+graph.addNode('decision', funDecision)
+    .addNode('actionA', funA)
+    .addNode('actionB', funB)
 
 // setup edges
 graph.addEdge(START, "decision")
     .addConditionalEdges(
         "decision", 
-        funcDecision, 
+        funDecision, 
         {'actionA': 'actionA', 'actionB': 'actionB'}
     )
     .addEdge('actionA', END)
