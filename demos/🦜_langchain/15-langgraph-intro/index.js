@@ -7,7 +7,7 @@ let index = 0
 function addOne(input) {
     console.log(index, input[0].content)
     index++
-    input[0].content = input[0].content + "a";
+    input[0].content += input[0].content + "a";
     return input;
 }
 
@@ -18,6 +18,14 @@ let graph = new MessageGraph()
 graph.addNode("branch_a", addOne)
 graph.addNode("branch_b", addOne)
 graph.addNode("branch_c", addOne)
+graph.addNode("final_node", addOne)
+
+// // jquery style
+// graph
+//     .addNode("branch_a", addOne)
+//     .addNode("branch_b", addOne)
+//     .addNode("branch_c", addOne)
+//     .addNode("final_node", addOne)
 
 // at the time being here are just some notes floating around with no connections between them. 
 
@@ -28,13 +36,19 @@ graph.addEdge("branch_a", "branch_c")
 graph.addEdge("branch_b", "final_node")
 graph.addEdge("branch_c", "final_node")
 graph.addEdge("branch_a", "final_node")
-
-
-
-graph.addNode("final_node", addOne)
 graph.addEdge("final_node", END)
 
-// note this
+// // jquery style
+// graph
+//     .addEdge(START, "branch_a")
+//     .addEdge("branch_a", "branch_b")
+//     .addEdge("branch_a", "branch_c")
+//     .addEdge("branch_b", "final_node")
+//     .addEdge("branch_c", "final_node")
+//     .addEdge("branch_a", "final_node")
+//     .addEdge("final_node", END)
+
+// note that setEntryPoint is depreacted 
 // graph.setEntryPoint("branch_a")
 
 
@@ -62,4 +76,11 @@ console.log(result)
     "additional_kwargs": {},
     "response_metadata": {}
 }]
+*/
+
+/*
+LangGrah.js basics - nodes, edges, conditional edges and 
+
+In this article we will not use and LLM. Wil will just discuss the basic structues that alow us to 
+build the graphs used for the definings the behaviour of an agetn. 
 */
