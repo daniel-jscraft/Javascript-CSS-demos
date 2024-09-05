@@ -30,27 +30,15 @@ graph.addEdge("nodeE", "nodeD")
 graph.addEdge("nodeD", END)
 
 
-let runnable = graph.compile()
+const runnable = graph.compile()
 
-const x = runnable.getGraph();
-const image = await x.drawMermaidPng();
+const image = await runnable.getGraph().drawMermaidPng();
 const arrayBuffer = await image.arrayBuffer();
+await fs.writeFileSync('graph-struct.png', new Uint8Array(arrayBuffer))
 
-await fs.writeFileSync('new-graph-struct.png', new Uint8Array(arrayBuffer))
-
-let result = await runnable.invoke("Initial input ")
-
+const result = await runnable.invoke("Initial input ")
 console.log(result)
 
 /*
-[
-  HumanMessage {
-    "id": "18afcb3b-55fd-460d-87a3-ddf482e70f8a",
-    "content": "aaaaa",
-    "additional_kwargs": {},
-    "response_metadata": {}
-}]
-    
-console.log(END)
-console.log(START)
+
 */
