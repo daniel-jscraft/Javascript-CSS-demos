@@ -1,5 +1,4 @@
 import { END, START, MessageGraph } from "@langchain/langgraph"
-import * as fs from "fs"
 
 const funcA = input => { input[0].content += " node A output"; return input }
 const funcB = input => { input[0].content += " node B output"; return input }
@@ -17,11 +16,6 @@ const graph = new MessageGraph()
 const runnable = graph.compile()
 const result = await runnable.invoke('Initial input ')
 console.log(result)
-
-// render the graph output
-const image = await runnable.getGraph().drawMermaidPng()
-const arrayBuffer = await image.arrayBuffer()
-await fs.writeFileSync('first-graph.png', new Uint8Array(arrayBuffer))
 
 /*
 [
