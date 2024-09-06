@@ -1,7 +1,6 @@
 import { END, START, MessageGraph } from '@langchain/langgraph'
 import { HumanMessage } from '@langchain/core/messages'
 
-
 const funAgent = input => input
 const funUseDiceTool = input => {
     // random dice - 1 to 6
@@ -15,7 +14,7 @@ const funUseDiceTool = input => {
 
 const shouldContinue = input => {
     return input.pop().content.includes('objective_achieved') ? 
-        '__end__' :
+        'end' :
         'useDiceTool'
 }
     
@@ -32,7 +31,7 @@ graph.addEdge(START, 'agent')
     .addConditionalEdges(
         'agent', 
         shouldContinue, 
-        {'useDiceTool': 'useDiceTool', '__end__': END}
+        {'useDiceTool': 'useDiceTool', 'end': END}
     )
 
 const runnable = graph.compile()

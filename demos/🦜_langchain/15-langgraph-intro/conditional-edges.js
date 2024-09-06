@@ -1,7 +1,7 @@
 import { END, START, MessageGraph } from '@langchain/langgraph'
 
-const funA = input => { input[0].content += '🔴 🔴 🔴'; return input }
-const funB = input => { input[0].content += '🔵 🔵 🔵'; return input }
+const funRed = input => { input[0].content += '🔴 🔴 🔴'; return input }
+const funBlue = input => { input[0].content += '🔵 🔵 🔵'; return input }
 
 const funDecision = input => 
     input[0].content.includes('red') ? 
@@ -12,8 +12,8 @@ const graph = new MessageGraph()
 
 // setup nodes
 graph.addNode('decision', funDecision)
-    .addNode('actionRed', funA)
-    .addNode('actionBlue', funB)
+    .addNode('actionRed', funRed)
+    .addNode('actionBlue', funBlue)
 
 // setup edges
 graph.addEdge(START, "decision")
