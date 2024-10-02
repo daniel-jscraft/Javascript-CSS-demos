@@ -1,109 +1,16 @@
-// import { ToolNode } from "@langchain/langgraph/prebuilt"
-// import {
-//   END,
-//   START,
-//   StateGraph, 
-//   MessagesAnnotation
-// } from "@langchain/langgraph"
-// import { ChatOpenAI } from "@langchain/openai"
-// import * as dotenv from "dotenv"
-// import { tool } from "@langchain/core/tools"
-// import { z } from "zod"
-// import { AIMessage, BaseMessage, HumanMessage } from "@langchain/core/messages"
-
-
-// dotenv.config()
-// const llm = new ChatOpenAI({
-//   model: "gpt-4o",
-//   temperature: 0,
-// })
-
-// const gmtTimeSchema = z.object({
-//   city: z.string().describe("The name of the city")
-// })
-
-// const gmtTimeTool = tool(
-//   async ({ city }) => {
-//     return `The local in ${city} time is 6:30pm.`
-//   },
-//   {
-//     name: "gmtTime",
-//     description: "Check local time in a specified city.",
-//     schema: gmtTimeSchema
-//   }
-// )
-
-// const tools = [gmtTimeTool]
-
-// const toolNode = new ToolNode(tools)
-
-// const callModel = async (messages) => {
-  
-//   // const { messages } = state
-
-//   const llmWithTools = llm.bindTools(tools)
-//   const result = await llmWithTools.invoke(messages)
-//   console.log('yyyyyyyy')
-//   console.log(result)
-//   return { messages: [result] }
-// }
-
-// const shouldContinue = (input) => {
-//   console.log('❌❌❌❌❌❌❌')
-//   //console.log(input)
-//   // const { messages } = input
-
-//   // const lastMessage = messages[messages.length - 1]
-//   // if (
-//   //   lastMessage._getType() !== "ai" ||
-//   //   !(lastMessage).tool_calls?.length
-//   // ) {
-//   //   // LLM did not call any tools, or it's not an AI message, so we should end.
-//   //   return END
-//   // }
-//   // return "tools"
-//   return END
-// }
-
-// const graph = new StateGraph(MessagesAnnotation)
-//   .addNode("agent", callModel)
-//   .addEdge(START, "agent")
-//   .addNode("tools", toolNode)
-//   .addEdge("tools", "agent")
-//   .addConditionalEdges("agent", shouldContinue, ["tools", END])
-
-// const runnable = graph.compile()
-// const result = await runnable.invoke({
-//   messages: [
-//     new HumanMessage({
-//       content: 'What is the time now in Singapore? I would like to call a friend there.'
-//     })
-//   ]
-// })
-// console.log(result)
-
-// /// TypeError: Cannot read properties of undefined (reading 'channels')
-
 import { HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { ToolNode } from "@langchain/langgraph/prebuilt"
 import {
-  END,
-  MessagesAnnotation,
-  START,
-  StateGraph,
+  END, MessagesAnnotation, START, StateGraph
 } from "@langchain/langgraph"
 import { ChatOpenAI } from "@langchain/openai"
 import { tool } from "@langchain/core/tools"
 import { z } from "zod"
 import * as dotenv from "dotenv"
 
-
 dotenv.config()
 
-const llm = new ChatOpenAI({
-  model: "gpt-4o",
-  temperature: 0, 
-})
+const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
 
 const getLastMessage = ({ messages }) => messages[messages.length - 1]
 
@@ -113,58 +20,61 @@ const gmtTimeSchema = z.object({
 
 const gmtTimeTool = tool(
   async ({ city }) => {
-    const serviceIsWorking =  Math.floor(Math.random() * 3)
-    return serviceIsWorking !== 2 ? `The local in ${city} time is 6:30pm.` : "Error 404"
+    const serviceIsWorking = Math.floor(Math.random() * 3)
+    return serviceIsWorking !== 2
+      ? `The local in ${city} time is 6:30pm.`
+      : "Error 404"
   },
   {
     name: "gmtTime",
-    description: "Check local time in a specified city. The API is available randomly, approximately every third call.",
-    schema: gmtTimeSchema
+    description: `Check local time in a specified city. 
+    The API is randomly available every third call.`,
+    schema: gmtTimeSchema,
   }
 )
 
 const tools = [gmtTimeTool]
-
 const toolNode = new ToolNode(tools)
+const llmWithTools = llm.bindTools(tools)
 
 const callModel = async (state) => {
   const { messages } = state
-
-  const llmWithTools = llm.bindTools(tools)
   const result = await llmWithTools.invoke(messages)
   return { messages: [result] }
 }
 
 const shouldContinue = (state) => {
   const lastMessage = getLastMessage(state)
-  if (
-    lastMessage._getType() !== "ai" ||
-    !(lastMessage).tool_calls?.length
-  ) {
-    // LLM did not call any tools, or it's not an AI message, so we should end.
-    return END
-  }
-  return "tools"
+  const didAICalledAnyTools = lastMessage._getType() === "ai" &&
+    lastMessage.tool_calls?.length
+  return didAICalledAnyTools ? "tools" : END
 }
 
-
-const workflow = new StateGraph(MessagesAnnotation)
+const graph = new StateGraph(MessagesAnnotation)
   .addNode("agent", callModel)
-  .addEdge(START, "agent")
   .addNode("tools", toolNode)
+  .addEdge(START, "agent")
   .addEdge("tools", "agent")
   .addConditionalEdges("agent", shouldContinue, ["tools", END])
 
-const graph = workflow.compile()
+const runnable = graph.compile()
 
-const result = await graph.invoke({
+const result = await runnable.invoke({
   messages: [
-    new SystemMessage('You are responsible for answering user questions. You use tools for that, These tools sometimes fail and you are very resilient and trying them again. Keep trying until you get a valid response.'),
-    new HumanMessage('What is the time now in Singapore? I would like to call a friend there.')
+    new SystemMessage(
+      `You are responsible for answering user questions using tools. 
+      These tools sometimes fail, but you keep trying until 
+      you get a valid response.`
+    ),
+    new HumanMessage(
+      "What is the time now in Singapore? I would like to call a friend."
+    ),
   ]
 })
 
-console.log("🔴🔴🔴" + getLastMessage(result).content)
+console.log(`🤖 ${getLastMessage(result).content}`)
+
+
 
 // It seems that I'm currently unable to retrieve the time for Singapore. You might want to check the time using another method or try again later.
 // The current time in Singapore is 6:30 PM. You can go ahead and call your friend!
