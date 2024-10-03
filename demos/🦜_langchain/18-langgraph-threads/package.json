@@ -1,0 +1,22 @@
+{
+  "name": "12-node-setup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@langchain/community": "^0.2.31",
+    "@langchain/langgraph": "^0.1.9",
+    "@langchain/openai": "^0.2.8",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.2.13",
+    "tslab": "^1.0.22",
+    "zod": "^3.23.8"
+  }
+}
