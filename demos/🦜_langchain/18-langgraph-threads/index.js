@@ -58,11 +58,9 @@ const shouldContinue = (state) => {
 
 const workflow = new StateGraph(MessagesAnnotation)
   .addNode("agent", callModel)
-  .addNode("tools", toolNode)
   .addEdge(START, "agent")
-  .addEdge("tools", "agent")
-  .addConditionalEdges("agent", shouldContinue, ["tools", END])
-  
+  .addEdge("agent", END)
+
 // Initialize memory to persist state between graph runs
 const checkpointer = new MemorySaver()
 const graph = workflow.compile({ checkpointer });
@@ -85,6 +83,21 @@ for await (const update of await graph.stream({
 }, configA)) {
   console.log(update);
 }
+
+const configB = {
+  configurable: { thread_id: "2" },
+  streamMode: "updates"
+}
+
+console.log("❌❌❌❌❌❌❌❌❌❌❌❌")
+for await (const update of await graph.stream({
+  messages: [{ role: "user", content: "Sorry, did I already introduce myself?" }],
+}, configB)) {
+  console.log(update);
+}
+
+// Yes, you did! You mentioned that your name is Daniel and that you like LangGraph. How can I assist you further?
+// No, you haven't introduced yourself yet. How can I assist you today?
 
 // import { HumanMessage, SystemMessage } from "@langchain/core/messages"
 // import { ToolNode } from "@langchain/langgraph/prebuilt"
