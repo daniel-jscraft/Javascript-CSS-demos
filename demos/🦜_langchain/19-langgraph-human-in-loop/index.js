@@ -19,7 +19,7 @@
 //     /**
 //      * Whether or not permission has been granted to refund the user.
 //      */
-//     refundAuthorized: Annotation(),
+//     askHuman: Annotation(),
 // })
 
 // const llm = new ChatOpenAI({
@@ -41,8 +41,8 @@
 // const tools = [processRefundTool]
 
 // const callTool = async (state) => {
-//     const { messages, refundAuthorized } = state
-//     if (!refundAuthorized) {
+//     const { messages, askHuman } = state
+//     if (!askHuman) {
 //         throw new Error("Permission to refund is required.")
 //     }
 //     const lastMessage = messages[messages.length - 1]
@@ -110,15 +110,15 @@
 // console.log("\n---INTERRUPTING GRAPH TO UPDATE STATE---\n\n")
 
 // console.log(
-//     "---refundAuthorized value before state update---",
-//     (await graph.getState(config)).values.refundAuthorized
+//     "---askHuman value before state update---",
+//     (await graph.getState(config)).values.askHuman
 // )
 
-// await graph.updateState(config, { refundAuthorized: true })
+// await graph.updateState(config, { askHuman: true })
 
 // console.log(
-//     "---refundAuthorized value after state update---",
-//     (await graph.getState(config)).values.refundAuthorized
+//     "---askHuman value after state update---",
+//     (await graph.getState(config)).values.askHuman
 // )
 
 // console.log("\n---CONTINUING GRAPH AFTER STATE UPDATE---\n\n")
@@ -153,7 +153,7 @@ const GraphAnnotation = Annotation.Root({
     /**
      * Whether or not permission has been granted to refund the user.
      */
-    refundAuthorized: Annotation(),
+    askHuman: Annotation(),
 })
 
 const llm = new ChatOpenAI({
@@ -176,8 +176,8 @@ const tools = [processRefundTool];
 
 const callTool = async (state) => {
 
-    const { messages, refundAuthorized } = state;
-    // if (!refundAuthorized) {
+    const { messages, askHuman } = state;
+    // if (!askHuman) {
     //     throw new Error("Permission to refund is required.");
     // }
     console.log("-----in call tool")
@@ -252,15 +252,15 @@ async function main() {
     // console.log("\n---INTERRUPTING GRAPH TO UPDATE STATE---\n\n");
 
     // console.log(
-    //     "---refundAuthorized value before state update---",
-    //     (await graph.getState(config)).values.refundAuthorized
+    //     "---askHuman value before state update---",
+    //     (await graph.getState(config)).values.askHuman
     // );
 
-    // await graph.updateState(config, { refundAuthorized: true });
+    // await graph.updateState(config, { askHuman: true });
 
     // console.log(
-    //     "---refundAuthorized value after state update---",
-    //     (await graph.getState(config)).values.refundAuthorized
+    //     "---askHuman value after state update---",
+    //     (await graph.getState(config)).values.askHuman
     // );
 
     // console.log("\n---CONTINUING GRAPH AFTER STATE UPDATE---\n\n");
