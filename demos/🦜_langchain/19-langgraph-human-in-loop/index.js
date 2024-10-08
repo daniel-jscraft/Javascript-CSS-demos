@@ -1,44 +1,144 @@
-import { END, START, MessageGraph } from "@langchain/langgraph"
-import * as fs from "fs"
+import {
+    END,
+    START,
+    StateGraph,
+    MessagesAnnotation,
+    MemorySaver, 
+    Annotation,
+} from "@langchain/langgraph"
+import { ChatOpenAI } from "@langchain/openai"
+import { z } from "zod"
+import { tool } from "@langchain/core/tools"
+import * as dotenv from "dotenv"
 
-const funcA = input => { input[0].content += "A"; return input }
-const funcB = input => { input[0].content += "B"; return input }
-const funcC = input => { input[0].content += "C"; return input }
-const funcD = input => { input[0].content += "D"; return input }
-const funcE = input => { input[0].content += "E"; return input }
-const funcF = input => { input[0].content += "F"; return input }
+dotenv.config()
 
-let graph = new MessageGraph()
+const GraphAnnotation = Annotation.Root({
+    ...MessagesAnnotation.spec,
+    /**
+     * Whether or not permission has been granted to refund the user.
+     */
+    refundAuthorized: Annotation(),
+})
 
-// build nodes
-graph.addNode("nodeA", funcA)
-graph.addNode("nodeB", funcB)
-graph.addNode("nodeC", funcC)
-graph.addNode("nodeD", funcD)
-graph.addNode("nodeE", funcE)
-graph.addNode("nodeF", funcF)
+const llm = new ChatOpenAI({
+    model: "gpt-4o",
+    temperature: 0,
+});
 
-// add nodes connections using edges
-graph.addEdge(START, "nodeA")
-graph.addEdge("nodeA", "nodeB")
-graph.addEdge("nodeA", "nodeC")
-graph.addEdge("nodeA", "nodeE")
-graph.addEdge("nodeB", "nodeD")
-graph.addEdge("nodeC", "funcF")
-graph.addEdge("nodeF", "nodeD")
-graph.addEdge("nodeE", "nodeD")
-graph.addEdge("nodeD", END)
+const processRefundTool = tool(
+    (input) => `Successfully processed refund for ${input.productId}`,
+    {
+        name: "process_refund",
+        description: "Process a refund for a given product ID.",
+        schema: z.object({
+        productId: z.string().describe("The ID of the product to be refunded."),
+        }),
+    }
+)
 
+const tools = [processRefundTool];
 
-const runnable = graph.compile()
+const callTool = async (state) => {
+    const { messages, refundAuthorized } = state;
+    if (!refundAuthorized) {
+        throw new Error("Permission to refund is required.");
+    }
+    const lastMessage = messages[messages.length - 1];
+    // ✅ fix this cast thing
+    const messageCastAI = lastMessage;
+    if (messageCastAI._getType() !== "ai" || !messageCastAI.tool_calls?.length) {
+        throw new Error("No tools were called.");
+    }
+    const toolCall = messageCastAI.tool_calls[0];
 
-const image = await runnable.getGraph().drawMermaidPng();
-const arrayBuffer = await image.arrayBuffer();
-await fs.writeFileSync('graph-struct.png', new Uint8Array(arrayBuffer))
+    // Invoke the tool to process the refund
+    const refundResult = await processRefundTool.invoke(toolCall);
 
-const result = await runnable.invoke("Initial input ")
-console.log(result)
+    return { messages: refundResult }
+};
 
-/*
+const callModel = async (state) => {
+    const { messages } = state;
 
-*/
+    const llmWithTools = llm.bindTools(tools);
+    const result = await llmWithTools.invoke(messages);
+    return { messages: [result] };
+};
+
+const shouldContinue = (state) => {
+    const { messages } = state;
+
+    const lastMessage = messages[messages.length - 1];
+    // Cast here since `tool_calls` does not exist on `BaseMessage`
+    const messageCastAI = lastMessage;
+    if (messageCastAI._getType() !== "ai" || !messageCastAI.tool_calls?.length) {
+        // LLM did not call any tools, or it's not an AI message, so we should end.
+        return END;
+    }
+
+    // Tools are provided, so we should continue.
+    return "tools";
+};
+
+const workflow = new StateGraph(GraphAnnotation)
+    .addNode("agent", callModel)
+    .addEdge(START, "agent")
+    .addNode("tools", callTool)
+    .addEdge("tools", "agent")
+    .addConditionalEdges("agent", shouldContinue, ["tools", END]);
+
+export const graph = workflow.compile({
+    checkpointer: new MemorySaver(),
+    interruptBefore: ["tools"]
+})
+
+async function main() {
+    const config = {
+        configurable: { thread_id: "refunder" },
+        streamMode: "updates",
+    }
+    const input = {
+        messages: [
+            {
+                role: "user",
+                content: "Can I have a refund for my purchase? Order no. 123",
+            }
+        ],
+    };
+
+    for await (const event of await graph.stream(input, config)) {
+        const key = Object.keys(event)[0];
+        if (key) {
+            console.log(`Event: ${key}\n`);
+        }
+    }
+
+    console.log("\n---INTERRUPTING GRAPH TO UPDATE STATE---\n\n");
+
+    console.log(
+        "---refundAuthorized value before state update---",
+        (await graph.getState(config)).values.refundAuthorized
+    );
+
+    await graph.updateState(config, { refundAuthorized: true });
+
+    console.log(
+        "---refundAuthorized value after state update---",
+        (await graph.getState(config)).values.refundAuthorized
+    );
+
+    console.log("\n---CONTINUING GRAPH AFTER STATE UPDATE---\n\n");
+
+    for await (const event of await graph.stream(null, config)) {
+        // Log the event to the terminal
+        console.log(event)
+    }
+}
+
+main();
+
+/* 
+this operation rqesuires human automization
+type in your secret code
+*/ 
