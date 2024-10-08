@@ -30,8 +30,7 @@ const workflow = new StateGraph(MessagesAnnotation)
 const checkpointer = new MemorySaver()
 const graph = workflow.compile({ checkpointer });
 
-
-console.log("👋 Starting intro thread")
+console.log("👋 Starting first thread")
 const configIntroThread = {
   configurable: { thread_id: "t1" }
 }
@@ -52,8 +51,7 @@ console.log(getLastMessage(t2r2))
 //👉 Yes, you did! You mentioned that your name is Daniel 
 // and that you like LangGraph.
 
-
-console.log("💬 Starting another thread")
+console.log("💬 Starting second thread")
 const configAnotherThread = {
   configurable: { thread_id: "t2" }
 }
