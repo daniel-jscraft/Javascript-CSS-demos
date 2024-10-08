@@ -61,7 +61,8 @@ const t2r1 = await graph.invoke({
     new HumanMessage("Sorry, did I already introduce myself?")
 ],}, configAnotherThread)
 console.log(getLastMessage(t2r1))
-//👉 No, you haven't introduced yourself yet. How can I assist you today?
+//👉 No, you haven't introduced yourself yet. 
+// How can I assist you today?
 
 /*
 
