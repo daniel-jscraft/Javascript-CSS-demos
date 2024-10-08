@@ -13,7 +13,7 @@ const llm = new ChatOpenAI({
 })
 
 const getLastMessage = ({ messages }) => 
-  messages[messages.length - 1].content
+  messages[messages.length - 1]
 
 const callModel = async (state) => {
   const { messages } = state
@@ -47,7 +47,7 @@ const t2r2 = await graph.invoke({
   messages: [
     new HumanMessage("Sorry, did I already introduce myself?")
 ],}, configIntroThread)
-console.log(getLastMessage(t2r2))
+console.log(getLastMessage(t2r2).content)
 //👉 Yes, you did! You mentioned that your name is Daniel 
 // and that you like LangGraph.
 
@@ -60,7 +60,7 @@ const t2r1 = await graph.invoke({
   messages: [
     new HumanMessage("Sorry, did I already introduce myself?")
 ],}, configAnotherThread)
-console.log(getLastMessage(t2r1))
+console.log(getLastMessage(t2r1).content)
 //👉 No, you haven't introduced yourself yet. 
 // How can I assist you today?
 
