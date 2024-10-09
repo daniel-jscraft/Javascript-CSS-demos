@@ -7,89 +7,72 @@ import {
     Annotation,
 } from "@langchain/langgraph"
 import { ChatOpenAI } from "@langchain/openai"
+import { HumanMessage } from "@langchain/core/messages"
 import { z } from "zod"
 import { tool } from "@langchain/core/tools"
 import * as dotenv from "dotenv"
+import * as reader  from "readline-sync"
 
 dotenv.config()
 
 const GraphAnnotation = Annotation.Root({
     ...MessagesAnnotation.spec,
-    /**
-     * Whether or not permission has been granted to refund the user.
-     */
-    askHuman: Annotation(),
+    // Whether or not permission has been granted to use credit card
+    askHumanUseCreditCard: Annotation(),
 })
 
 const llm = new ChatOpenAI({
     model: "gpt-4o",
     temperature: 0,
-});
+})
 
-const processRefundTool = tool(
-    (input) => `Successfully processed refund for ${input.productId}`,
+const purchaseTicketTool = tool(
+    (input) => `Successfully purchase a plane ticket for ${input.destination}`,
     {
-        name: "process_refund",
-        description: "Process a refund for a given product ID.",
+        name: "purchase_ticket",
+        description: "Buy a plane ticket for a given destination.",
         schema: z.object({
-        productId: z.string().describe("The ID of the product to be refunded."),
+            destination: z.string().describe("The destination of the plane ticket."),
         }),
     }
 )
 
-const tools = [processRefundTool];
+const tools = [purchaseTicketTool]
 
-const callTool = async (state) => {
-
-    const { messages, askHuman } = state;
-    if (!askHuman) {
-        throw new Error("Permission to refund is required.");
+const nodeTools = async (state) => {
+    const { messages, askHumanUseCreditCard } = state
+    if (!askHumanUseCreditCard) {
+        throw new Error("Permission to use credit card is required.")
     }
-    console.log("-----in call tool")
-    console.log(messages)
-    const lastMessage = messages[messages.length - 1];
-    // ✅ fix this cast thing
-    const messageCastAI = lastMessage;
-    if (messageCastAI._getType() !== "ai" || !messageCastAI.tool_calls?.length) {
-        throw new Error("No tools were called.");
-    }
-    const toolCall = messageCastAI.tool_calls[0];
-
+    const lastMessage = messages[messages.length - 1]
+    const toolCall = lastMessage.tool_calls[0]
     // Invoke the tool to process the refund
-    const refundResult = await processRefundTool.invoke(toolCall);
+    const result = await purchaseTicketTool.invoke(toolCall)
+    return { messages: result }
+}
 
-    return { messages: refundResult }
-};
+const nodeAgent = async ({messages}) => {
+    const llmWithTools = llm.bindTools(tools)
+    const result = await llmWithTools.invoke(messages)
+    return { messages: [result] }
+}
 
-const callModel = async (state) => {
-    const { messages } = state;
-
-    const llmWithTools = llm.bindTools(tools);
-    const result = await llmWithTools.invoke(messages);
-    return { messages: [result] };
-};
-
-const shouldContinue = (state) => {
-    const { messages } = state;
-
-    const lastMessage = messages[messages.length - 1];
-    // Cast here since `tool_calls` does not exist on `BaseMessage`
-    const messageCastAI = lastMessage;
-    if (messageCastAI._getType() !== "ai" || !messageCastAI.tool_calls?.length) {
+const shouldContinue = ({messages}) => {
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage._getType() !== "ai" || !lastMessage.tool_calls?.length) {
         // LLM did not call any tools, or it's not an AI message, so we should end.
-        return END;
+        return END
     }
-
     // Tools are provided, so we should continue.
-    return "tools";
-};
+    return "tools"
+}
 
 const workflow = new StateGraph(GraphAnnotation)
-    .addNode("agent", callModel)
+    .addNode("agent", nodeAgent)
     .addEdge(START, "agent")
-    .addNode("tools", callTool)
+    .addNode("tools", nodeTools)
     .addEdge("tools", "agent")
-    .addConditionalEdges("agent", shouldContinue, ["tools", END]);
+    .addConditionalEdges("agent", shouldContinue, ["tools", END])
 
 export const graph = workflow.compile({
     checkpointer: new MemorySaver(),
@@ -97,47 +80,28 @@ export const graph = workflow.compile({
 })
 
 const config = {
-    configurable: { thread_id: "refund" },
+    configurable: { thread_id: "vacation" },
 }
 
 const input = {
     messages: [
-        {
-            role: "user",
-            content: "Can I have a refund for my purchase? The product ID is 123.",
-        }
-    ],
-};
+        new HumanMessage("Can I get a plane ticket to destination New York?")
+    ]
+}
 
-const interRestul = await graph.invoke(input, config)
+const intermediaryRestult = await graph.invoke(input, config)
 
-console.log("🟡🟡🟡🟡🟡")
-console.log(interRestul)
+// mention this await graph.getState(config)).values.askHumanUseCreditCard
 
 
+console.log("✋ We need human optimization for this operation.")
 
-console.log("\n---INTERRUPTING GRAPH TO UPDATE STATE---\n\n");
+// get human optimization
+let userInput = reader.question("Type yes to allow credit card use: ")
+await graph.updateState(config, { 
+    askHumanUseCreditCard: userInput === "yes" 
+})
 
-console.log(
-    "---askHuman value before state update---",
-    (await graph.getState(config)).values.askHuman
-);
-
-await graph.updateState(config, { askHuman: true });
-
-console.log(
-    "---askHuman value after state update---",
-    (await graph.getState(config)).values.askHuman
-);
-
-console.log("\n---CONTINUING GRAPH AFTER STATE UPDATE---\n\n");
-
+// CONTINUING GRAPH AFTER STATE UPDATE note - graph.invoke(👉 null, config)
 const finalResult = await graph.invoke(null, config)
-
-console.log("🟢🟢🟢🟢🟢")
 console.log(finalResult)
-
-/* 
-this operation rqesuires human automization
-type in your secret code
-*/ 

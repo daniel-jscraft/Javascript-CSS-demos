@@ -16,6 +16,7 @@
     "@langchain/openai": "^0.2.8",
     "dotenv": "^16.4.5",
     "langchain": "^0.2.13",
+    "readline-sync": "^1.4.10",
     "tslab": "^1.0.22"
   }
 }
