@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSML with Web Speech API Example</title>
+</head>
+<body>
+    <button onclick="speakWithSSML()">Speak with SSML</button>
+
+    <script>
+        function speakWithSSML() {
+            // Check if the browser supports the Web Speech API
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance();
+
+                // SSML markup to control speech synthesis
+                const ssml = `
+                    <speak>
+                        <p>Welcome to the <emphasis level="strong">world of SSML</emphasis> with Web Speech API.</p>
+                        <p>
+                            <prosody rate="slow">This is a slower part of the speech.</prosody>
+                            <prosody rate="fast">And this part is spoken much faster!</prosody>
+                        </p>
+                        <p>
+                            <break time="500ms"/> We can also add pauses.
+                        </p>
+                        <p>
+                            <voice name="Google UK English Female">And switch to a different voice if supported.</voice>
+                        </p>
+                    </speak>
+                `;
+
+                // Set the SSML text to the utterance (may not be supported in all browsers)
+                utterance.text = ssml;
+                utterance.lang = 'en-US';
+
+                // Try setting as SSML (useful for browsers that interpret it correctly)
+                utterance.ssml = ssml;
+
+                // Speak the utterance
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support the Web Speech API.');
+            }
+        }
+    </script>
+</body>
+</html>
