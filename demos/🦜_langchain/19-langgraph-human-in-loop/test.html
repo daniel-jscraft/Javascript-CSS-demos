@@ -1,0 +1,65 @@
+<html>
+    <head>
+    <script type="text/javascript">
+// function htmlToStrictXml(htmlString) {
+//     // Step 1: Parse the HTML string into a DOM object
+//     const parser = new DOMParser();
+//     const dom = parser.parseFromString(htmlString, 'text/html');
+
+//     // Step 2: Create a new XML document
+//     const xmlDoc = document.implementation.createDocument(null, null, null);
+
+//     // Step 3: Function to recursively convert HTML nodes to XML nodes
+//     function convertToXmlNode(htmlNode, xmlParentNode) {
+//         if (htmlNode.nodeType === Node.TEXT_NODE) {
+//             xmlParentNode.appendChild(xmlDoc.createTextNode(htmlNode.textContent));
+//         } else if (htmlNode.nodeType === Node.ELEMENT_NODE) {
+//             const xmlNode = xmlDoc.createElement(htmlNode.tagName.toLowerCase());
+
+//             // Copy attributes
+//             for (let attr of htmlNode.attributes) {
+//                 xmlNode.setAttribute(attr.name, attr.value);
+//             }
+
+//             // Recursively convert child nodes
+//             for (let childNode of htmlNode.childNodes) {
+//                 convertToXmlNode(childNode, xmlNode);
+//             }
+
+//             xmlParentNode.appendChild(xmlNode);
+//         }
+//     }
+
+//     // Step 4: Create a root element for the XML document
+//     const xmlRoot = xmlDoc.createElement('root');
+//     xmlDoc.appendChild(xmlRoot);
+
+//     // Step 5: Start conversion from the body of the parsed HTML DOM
+//     for (let childNode of dom.body.childNodes) {
+//         convertToXmlNode(childNode, xmlRoot);
+//     }
+
+//     // Step 6: Serialize the XML document to a string
+//     const xmlSerializer = new XMLSerializer();
+//     const xmlString = xmlSerializer.serializeToString(xmlDoc);
+
+//     return xmlString;
+// }
+
+// // Example usage:
+// const htmlString = `<div><p>Hello, <b>World!</b></p><img src="image.jpg"></div>`;
+// const xmlFormattedString = htmlToStrictXml(htmlString);
+
+// console.log(xmlFormattedString);
+
+// var msg = new SpeechSynthesisUtterance();
+// msg.text = '<?xml version="1.0"?>\r\n<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US"><emphasis>Welcome</emphasis> to the Bird Seed Emporium.  Welcome to the Bird Seed Emporium.</speak>';
+// msg.lang = 'en';
+// speechSynthesis.speak(msg);
+
+        </script>
+    </head>
+   <body>
+       
+   </body>
+</html>
