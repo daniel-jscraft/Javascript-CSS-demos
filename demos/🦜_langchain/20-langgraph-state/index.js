@@ -1,5 +1,6 @@
-import { END, START, StateGraph, Annotation } from "@langchain/langgraph"
-
+import { END, START, 
+    StateGraph, Annotation } from "@langchain/langgraph"
+import * as fs from "fs"
 
 const GraphAnnotation = Annotation.Root({
     // Define a 'steps' channel
@@ -17,8 +18,8 @@ const funcGreen = state => {
     return state
 }
 
-const funcOrange = state => {
-    console.log('🟠 function Orange')  
+const funcYellow = state => {
+    console.log('🟡 function Yellow')  
     console.log(state) 
     return state
 }
@@ -27,14 +28,15 @@ const funcOrange = state => {
 const workflow = new StateGraph(GraphAnnotation)
     // nodes
     .addNode("nodeGreen", funcGreen)
-    .addNode("nodeOrange", funcOrange)
+    .addNode("nodeYellow", funcYellow)
     // edges
     .addEdge(START, "nodeGreen")
-    .addEdge("nodeGreen", "nodeOrange")
-    .addEdge("nodeOrange", END)
+    .addEdge("nodeGreen", "nodeYellow")
+    .addEdge("nodeYellow", END)
 
 const graph = workflow.compile()
 await graph.invoke({}) // calling default; await graph.invoke({ steps: 0 }) 
 
-// at each node call the state is updated vita it the reducer function
-// vezi aici https://langchain-ai.github.io/langgraphjs/concepts/low_level/?h=state+reducer#messagesannotation
+// const image = await graph.getGraph().drawMermaidPng();
+// const arrayBuffer = await image.arrayBuffer();
+// await fs.writeFileSync('graph-struct.png', new Uint8Array(arrayBuffer))
