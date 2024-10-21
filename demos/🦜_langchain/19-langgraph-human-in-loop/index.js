@@ -18,7 +18,7 @@
 // })
 
 // const purchaseTicketTool = tool(
-//     (input) => `Successfully purchase a plane ticket for ${input.destination}`,
+//     (input) => `Successfully purchased a plane ticket for ${input.destination}`,
 //     {
 //         name: "purchase_ticket",
 //         description: "Buy a plane ticket for a given destination.",
@@ -81,7 +81,7 @@
 
 // console.log(result)
 
-// // 👉 Successfully purchase a plane ticket for New York
+// // 👉 Successfully purchased a plane ticket for New York
 
 import {
     END,
@@ -106,7 +106,7 @@ const llm = new ChatOpenAI({
 })
 
 const purchaseTicketTool = tool(
-    (input) => `Successfully purchase a plane ticket for ${input.destination}`,
+    (input) => `Successfully purchased a plane ticket for ${input.destination}`,
     {
         name: "purchase_ticket",
         description: "Buy a plane ticket for a given destination.",
