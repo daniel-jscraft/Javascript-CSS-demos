@@ -2,16 +2,13 @@
 //     END,
 //     START,
 //     StateGraph,
-//     MemorySaver, 
-//     MessagesAnnotation,
-//     Annotation
+//     MessagesAnnotation
 // } from "@langchain/langgraph"
 // import { ChatOpenAI } from "@langchain/openai"
 // import { HumanMessage } from "@langchain/core/messages"
 // import { z } from "zod"
 // import { tool } from "@langchain/core/tools"
 // import * as dotenv from "dotenv"
-// import * as reader  from "readline-sync"
 
 // dotenv.config()
 
@@ -34,10 +31,7 @@
 // const tools = [purchaseTicketTool]
 
 // const nodeTools = async (state) => {
-//     const { messages, askHumanUseCreditCard } = state
-//     if (!askHumanUseCreditCard) {
-//         throw new Error("Permission to use credit card is required.")
-//     }
+//     const { messages } = state
 //     const lastMessage = messages[messages.length - 1]
 //     const toolCall = lastMessage.tool_calls[0]
 //     // invoke the tool to buy the plane ticket
@@ -63,26 +57,18 @@
 //     return "tools"
 // }
 
-// const graphState = Annotation.Root({
-//     ...MessagesAnnotation.spec,
-//     // whether or not permission has been granted to use credit card
-//     askHumanUseCreditCard: Annotation(),
-// })
 
-// const workflow = new StateGraph(graphState)
+// const workflow = new StateGraph(MessagesAnnotation)
 //     .addNode("agent", nodeAgent)
 //     .addEdge(START, "agent")
 //     .addNode("tools", nodeTools)
 //     .addEdge("tools", "agent")
 //     .addConditionalEdges("agent", shouldContinue, ["tools", END])
 
-// const graph = workflow.compile({
-//     checkpointer: new MemorySaver(),
-// })
+// const graph = workflow.compile()
 
 // const config = {
-//     configurable: { thread_id: "vacation" },
-//     interruptBefore: ["tools"]
+//     configurable: { thread_id: "vacation" }
 // }
 
 // const input = {
@@ -91,23 +77,11 @@
 //     ]
 // }
 
-// const intermediaryResult = await graph.invoke(input, config)
+// const result = await graph.invoke(input, config)
 
-// // mention 👉 await graph.getState(config)).values.askHumanUseCreditCard
+// console.log(result)
 
-// console.log("✋ We need human authorization for this operation.")
-
-// // get human authorization
-// let userInput = reader.question("Type yes to allow credit card use: ")
-// await graph.updateState(config, { 
-//     askHumanUseCreditCard: userInput === "yes" 
-// })
-
-// // continuing graph after state update
-// // mention - graph.invoke(👉 null, config)
-// const finalResult = await graph.invoke(null, config)
-// console.log(finalResult)
-
+// // 👉 Successfully purchase a plane ticket for New York
 
 import {
     END,
