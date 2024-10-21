@@ -171,13 +171,13 @@ const shouldContinue = (state) => {
     return "tools"
 }
 
-const GraphAnnotation = Annotation.Root({
+const graphState = Annotation.Root({
     ...MessagesAnnotation.spec,
     // Whether or not permission has been granted to use credit card
     askHumanUseCreditCard: Annotation(),
 })
 
-const workflow = new StateGraph(GraphAnnotation)
+const workflow = new StateGraph(graphState)
     .addNode("agent", nodeAgent)
     .addEdge(START, "agent")
     .addNode("tools", nodeTools)
@@ -211,6 +211,6 @@ await graph.updateState(config, {
     askHumanUseCreditCard: userInput === "yes" 
 })
 
-// CONTINUING GRAPH AFTER STATE UPDATE note - graph.invoke(👉 null, config)
+// continuing graph after state update note - graph.invoke(👉 null, config)
 const finalResult = await graph.invoke(null, config)
 console.log(finalResult)
