@@ -43,11 +43,11 @@ console.log(getLastMessage(t1r1))
 //👉 Hi Daniel! How can I assist you with it today?
 
 // Does the AI remembers us?
-const t2r2 = await graph.invoke({
+const t1r2 = await graph.invoke({
   messages: [
     new HumanMessage("Sorry, did I already introduce myself?")
 ],}, configIntroThread)
-console.log(getLastMessage(t2r2).content)
+console.log(getLastMessage(t1r2).content)
 //👉 Yes, you did! You mentioned that your name is Daniel 
 // and that you like LangGraph.
 
