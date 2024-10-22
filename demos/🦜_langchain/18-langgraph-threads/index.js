@@ -63,16 +63,3 @@ const t2r1 = await graph.invoke({
 console.log(getLastMessage(t2r1).content)
 //👉 No, you haven't introduced yourself yet. 
 // How can I assist you today?
-
-/*
-
-checkout this : https://langchain-ai.github.io/langgraphjs/how-tos/shared-state/?h=thread+id
-
-the structure of the graph is extremly simple
-is it safe to say that we are not even using a real AI Agent here
-but bear with me. this will be usefull for the next chapers
-
-ia text din  https://www.youtube.com/watch?v=9BPCV5TYPmg
-
-poza printrscreen chat gpt discution threads
-*/
