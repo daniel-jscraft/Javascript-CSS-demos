@@ -83,14 +83,8 @@
 
 // // 👉 Successfully purchased a plane ticket for New York
 
-import {
-    END,
-    START,
-    StateGraph,
-    MemorySaver, 
-    MessagesAnnotation,
-    Annotation
-} from "@langchain/langgraph"
+import { END, START, StateGraph, MemorySaver, 
+    MessagesAnnotation, Annotation } from "@langchain/langgraph"
 import { ChatOpenAI } from "@langchain/openai"
 import { HumanMessage } from "@langchain/core/messages"
 import { z } from "zod"
@@ -105,8 +99,15 @@ const llm = new ChatOpenAI({
     temperature: 0,
 })
 
+const graphState = Annotation.Root({
+    ...MessagesAnnotation.spec,
+    // whether or not permission has been granted to use credit card
+    askHumanUseCreditCard: Annotation(),
+})
+
 const purchaseTicketTool = tool(
-    (input) => `Successfully purchased a plane ticket for ${input.destination}`,
+    (input) => `Successfully purchased a plane 
+    ticket for ${input.destination}`,
     {
         name: "purchase_ticket",
         description: "Buy a plane ticket for a given destination.",
@@ -147,12 +148,6 @@ const shouldContinue = (state) => {
     // tools are provided, so we should continue.
     return "tools"
 }
-
-const graphState = Annotation.Root({
-    ...MessagesAnnotation.spec,
-    // whether or not permission has been granted to use credit card
-    askHumanUseCreditCard: Annotation(),
-})
 
 const workflow = new StateGraph(graphState)
     .addNode("agent", nodeAgent)
