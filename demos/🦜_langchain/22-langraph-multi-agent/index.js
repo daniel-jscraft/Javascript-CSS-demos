@@ -1,6 +1,6 @@
 import { END, Annotation, START, StateGraph } from "@langchain/langgraph";
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
-import { DynamicStructuredTool } from "@langchain/core/tools";
+import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { JsonOutputToolsParser } from "langchain/output_parsers";
@@ -25,24 +25,43 @@ const AgentState = Annotation.Root({
     }),
 });
 
-const chartTool = new DynamicStructuredTool({
-    name: "generate_bar_chart",
-    description:
-      "Generates a bar chart from an array of data points using D3.js and displays it for the user.",
-    schema: z.object({
-      data: z
-        .object({
-          label: z.string(),
-          value: z.number(),
-        })
-        .array(),
-    }),
-    func: async ({ data }) => {
-        console.log("----chartTool-----")
+
+
+const chartTool = new tool(
+    async ({ data }) => {
         console.log(data)
+
+        const SCALE = 20
+        const firstThreeChars = s => (s+"   ").slice(0, 3).toUpperCase()
+        const normalizeToScale = (v, max) => Math.ceil(v / max * SCALE) 
+        const getMaxVal = data => Math.max(...data.map(d => d.val))
+        const maxVal = getMaxVal(data)
+
+        console.log("--------------------------")
+        for (let i = 0; i < data.length; i++) {
+            let {label, val} = data[i]
+            let result = `${firstThreeChars(label)} (${Math.ceil(val)}) | `
+            let normalizedVal = normalizeToScale(val, maxVal)
+            result  = result + String('*').repeat(normalizedVal)
+            console.log(result)
+        }
+        console.log("--------------------------")
+
         return "Chart has been generated and displayed to the user!";
     },
-});
+    {
+        name: "generate_bar_chart",
+        description: "Generates a bar chart from an array of data points and displays it for the user.",
+        schema: z.object({
+            data: z
+              .object({
+                label: z.string(),
+                val: z.number(),
+              })
+              .array(),
+        })
+    }
+);
   
 const tavilyTool = new TavilySearchResults();
 
@@ -96,18 +115,7 @@ const supervisorChain = formattedPrompt
   // select the first one
   .pipe((x) => (x[0].args));
 
-// let result = await supervisorChain.invoke({
-//     messages: [
-//         new HumanMessage({
-//             content: "write a report on birds.",
-//         })
-//     ]
-// });
 
-// console.log(result)
-
-// Recall llm was defined as ChatOpenAI above
-// It could be any other language model
 const researcherAgent = createReactAgent({
     llm,
     tools: [tavilyTool],
@@ -161,47 +169,48 @@ workflow.addEdge(START, "supervisor");
 
 const graph = workflow.compile()
 
-// let streamResults = graph.stream(
-//     {
-//       messages: [
+
+// const result  = await graph.invoke({
+//     messages: [
 //         new HumanMessage({
-//           content: "What were the 3 most popular tv shows in 2023?",
-//         }),
-//       ],
-//     },
-//     { recursionLimit: 100 },
-//   );
-  
-// for await (const output of await streamResults) {
-//     if (!output?.__end__) {
-//         console.log(output);
-//         console.log("----");
-//     }
-// }
+//             content: "What are the top 3 winners of the Fifa World Cup?"
+//         })
+//     ]
+// })
+// console.log(result)
 
-let result  = await graph.invoke(
-    {
-      messages: [
+
+// --------------------------
+// BRA | ********************
+// GER | ****************
+// ITA | ****************
+// --------------------------
+// Here is a bar chart representing the top 3 winners of the FIFA World Cup based on the number of titles won:\n\n- **Brazil**: 5 titles\n- **Germany**: 4 titles\n- **Italy**: 4 titles\n\nYou can view the chart for a visual representation of this data.
+
+
+// const result  = await graph.invoke({
+//     messages: [
+//         new HumanMessage({
+//             content: "Who was Abraham Lincoln?"
+//         })
+//     ]
+// })
+// console.log(result)
+// Abraham Lincoln was the 16th President of the United States, serving from March 1861 until his assassination in April 1865. He is one of the most revered figures in American history.
+
+const result  = await graph.invoke({
+    messages: [
         new HumanMessage({
-          content: "What is the GDP or UK vs US vs France?",
-        }),
-      ],
-    },
-    { recursionLimit: 100 },
-);
-
+            content: "What was the GDP of Italy, Japan and Mexico in 2023?"
+        })
+    ]
+})
 console.log(result)
 
-
-// let result  = await graph.invoke(
-//     {
-//       messages: [
-//         new HumanMessage({
-//           content: "Who was Lev Tolstoy?",
-//         }),
-//       ],
-//     },
-//     { recursionLimit: 100 },
-// );
-
-// console.log(result)
+/*
+- de facut agentii cu langraph
+- de pus in fisiere lor
+- update ouputs
+- schimba asta for (let i = 0; i < data.length; i++) {
+- let vs const
+*/
