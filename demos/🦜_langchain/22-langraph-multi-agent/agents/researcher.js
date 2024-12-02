@@ -2,6 +2,9 @@ import { getLastMessage } from "../etc/utils.js"
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
 import { ChatOpenAI } from "@langchain/openai";
 import { END, START, StateGraph, MessagesAnnotation } from "@langchain/langgraph";
+import { ToolNode } from "@langchain/langgraph/prebuilt"
+import * as dotenv from "dotenv"
+dotenv.config()
 
 const llm = new ChatOpenAI({
     modelName: "gpt-4o",
@@ -16,7 +19,7 @@ const callModel = async (state) => {
     const { messages } = state
     const result = await llm.bindTools(tools).invoke(messages)
     return { messages: [result] }
-  }
+}
   
 const shouldContinue = (state) => {
     const lastMessage = getLastMessage(state)
