@@ -1,12 +1,12 @@
-import { END, Annotation, START, StateGraph } from "@langchain/langgraph";
-import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
+import { END, Annotation, START, StateGraph, MessagesAnnotation } from "@langchain/langgraph";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { JsonOutputToolsParser } from "langchain/output_parsers";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import { createReactAgent, ToolNode } from "@langchain/langgraph/prebuilt";
+import { researcherAgent } from "./agents/researcher";
 
 import * as dotenv from "dotenv"
 
@@ -29,8 +29,6 @@ const AgentState = Annotation.Root({
 
 const chartTool = new tool(
     async ({ data }) => {
-        console.log(data)
-
         const SCALE = 20
         const firstThreeChars = s => (s+"   ").slice(0, 3).toUpperCase()
         const normalizeToScale = (v, max) => Math.ceil(v / max * SCALE) 
@@ -45,6 +43,13 @@ const chartTool = new tool(
             result  = result + String('*').repeat(normalizedVal)
             console.log(result)
         }
+
+        // data.forEach(({ label, val }) => {
+        //     let result = `${firstThreeChars(label)} (${Math.ceil(val)}) | `;
+        //     const normalizedVal = normalizeToScale(val, maxVal);
+        //     result = resultLabel + '*'.repeat(normalizedVal);
+        //     console.log(result);
+        // });
         console.log("--------------------------")
 
         return "Chart has been generated and displayed to the user!";
@@ -63,7 +68,6 @@ const chartTool = new tool(
     }
 );
   
-const tavilyTool = new TavilySearchResults();
 
 const members = ["researcher", "chart_generator"];
 
@@ -115,19 +119,14 @@ const supervisorChain = formattedPrompt
   // select the first one
   .pipe((x) => (x[0].args));
 
-
-const researcherAgent = createReactAgent({
-    llm,
-    tools: [tavilyTool],
-    messageModifier: new SystemMessage("You are a web researcher. You may use the Tavily search engine to search the web for" +
-      " important information, so the Chart Generator in your team can make useful plots.")
-  })
   
 const researcherNode = async ( state , config ) => {
     const result = await researcherAgent.invoke(state, config);
     const lastMessage = result.messages[result.messages.length - 1];
     return {
         messages: [
+        new SystemMessage("You are a web researcher. You may use the Tavily search engine to search the web for" +
+                " important information, so the Chart Generator in your team can make useful plots."),
         new HumanMessage({ content: lastMessage.content, name: "Researcher" }),
         ],
     };
