@@ -1,6 +1,7 @@
 import { getLastMessage } from "../etc/utils.js"
 import { ChatOpenAI } from "@langchain/openai"
-import { END, START, StateGraph, MessagesAnnotation } from "@langchain/langgraph"
+import { END, START, StateGraph, 
+    MessagesAnnotation } from "@langchain/langgraph"
 import { ToolNode } from "@langchain/langgraph/prebuilt"
 import { tool } from "@langchain/core/tools"
 import { z } from "zod"
@@ -21,34 +22,26 @@ const chartTool = new tool(
         const maxVal = getMaxVal(data)
 
         console.log("--------------------------")
-        for (let i = 0; i < data.length; i++) {
-            let {label, val} = data[i]
+        data.forEach(({ label, val }) => {
             let result = `${firstThreeChars(label)} (${Math.ceil(val)}) | `
             let normalizedVal = normalizeToScale(val, maxVal)
             result  = result + String('*').repeat(normalizedVal)
             console.log(result)
-        }
-
-        // data.forEach(({ label, val }) => {
-        //     let result = `${firstThreeChars(label)} (${Math.ceil(val)}) | `;
-        //     const normalizedVal = normalizeToScale(val, maxVal);
-        //     result = resultLabel + '*'.repeat(normalizedVal);
-        //     console.log(result);
-        // });
+        })
         console.log("--------------------------")
-
-        return "Chart has been generated and displayed to the user!";
+        return "Chart has been generated and displayed to the user!"
     },
     {
         name: "generate_bar_chart",
-        description: "Generates a bar chart from an array of data points and displays it for the user.",
+        description: "Generates a bar chart from an array of data" +
+            " points and displays it for the user.",
         schema: z.object({
             data: z
               .object({
                 label: z.string(),
-                val: z.number(),
+                val: z.number()
               })
-              .array(),
+              .array()
         })
     }
 )

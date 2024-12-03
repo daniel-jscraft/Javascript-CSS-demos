@@ -3,7 +3,8 @@ import { z } from "zod"
 import { HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { JsonOutputToolsParser } from "langchain/output_parsers"
 import { ChatOpenAI } from "@langchain/openai"
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts"
+import { ChatPromptTemplate, 
+  MessagesPlaceholder } from "@langchain/core/prompts"
 import { researcherAgent } from "./agents/researcher.js"
 import { chartGenAgent } from "./agents/chartAgent.js"
 import * as dotenv from "dotenv"
@@ -30,14 +31,15 @@ const systemPrompt =
   " respond with the worker to act next. Each worker will perform a" +
   " task and respond with their results and status. When finished," +
   " respond with FINISH."
-const options = [END, ...members];
+
+const options = [END, ...members]
 
 // Define the routing function
 const routingTool = {
   name: "route",
   description: "Select the next role.",
   schema: z.object({
-    next: z.enum([END, ...members]),
+    next: z.enum([END, ...members])
   }),
 }
 
@@ -47,72 +49,69 @@ const prompt = ChatPromptTemplate.fromMessages([
   [
     "system",
     "Given the conversation above, who should act next?" +
-    " Or should we FINISH? Select one of: {options}",
-  ],
-]);
+    " Or should we FINISH? Select one of: {options}"
+  ]
+])
 
 const formattedPrompt = await prompt.partial({
   options: options.join(", "),
-  members: members.join(", "),
-});
+  members: members.join(", ")
+})
 
 const llm = new ChatOpenAI({
   modelName: "gpt-4o",
-  temperature: 0,
-});
+  temperature: 0
+})
 
 const supervisorChain = formattedPrompt
   .pipe(llm.bindTools(
     [routingTool],
-    {
-      tool_choice: "route",
-    },
+    { tool_choice: "route" }
   ))
   .pipe(new JsonOutputToolsParser())
-  // select the first one
-  .pipe((x) => (x[0].args));
+  .pipe((x) => (x[0].args))
 
   
 const researcherNode = async ( state , config ) => {
-    const result = await researcherAgent.invoke(state, config);
-    const lastMessage = result.messages[result.messages.length - 1];
-    return {
-        messages: [
-          new SystemMessage("You are a web researcher. You may use the Tavily search engine to search the web for" +
-                " important information, so the Chart Generator in your team can make useful plots."),
-          new HumanMessage({ content: lastMessage.content, name: "Researcher" }),
-        ],
-    };
-};
+  const result = await researcherAgent.invoke(state, config)
+  const lastMessage = result.messages[result.messages.length - 1]
+  return {
+      messages: [
+        new HumanMessage({ 
+          content: lastMessage.content, 
+          name: "Researcher" 
+        })
+      ]
+  }
+}
   
 const chartGenNode = async ( state , config ) => {
-    const result = await chartGenAgent.invoke(state, config);
-    const lastMessage = result.messages[result.messages.length - 1];
-    return {
-      messages: [
-        new SystemMessage("You excel at generating bar charts. Use the researcher's information to generate the charts."),
-        new HumanMessage({ content: lastMessage.content, name: "ChartGenerator" }),
-      ],
-    };
+  const result = await chartGenAgent.invoke(state, config)
+  const lastMessage = result.messages[result.messages.length - 1]
+  return {
+    messages: [
+      new SystemMessage("You excel at generating bar charts. Use the" +
+        " researcher's information to generate the charts."),
+      new HumanMessage({ 
+        content: lastMessage.content, 
+        name: "ChartGenerator" 
+      })
+    ]
+  }
 }
 
-// 1. Create the graph
 const workflow = new StateGraph(AgentState)
-  // 2. Add the nodes; these will do the work
   .addNode("researcher", researcherNode)
   .addNode("chart_generator", chartGenNode)
-  .addNode("supervisor", supervisorChain);
-// 3. Define the edges. We will define both regular and conditional ones
-// After a worker completes, report to supervisor
-members.forEach((member) => {
-  workflow.addEdge(member, "supervisor");
-});
+  .addNode("supervisor", supervisorChain)
 
-workflow.addConditionalEdges( "supervisor",
-  (x) => x.next,
-)
+  members.forEach((member) => {
+  workflow.addEdge(member, "supervisor")
+})
 
-workflow.addEdge(START, "supervisor");
+workflow.addConditionalEdges("supervisor", (x) => x.next)
+
+workflow.addEdge(START, "supervisor")
 
 const graph = workflow.compile()
 

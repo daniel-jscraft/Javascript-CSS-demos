@@ -2,10 +2,10 @@ import { getLastMessage } from "../etc/utils.js"
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search"
 import { SystemMessage } from "@langchain/core/messages"
 import { ChatOpenAI } from "@langchain/openai"
-import { END, START, Annotation, messagesStateReducer, StateGraph } from "@langchain/langgraph"
+import { END, START, Annotation, messagesStateReducer, 
+    StateGraph } from "@langchain/langgraph"
 import { ToolNode } from "@langchain/langgraph/prebuilt"
 import * as dotenv from "dotenv"
-
 dotenv.config()
 
 const llm = new ChatOpenAI({
