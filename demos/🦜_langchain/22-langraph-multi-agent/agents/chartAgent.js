@@ -7,6 +7,7 @@ import { tool } from "@langchain/core/tools"
 import { SystemMessage } from "@langchain/core/messages"
 import { z } from "zod"
 import * as dotenv from "dotenv"
+
 dotenv.config()
 
 const llm = new ChatOpenAI({

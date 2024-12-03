@@ -1,6 +1,6 @@
 import { END, Annotation, START, StateGraph } from "@langchain/langgraph"
 import { z } from "zod"
-import { HumanMessage, SystemMessage } from "@langchain/core/messages"
+import { HumanMessage } from "@langchain/core/messages"
 import { JsonOutputToolsParser } from "langchain/output_parsers"
 import { ChatOpenAI } from "@langchain/openai"
 import { ChatPromptTemplate, 
@@ -15,12 +15,11 @@ dotenv.config()
 const AgentState = Annotation.Root({
     messages: Annotation({
       reducer: (x, y) => x.concat(y),
-      default: () => [],
+      default: () => []
     }),
-    // The agent node that last performed work
     next: Annotation({
       reducer: (x, y) => y ?? x ?? END,
-      default: () => END,
+      default: () => END
     })
 })
 
@@ -35,13 +34,12 @@ const systemPrompt =
 
 const options = [END, ...members]
 
-// Define the routing function
 const routingTool = {
   name: "route",
   description: "Select the next role.",
   schema: z.object({
     next: z.enum([END, ...members])
-  }),
+  })
 }
 
 const prompt = ChatPromptTemplate.fromMessages([
@@ -86,8 +84,8 @@ const createAgentNode = (agent, nodeName) => async (state, config) => {
   }
 }
 
-const researcherNode = createAgentNode(researcherAgent, "Researcher");
-const chartGenNode = createAgentNode(chartGenAgent, "ChartGenerator");
+const researcherNode = createAgentNode(researcherAgent, "Researcher")
+const chartGenNode = createAgentNode(chartGenAgent, "ChartGenerator")
 
 const workflow = new StateGraph(AgentState)
   .addNode("researcher", researcherNode)
@@ -102,26 +100,25 @@ workflow.addConditionalEdges("supervisor", (x) => x.next)
 
 workflow.addEdge(START, "supervisor")
 
+
+
 const graph = workflow.compile()
 
-
-// const result  = await graph.invoke({
-//     messages: [
-//         new HumanMessage({
-//             content: "What are the top 3 winners of the Fifa World Cup?"
-//         })
-//     ]
-// })
-// console.log(result)
-
+const result  = await graph.invoke({
+    messages: [
+        new HumanMessage({
+            content: "What are the top 3 winners of the Fifa World Cup?"
+        })
+    ]
+})
+console.log(result)
 
 // --------------------------
-// BRA | ********************
-// GER | ****************
-// ITA | ****************
+// BRA (5) | ********************
+// GER (4) | ****************
+// ITA (4) | ****************
 // --------------------------
-// Here is a bar chart representing the top 3 winners of the FIFA World Cup based on the number of titles won:\n\n- **Brazil**: 5 titles\n- **Germany**: 4 titles\n- **Italy**: 4 titles\n\nYou can view the chart for a visual representation of this data.
-
+// Here is the bar chart showing the top 3 winners of the FIFA World Cup based on the number of titles won:\n\n- **Brazil**: 5 titles\n- **Germany**: 4 titles\n- **Italy**: 4 titles\n\nIf you have any more questions or need further assistance, feel free to ask!
 
 // const result  = await graph.invoke({
 //     messages: [
@@ -133,12 +130,22 @@ const graph = workflow.compile()
 // console.log(result)
 // Abraham Lincoln was the 16th President of the United States, serving from March 1861 until his assassination in April 1865. He is one of the most revered figures in American history.
 
-const result  = await graph.invoke({
-    messages: [
-        new HumanMessage({
-            content: "What was the GDP of Italy, Japan and Mexico in 2023?"
-        })
-    ]
-})
-console.log(result)
+// const result  = await graph.invoke({
+//     messages: [
+//         new HumanMessage({
+//             content: "What was the GDP of Italy, Japan and Mexico in 2023?"
+//         })
+//     ]
+// })
+// console.log(result)
 
+/*
+--------------------------
+ITA (2255) | ***********
+JAP (4213) | ********************
+MEX (1789) | *********
+--------------------------
+
+
+Here is the bar chart representing the GDP of Italy, Japan, and Mexico in 2023:\n\n- **Italy**: $2,254.85 billion USD\n- **Japan**: $4,212.95 billion USD\n- **Mexico**: $1,788.89 billion USD\n\nThis visual representation helps to compare the economic output of these countries for that year.
+*/
