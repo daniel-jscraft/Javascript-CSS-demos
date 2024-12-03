@@ -7,6 +7,7 @@ import { ChatPromptTemplate,
   MessagesPlaceholder } from "@langchain/core/prompts"
 import { researcherAgent } from "./agents/researcher.js"
 import { chartGenAgent } from "./agents/chartAgent.js"
+import { getLastMessage } from "./etc/utils.js"
 import * as dotenv from "dotenv"
 
 dotenv.config()
@@ -74,11 +75,11 @@ const supervisorChain = formattedPrompt
   
 const researcherNode = async ( state , config ) => {
   const result = await researcherAgent.invoke(state, config)
-  const lastMessage = result.messages[result.messages.length - 1]
+  const { content } = getLastMessage(result)
   return {
       messages: [
         new HumanMessage({ 
-          content: lastMessage.content, 
+          content,  
           name: "Researcher" 
         })
       ]
@@ -87,13 +88,13 @@ const researcherNode = async ( state , config ) => {
   
 const chartGenNode = async ( state , config ) => {
   const result = await chartGenAgent.invoke(state, config)
-  const lastMessage = result.messages[result.messages.length - 1]
+  const { content } = getLastMessage(result)
   return {
     messages: [
       new SystemMessage("You excel at generating bar charts. Use the" +
         " researcher's information to generate the charts."),
       new HumanMessage({ 
-        content: lastMessage.content, 
+        content, 
         name: "ChartGenerator" 
       })
     ]
