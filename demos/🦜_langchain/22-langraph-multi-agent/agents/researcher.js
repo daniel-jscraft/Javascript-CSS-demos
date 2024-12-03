@@ -13,7 +13,7 @@ const llm = new ChatOpenAI({
     temperature: 0
 })
 
-export const researcherAnnotation = Annotation.Root({
+const researcherAnnotation = Annotation.Root({
   messages: Annotation({
     reducer: messagesStateReducer,
     default: () => [

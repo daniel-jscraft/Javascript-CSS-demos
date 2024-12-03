@@ -1,9 +1,10 @@
 import { getLastMessage } from "../etc/utils.js"
 import { ChatOpenAI } from "@langchain/openai"
-import { END, START, StateGraph, 
-    MessagesAnnotation } from "@langchain/langgraph"
+import { END, START, StateGraph, Annotation, 
+    messagesStateReducer } from "@langchain/langgraph"
 import { ToolNode } from "@langchain/langgraph/prebuilt"
 import { tool } from "@langchain/core/tools"
+import { SystemMessage } from "@langchain/core/messages"
 import { z } from "zod"
 import * as dotenv from "dotenv"
 dotenv.config()
@@ -11,6 +12,16 @@ dotenv.config()
 const llm = new ChatOpenAI({
     modelName: "gpt-4o",
     temperature: 0
+})
+
+const chartGeneratorAnnotation = Annotation.Root({
+    messages: Annotation({
+      reducer: messagesStateReducer,
+      default: () => [
+        new SystemMessage("You excel at generating bar charts. Use the" +
+        " researcher's information to generate the charts.")
+      ]
+    })
 })
 
 const chartTool = new tool(
@@ -62,7 +73,7 @@ const shouldContinue = (state) => {
     return didAICalledAnyTools ? "tools" : END
 }
 
-const chartGenGraph = new StateGraph(MessagesAnnotation)
+const chartGenGraph = new StateGraph(chartGeneratorAnnotation)
     .addNode("agent", callModel)
     .addNode("tools", toolNode)
     .addEdge(START, "agent")

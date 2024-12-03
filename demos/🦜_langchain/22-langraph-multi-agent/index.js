@@ -73,33 +73,21 @@ const supervisorChain = formattedPrompt
   .pipe((x) => (x[0].args))
 
   
-const researcherNode = async ( state , config ) => {
-  const result = await researcherAgent.invoke(state, config)
-  const { content } = getLastMessage(result)
-  return {
-      messages: [
-        new HumanMessage({ 
-          content,  
-          name: "Researcher" 
-        })
-      ]
-  }
-}
-  
-const chartGenNode = async ( state , config ) => {
-  const result = await chartGenAgent.invoke(state, config)
+const createAgentNode = (agent, nodeName) => async (state, config) => {
+  const result = await agent.invoke(state, config)
   const { content } = getLastMessage(result)
   return {
     messages: [
-      new SystemMessage("You excel at generating bar charts. Use the" +
-        " researcher's information to generate the charts."),
       new HumanMessage({ 
         content, 
-        name: "ChartGenerator" 
+        name: nodeName 
       })
     ]
   }
 }
+
+const researcherNode = createAgentNode(researcherAgent, "Researcher");
+const chartGenNode = createAgentNode(chartGenAgent, "ChartGenerator");
 
 const workflow = new StateGraph(AgentState)
   .addNode("researcher", researcherNode)
@@ -154,10 +142,3 @@ const result  = await graph.invoke({
 })
 console.log(result)
 
-/*
-- de facut agentii cu langraph
-- de pus in fisiere lor
-- update ouputs
-- schimba asta for (let i = 0; i < data.length; i++) {
-- let vs const
-*/
