@@ -39,6 +39,19 @@ class BinaryTree {
         this.printRooLeftRight(cNode.left)
         this.printRooLeftRight(cNode.right)
     }
+
+    _goDeep(cNode, level) {
+        if (cNode === null) return
+        this.level = Math.max(level, this.level)
+        this._goDeep(cNode.left, level + 1)
+        this._goDeep(cNode.right, level + 1)
+    }
+
+    getTreeLevel() {
+        this.level = 0
+        this._goDeep(this.root, 0)
+        return this.level
+    }
 }
 
 
@@ -51,8 +64,13 @@ myTree.insert(3)
 myTree.insert(7)
 myTree.insert(12)
 myTree.insert(18)
+myTree.insert(2)
+myTree.insert(1)
+myTree.insert(0)
 
 myTree.printRooLeftRight(myTree.root)
+
+console.log(myTree.getTreeLevel())
 
 //             10
 //     5               15
