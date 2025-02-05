@@ -1,0 +1,13 @@
+📦 install app --> https://ollama.com/
+
+🖥 run --> ollama pull llama3.2
+
+🖥 run --> ollama run llama3.2
+
+💬 chat in terminal 
+
+🖥 run --> OLLAMA_HOST=127.0.0.1:11435 ollama serve
+
+🖥 run --> npm install @langchain/ollama  (and langchain)
+
+👨‍💻 index.js ; check models http://127.0.0.1:11435/v1/models 
