@@ -6,4 +6,5 @@ const llm = new Ollama({
 })
 
 let response = await llm.invoke('What is the age of Bugs Bunny?')
+
 console.log(response)
