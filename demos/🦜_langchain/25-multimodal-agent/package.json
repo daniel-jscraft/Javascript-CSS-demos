@@ -1,0 +1,19 @@
+{
+  "name": "12-node-setup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@langchain/community": "^0.2.31",
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
+    "langchain": "^0.2.13"
+  }
+}
