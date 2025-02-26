@@ -6,8 +6,7 @@ import {
 import { tool } from "@langchain/core/tools"
 import { z } from "zod"
 import { ChatOpenAI } from "@langchain/openai"
-import { StringOutputParser } from "@langchain/core/output_parsers"
-import { ChatPromptTemplate } from "@langchain/core/prompts"
+import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio"
 import fs from 'fs'
 import * as dotenv from "dotenv"
 
@@ -17,30 +16,11 @@ const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
 
 const getLastMessage = ({ messages }) => messages[messages.length - 1]
 
-const gmtTimeSchema = z.object({
-  city: z.string().describe("The name of the city")
-})
-
-const gmtTimeTool = tool(
-  async ({ city }) => {
-    const serviceIsWorking = Math.floor(Math.random() * 3)
-    return serviceIsWorking !== 2
-      ? `The local in ${city} time is 2:30am.`
-      : "Error 404"
-  },
-  {
-    name: "gmtTime",
-    description: `Check local time in a specified city. 
-    The API is randomly available every third call.`,
-    schema: gmtTimeSchema,
-  }
-)
-
-const readImageSchema = z.object({
+const readImageFileSchema = z.object({
     filePath: z.string().describe("The file name of the picture.")
 })
 
-const readImageContentTool = tool(
+const readImageFileTool = tool(
     async ({ filePath }) => {
 
         // Initialize the ChatOpenAI model with GPT-4 Vision
@@ -54,7 +34,7 @@ const readImageContentTool = tool(
 
         const imageDataUrl = `data:image/jpeg;base64,${imageData}`
 
-        const message = {
+        const messages = {
             role: "user",
             content: [
                 {
@@ -70,17 +50,62 @@ const readImageContentTool = tool(
             ]
         }
 
-        const response = await model.invoke([message])
+        const response = await model.invoke([messages])
         return response.content
     },
     {
-        name: "readImageContentTool",
+        name: "readImageFileTool",
         description: `Reads the content of an image file.`,
-        schema: readImageSchema,
+        schema: readImageFileSchema,
     }
 )
 
-const tools = [gmtTimeTool, readImageContentTool]
+
+
+const readAudioFileSchema = z.object({
+    filePath: z.string().describe("The file name of the audio file.")
+})
+
+const readAudioFileTool = tool(
+    async ({ filePath }) => {
+
+        console.log("🟢🟢🟢🟢🟢🟢🟢")
+        console.log(filePath)
+
+        const loader = new OpenAIWhisperAudio(filePath, {
+          transcriptionCreateParams: {
+            language: "en",
+          }
+        })
+        
+        const docs = await loader.load();
+
+        const transcript = docs[0].pageContent
+
+        const messages = [
+            new SystemMessage(
+              "Please describe what the following audio transcript is about: " + transcript
+            )
+        ]
+ 
+        console.log("messages")
+        console.log(messages)
+
+        const response = await model.invoke([messages])
+        console.log("response")
+        console.log(response)
+        return response.content
+    },
+    {
+        name: "readAudioFileTool",
+        description: `Reads the content of a audio file.`,
+        schema: readAudioFileSchema,
+    }
+)
+
+
+
+const tools = [readImageFileTool, readAudioFileTool]
 const toolNode = new ToolNode(tools)
 const llmWithTools = llm.bindTools(tools)
 
@@ -113,11 +138,9 @@ const result = await runnable.invoke({
       These tools sometimes fail, but you keep trying until 
       you get a valid response.`
     ),
-    // new HumanMessage(
-    //   "What is the time now in Singapore? I would like to call a friend."
-    // ),
     // new HumanMessage("How are you ?" ),
-    new HumanMessage("What's in the file named food.jpg ?" ),
+    // new HumanMessage("What's in the file named food.jpg ?" ),
+    new HumanMessage("What's in the file named charlie_munger.mp3 ?" ),
   ]
 })
 

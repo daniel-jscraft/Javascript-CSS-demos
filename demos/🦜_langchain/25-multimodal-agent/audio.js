@@ -14,4 +14,4 @@ const loader = new OpenAIWhisperAudio(filePath, {
 
 const docs = await loader.load();
 
-console.log(docs);
+console.log(docs[0].pageContent);
