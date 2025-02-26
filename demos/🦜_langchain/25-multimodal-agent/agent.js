@@ -22,35 +22,27 @@ const readImageFileSchema = z.object({
 
 const readImageFileTool = tool(
     async ({ filePath }) => {
-
         // Initialize the ChatOpenAI model with GPT-4 Vision
         const model = new ChatOpenAI({
             modelName: "gpt-4o",
             maxTokens: 1000,
         })
 
-        const x = fs.readFileSync(filePath)
-        let imageData = x.toString('base64')
+        const imageData = fs.readFileSync(filePath).toString('base64')
 
         const imageDataUrl = `data:image/jpeg;base64,${imageData}`
 
-        const messages = {
-            role: "user",
-            content: [
-                {
-                    type: "text",
-                    text: "Please describe what you see in this image in detail."
-                },
-                {
-                    type: "image_url",
-                    image_url: {
-                        "url": imageDataUrl
-                    },
-                }
-            ]
-        }
-
-        const response = await model.invoke([messages])
+        const message = new HumanMessage({ content: [
+            {
+              type: "text",
+              text: "What does this image contain?",
+            },
+            {
+              type: "image_url",
+              image_url: { url: imageDataUrl },
+            }
+        ]})
+        const response = await model.invoke([message]);
         return response.content
     },
     {
@@ -59,8 +51,6 @@ const readImageFileTool = tool(
         schema: readImageFileSchema,
     }
 )
-
-
 
 const readAudioFileSchema = z.object({
     filePath: z.string().describe("The file name of the audio file.")
@@ -80,17 +70,7 @@ const readAudioFileTool = tool(
 
       const transcript = docs[0].pageContent
 
-      const messages = {
-          role: "user",
-          content: [
-              {
-                  type: "text",
-                  text: "Please describe in short what the following audio transcript is about: \n " + transcript
-              }
-          ]
-      }
-
-      const response = await model.invoke([messages])
+      const response = await model.invoke("Please describe what the following audio transcript is about: \n " + transcript)
       return response.content
     },
     {
@@ -132,10 +112,8 @@ const result = await runnable.invoke({
   messages: [
     new SystemMessage(
       `You are responsible for answering user questions using tools. 
-      These tools sometimes fail, but you keep trying until 
-      you get a valid response.`
+      Respond as short as possible.`
     ),
-    // new HumanMessage("How are you ?" ),
     // new HumanMessage("What's in the file named food.jpg ?" ),
     new HumanMessage("What's in the file named charlie_munger.mp3 ?" ),
   ]
