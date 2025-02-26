@@ -68,33 +68,30 @@ const readAudioFileSchema = z.object({
 
 const readAudioFileTool = tool(
     async ({ filePath }) => {
+      const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
 
-        console.log("🟢🟢🟢🟢🟢🟢🟢")
-        console.log(filePath)
+      const loader = new OpenAIWhisperAudio(filePath, {
+        transcriptionCreateParams: {
+          language: "en",
+        }
+      })
+      
+      const docs = await loader.load();
 
-        const loader = new OpenAIWhisperAudio(filePath, {
-          transcriptionCreateParams: {
-            language: "en",
-          }
-        })
-        
-        const docs = await loader.load();
+      const transcript = docs[0].pageContent
 
-        const transcript = docs[0].pageContent
+      const messages = {
+          role: "user",
+          content: [
+              {
+                  type: "text",
+                  text: "Please describe in short what the following audio transcript is about: \n " + transcript
+              }
+          ]
+      }
 
-        const messages = [
-            new SystemMessage(
-              "Please describe what the following audio transcript is about: " + transcript
-            )
-        ]
- 
-        console.log("messages")
-        console.log(messages)
-
-        const response = await model.invoke([messages])
-        console.log("response")
-        console.log(response)
-        return response.content
+      const response = await model.invoke([messages])
+      return response.content
     },
     {
         name: "readAudioFileTool",
