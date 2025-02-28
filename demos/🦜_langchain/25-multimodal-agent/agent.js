@@ -28,9 +28,9 @@ const readImageFileTool = tool(
             modelName: "gpt-4o", maxTokens: 1000
         })
 
-        const imageData = fs.readFileSync(filePath).toString('base64')
+        const imageData = fs.readFileSync(filePath).toString("base64")
 
-        const imageDataUrl = `data:image/jpeg;base64,${imageData}`
+        const imageDataUrl = "data:image/jpeg;base64,"+ imageData
 
         const message = new HumanMessage({ content: [
             {
@@ -42,7 +42,7 @@ const readImageFileTool = tool(
               image_url: { url: imageDataUrl },
             }
         ]})
-        const response = await model.invoke([message]);
+        const response = await model.invoke([message])
         return response.content
     },
     {
@@ -66,12 +66,12 @@ const readAudioFileTool = tool(
         }
       })
       
-      const docs = await loader.load();
+      const docs = await loader.load()
 
       const transcript = docs[0].pageContent
 
-      const response = await model.invoke(`Describe what the following 
-        audio transcript is about: ${transcript}`)
+      const response = await model.invoke("Describe what the following" 
+        + " audio transcript is about: \n" + transcript)
       return response.content
     },
     {
@@ -109,10 +109,8 @@ const runnable = graph.compile()
 
 const result = await runnable.invoke({
   messages: [
-    new SystemMessage(
-      `You are responsible for answering user questions using tools. 
-      Respond as short as possible.`
-    ),
+    new SystemMessage("You are responsible for answering user questions" 
+      + " using tools. Respond as short as possible."),
     // new HumanMessage("What's in the file named food.jpg ?" ),
     new HumanMessage("What's in the file named audio.mp3 ?" ),
   ]
@@ -120,8 +118,4 @@ const result = await runnable.invoke({
 
 console.log(getLastMessage(result).content)
 
-console.log(
-  `You are responsible for answering user questions using tools.
-  Respond as short as possible.`
-)
 
