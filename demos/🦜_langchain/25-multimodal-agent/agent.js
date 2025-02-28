@@ -6,7 +6,9 @@ import {
 import { tool } from "@langchain/core/tools"
 import { z } from "zod"
 import { ChatOpenAI } from "@langchain/openai"
-import { OpenAIWhisperAudio } from "@langchain/community/document_loaders/fs/openai_whisper_audio"
+import { 
+  OpenAIWhisperAudio 
+} from "@langchain/community/document_loaders/fs/openai_whisper_audio"
 import fs from 'fs'
 import * as dotenv from "dotenv"
 
@@ -22,10 +24,8 @@ const readImageFileSchema = z.object({
 
 const readImageFileTool = tool(
     async ({ filePath }) => {
-        // Initialize the ChatOpenAI model with GPT-4 Vision
         const model = new ChatOpenAI({
-            modelName: "gpt-4o",
-            maxTokens: 1000,
+            modelName: "gpt-4o", maxTokens: 1000
         })
 
         const imageData = fs.readFileSync(filePath).toString('base64')
@@ -47,7 +47,7 @@ const readImageFileTool = tool(
     },
     {
         name: "readImageFileTool",
-        description: `Reads the content of an image file.`,
+        description: "Reads the content of an image file.",
         schema: readImageFileSchema,
     }
 )
@@ -70,17 +70,16 @@ const readAudioFileTool = tool(
 
       const transcript = docs[0].pageContent
 
-      const response = await model.invoke("Please describe what the following audio transcript is about: \n " + transcript)
+      const response = await model.invoke(`Describe what the following 
+        audio transcript is about: ${transcript}`)
       return response.content
     },
     {
         name: "readAudioFileTool",
-        description: `Reads the content of a audio file.`,
+        description: "Reads the content of a audio file.",
         schema: readAudioFileSchema,
     }
 )
-
-
 
 const tools = [readImageFileTool, readAudioFileTool]
 const toolNode = new ToolNode(tools)
@@ -115,9 +114,14 @@ const result = await runnable.invoke({
       Respond as short as possible.`
     ),
     // new HumanMessage("What's in the file named food.jpg ?" ),
-    new HumanMessage("What's in the file named charlie_munger.mp3 ?" ),
+    new HumanMessage("What's in the file named audio.mp3 ?" ),
   ]
 })
 
-console.log(`${getLastMessage(result).content}`)
+console.log(getLastMessage(result).content)
+
+console.log(
+  `You are responsible for answering user questions using tools.
+  Respond as short as possible.`
+)
 
