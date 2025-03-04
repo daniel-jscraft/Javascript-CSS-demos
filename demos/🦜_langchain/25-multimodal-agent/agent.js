@@ -7,7 +7,7 @@ import { ChatOpenAI } from "@langchain/openai"
 import * as dotenv from "dotenv"
 import { readAudioFileTool, readImageFileTool } from "./tools/index.js"
 
-dotenv.config()
+dotenv.config({ path: '../.env' })
 
 const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
 
