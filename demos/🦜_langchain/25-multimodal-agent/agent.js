@@ -43,8 +43,8 @@ const result = await runnable.invoke({
   messages: [
     new SystemMessage("You are responsible for answering user questions" 
       + " using tools. Respond as short as possible."),
-    // new HumanMessage("What's in the file named food.jpg ?" ),
-    new HumanMessage("What's in the file named audio.mp3 ?" ),
+    new HumanMessage("What's in the file named image.jpg ?" ),
+    //new HumanMessage("What's in the file named audio.mp3 ?" ),
   ]
 })
 
