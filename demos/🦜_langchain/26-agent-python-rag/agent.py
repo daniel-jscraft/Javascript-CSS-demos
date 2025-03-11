@@ -7,6 +7,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from langchain.schema import Document
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field
 
 load_dotenv()
 
@@ -42,7 +44,7 @@ vectorstore = Chroma.from_documents(
 )
 retriever = vectorstore.as_retriever()
 
-# part 2: create chain
+# part 2: create and use chain
 # Prompt
 rag_prompt = hub.pull("rlm/rag-prompt")
 # LLM
@@ -70,3 +72,49 @@ print("Documents:\\n")
 print('\\n\\n'.join(['- %s' % x.page_content for x in docs]))
 print("----")
 print("Final answer: %s" % generation)
+
+# part 3: Set up a retrieval evaluator
+class RetrievalEvaluator(BaseModel):
+    """Classify retrieved documents based on how relevant it is to the user's question."""
+    binary_score: str = Field(
+        description="Documents are relevant to the question, 'yes' or 'no'"
+    )
+# LLM with function call
+retrieval_evaluator_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+structured_llm_evaluator = retrieval_evaluator_llm.with_structured_output(RetrievalEvaluator)
+# Prompt
+system = """You are a document retrieval evaluator that's responsible for checking the relevancy of a retrieved document to the user's question. \\n 
+    If the document contains keyword(s) or semantic meaning related to the question, grade it as relevant. \\n
+    Output a binary score 'yes' or 'no' to indicate whether the document is relevant to the question."""
+retrieval_evaluator_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system),
+        ("human", "Retrieved document: \\n\\n {document} \\n\\n User question: {question}"),
+    ]
+)
+retrieval_grader = retrieval_evaluator_prompt | structured_llm_evaluator
+
+# poti incera ca faci teste si sa vezi daca doc 1 e relevant pentru o intrebare
+
+
+
+# part 3 add Question Re-writer
+# LLM
+question_rewriter_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+# Prompt
+system = """You are a question re-writer that converts an input question to a better version that is optimized \\n 
+     for web search. Look at the input and try to reason about the underlying semantic intent / meaning."""
+re_write_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system),
+        (
+            "human",
+            "Here is the initial question: \\n\\n {question} \\n Formulate an improved question.",
+        ),
+    ]
+)
+question_rewriter = re_write_prompt | question_rewriter_llm | StrOutputParser()
+
+# 👏 answer = question_rewriter.invoke({"question": "I would like to eat out today. Do you know when is Bella Vista open?"})
+# print(answer)
+# What are the opening hours for Bella Vista today?
