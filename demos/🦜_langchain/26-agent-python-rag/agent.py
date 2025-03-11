@@ -6,9 +6,13 @@ from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from langchain.schema import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_community.tools.tavily_search import TavilySearchResults
+from typing import List
+from typing_extensions import TypedDict
+from langchain.schema import Document
+
 
 load_dotenv()
 
@@ -118,3 +122,53 @@ question_rewriter = re_write_prompt | question_rewriter_llm | StrOutputParser()
 # 👏 answer = question_rewriter.invoke({"question": "I would like to eat out today. Do you know when is Bella Vista open?"})
 # print(answer)
 # What are the opening hours for Bella Vista today?
+
+# part 4: add web search tool
+# asta poate fi muatat mai sus, sa raspunda la ceva de genul "What is the speed of light?"
+web_search_tool = TavilySearchResults(k=3)
+
+# part 5: add graph state
+class GraphState(TypedDict):
+    """
+    Represents the state of our graph.
+    Attributes:
+        question: question
+        generation: LLM generation
+        web_search: whether to add search
+        documents: list of documents
+    """
+    question: str
+    generation: str
+    web_search: str
+    documents: List[str]
+
+# part 6: add retrieve and generate functions
+def retrieve(state):
+    """
+    Retrieve documents
+    Args:
+        state (dict): The current graph state
+    Returns:
+        state (dict): New key added to state, documents, that contains retrieved documents
+    """
+    print("---RETRIEVE---")
+    question = state["question"]
+    # Retrieval
+    documents = retriever.get_relevant_documents(question)
+    return {"documents": documents, "question": question}
+
+def generate(state):
+    """
+    Generate answer
+    Args:
+        state (dict): The current graph state
+    Returns:
+        state (dict): New key added to state, generation, that contains LLM generation
+    """
+    print("---GENERATE---")
+    question = state["question"]
+    documents = state["documents"]
+    # RAG generation
+    generation = rag_chain.invoke({"context": documents, "question": question})
+    return {"documents": documents, "question": question, "generation": generation}
+
