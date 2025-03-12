@@ -6,7 +6,7 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain.schema import Document
 from langgraph.graph import END, StateGraph, START
 from typing import List
