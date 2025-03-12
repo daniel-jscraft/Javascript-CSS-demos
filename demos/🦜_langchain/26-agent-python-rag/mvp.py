@@ -79,6 +79,7 @@ class GraphState(TypedDict):
     question: str
     generation: str
     should_do_web_search: str
+    try_to_rewrite_question: str
     documents: List[str]
 
 def retrieve(state):
@@ -97,6 +98,10 @@ def evaluate_documents(state):
     print("---CHECK DOCUMENT RELEVANCE TO QUESTION---")
     question = state["question"]
     documents = state["documents"]
+    if "try_to_rewrite_question" in state:
+        try_to_rewrite_question = state["try_to_rewrite_question"]
+    else:
+        try_to_rewrite_question = "No"
     filtered_docs = []
     web_search = "No"
     for d in documents:
@@ -110,9 +115,21 @@ def evaluate_documents(state):
         else:
             print("---GRADE: DOCUMENT NOT RELEVANT---")
             continue
-    if len(filtered_docs) / len(documents) <= 0.7:
-        should_do_web_search = "Yes"
-    return {"documents": filtered_docs, "question": question, "should_do_web_search": should_do_web_search}
+    should_do_web_search = "No"
+    if len(filtered_docs) == 0:
+        print("11111111")
+        if try_to_rewrite_question == "No":
+            print("22222222")
+            try_to_rewrite_question = "Yes"
+        else:
+            print("33333333")
+            should_do_web_search = "Yes"
+    return {
+        "documents": filtered_docs, 
+        "question": question, 
+        "try_to_rewrite_question": try_to_rewrite_question,
+        "should_do_web_search": should_do_web_search
+    }
 
 def web_search(state):
     print("---WEB SEARCH---")
@@ -125,9 +142,15 @@ def web_search(state):
 
 def router(state):
     print("---ASSESS GRADED DOCUMENTS---")
-    state["question"]
+
+    try_to_rewrite_question = state["try_to_rewrite_question"]
+    if try_to_rewrite_question == "Yes":
+        print(
+            "--- 🍏🍏🍏🍏🍏 try_to_rewrite_question"
+        )
+        return "rewrite_question_node"
+    
     should_do_web_search = state["should_do_web_search"]
-    state["documents"]
     if should_do_web_search == "Yes":
         print(
             "---DECISION: ALL DOCUMENTS ARE NOT RELEVANT TO QUESTION, TRANSFORM QUERY---"
@@ -136,6 +159,24 @@ def router(state):
     else:
         print("---DECISION: GENERATE---")
         return "generate"
+
+# part 3 add Question Re-writer
+# LLM
+question_rewriter_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+# Prompt
+system = """You are a question re-writer that converts an input question to a better version that is optimized \\n 
+     for web search. Look at the input and try to reason about the underlying semantic intent / meaning."""
+re_write_prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", system),
+        (
+            "human",
+            "Here is the initial question: \\n\\n {question} \\n Formulate an improved question.",
+        ),
+    ]
+)
+question_rewriter = re_write_prompt | question_rewriter_llm | StrOutputParser()
+
 
 workflow = StateGraph(GraphState)
 workflow.add_node("retrieve", retrieve)  # retrieve
