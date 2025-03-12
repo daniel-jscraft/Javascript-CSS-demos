@@ -156,21 +156,21 @@ workflow.add_edge("web_search_node", "generate")
 workflow.add_edge("generate", END)
 app = workflow.compile()
 
-# inputs = {"question": "What is the speed of light?"}
+inputs = {"question": "What is the speed of light?"}
 # inputs = {"question": "When is Bella Vista open?"}
-# for output in app.stream(inputs):
-#     for key, value in output.items():
-#         pprint(f"Node '{key}':")
-#         pprint(value, indent=2, width=80, depth=None)
-#     pprint("\\n---\\n")
-# pprint(value["generation"])
+for output in app.stream(inputs):
+    for key, value in output.items():
+        pprint(f"Node '{key}':")
+        pprint(value, indent=2, width=80, depth=None)
+    pprint("\\n---\\n")
+pprint(value["generation"])
 
 
-try:
-    img = app.get_graph(xray=True).draw_mermaid_png()
+# try:
+#     img = app.get_graph(xray=True).draw_mermaid_png()
     
-    # Save the image to a file
-    with open('graph_no_transform_step.png', 'wb') as f:
-        f.write(img)
-except Exception as e:
-    print(f"Error: {e}")
+#     # Save the image to a file
+#     with open('graph_no_transform_step.png', 'wb') as f:
+#         f.write(img)
+# except Exception as e:
+#     print(f"Error: {e}")
