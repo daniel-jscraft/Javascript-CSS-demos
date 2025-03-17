@@ -1,13 +1,9 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages"
-import { ToolNode } from "@langchain/langgraph/prebuilt"
-import {
-  END, MessagesAnnotation, START, StateGraph
-} from "@langchain/langgraph"
 import { ChatOpenAI } from "@langchain/openai"
 import { z } from "zod"
 import { tool } from "@langchain/core/tools"
+import { createReactAgent } from "@langchain/langgraph/prebuilt"
 import * as dotenv from "dotenv"
-
 dotenv.config({ path: '../.env' })
 
 const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
@@ -39,35 +35,12 @@ const substractTool = tool(
 )
 
 const tools = [addTool, substractTool]
-const toolNode = new ToolNode(tools)
-const llmWithTools = llm.bindTools(tools)
 
-const callModel = async (state) => {
-  const { messages } = state
-  const result = await llmWithTools.invoke(messages)
-  return { messages: [result] }
-}
+const agent = createReactAgent({llm, tools})
 
-const shouldContinue = (state) => {
-  const lastMessage = getLastMessage(state)
-  const didAICalledAnyTools = lastMessage._getType() === "ai" &&
-    lastMessage.tool_calls?.length
-  return didAICalledAnyTools ? "tools" : END
-}
 
-const graph = new StateGraph(MessagesAnnotation)
-  .addNode("agent", callModel)
-  .addNode("tools", toolNode)
-  .addEdge(START, "agent")
-  .addEdge("tools", "agent")
-  .addConditionalEdges("agent", shouldContinue, ["tools", END])
-
-const runnable = graph.compile()
-
-const result = await runnable.invoke({
+const result = await agent.invoke({
   messages: [
-    new SystemMessage("You are responsible for answering user questions" 
-      + " using tools. Respond as short as possible."),
     new HumanMessage("Add 10 and 8 and substract 2." ),
   ]
 })
