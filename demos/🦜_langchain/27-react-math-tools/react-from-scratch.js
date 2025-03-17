@@ -14,11 +14,7 @@ const llm = new ChatOpenAI({ model: "gpt-4o", temperature: 0 })
 const getLastMessage = ({ messages }) => messages[messages.length - 1]
 
 const addTool = tool(
-    async ({ a, b }) => {
-        console.log("addTool")
-        console.log(a, b)
-        return a + b
-    },
+    async ({ a, b }) => a + b,
     {
         name: "add",
         description: "Add two numbers together.",
@@ -30,11 +26,7 @@ const addTool = tool(
 )
 
 const substractTool = tool(
-  async ({ a, b }) => {
-      console.log("substractTool")
-      console.log(a, b)
-      return a - b
-  },
+  async ({ a, b }) => a - b,
   {
       name: "substract",
       description: "Substract two numbers together.",
