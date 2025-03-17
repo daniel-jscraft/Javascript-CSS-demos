@@ -29,7 +29,23 @@ const addTool = tool(
     }
 )
 
-const tools = [addTool]
+const substractTool = tool(
+  async ({ a, b }) => {
+      console.log("substractTool")
+      console.log(a, b)
+      return a - b
+  },
+  {
+      name: "substract",
+      description: "Substract two numbers together.",
+      schema: z.object({
+          a: z.number().describe("The first number"),
+          b: z.number().describe("The second number")
+      }),
+  }
+)
+
+const tools = [addTool, substractTool]
 const toolNode = new ToolNode(tools)
 const llmWithTools = llm.bindTools(tools)
 
@@ -59,8 +75,9 @@ const result = await runnable.invoke({
   messages: [
     new SystemMessage("You are responsible for answering user questions" 
       + " using tools. Respond as short as possible."),
-    new HumanMessage("Add 32 and 4." ),
+    new HumanMessage("Add 10 and 8 and substract 2." ),
   ]
 })
 
 console.log(getLastMessage(result).content)
+// ⬆️ The result of adding 10 and 8 is 18, and the result of subtracting 2 from 10 is 8.
