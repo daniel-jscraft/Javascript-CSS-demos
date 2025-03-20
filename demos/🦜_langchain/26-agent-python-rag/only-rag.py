@@ -154,27 +154,16 @@ def decide_to_generate(state):
 
 workflow = StateGraph(GraphState)
 workflow.add_node("retrieve", retrieve)  # retrieve
-workflow.add_node("grade_documents", evaluate_documents)  # evaluate documents
 workflow.add_node("generate", generate)  # generate
-workflow.add_node("web_search_node", web_search)  # web search
+
 workflow.add_edge(START, "retrieve")
-workflow.add_edge("retrieve", "grade_documents")
-workflow.add_conditional_edges(
-    "grade_documents",
-    decide_to_generate,
-    {
-        "web_search_node": "web_search_node",
-        "generate": "generate",
-    },
-)
-workflow.add_edge("web_search_node", "generate")
+workflow.add_edge("retrieve", "generate")
 workflow.add_edge("generate", END)
+
 app = workflow.compile()
 
-# inputs = {"question": "What is the speed of light?"}
-# inputs = {"question": "When is Bella Vista open?"}
-# inputs = {"question": "When did I visited Istanbul?"}
-inputs = {"question": "Who is Daniel Nastase?"}
+inputs = {"question": "What is the speed of light?"}
+# inputs = {"question": "Who is Daniel Nastase?"}
 for output in app.stream(inputs):
     for key, value in output.items():
         pprint(f"Node '{key}':")
@@ -183,11 +172,11 @@ for output in app.stream(inputs):
 pprint(value["generation"])
 
 
-# try:
-#     img = app.get_graph(xray=True).draw_mermaid_png()
+try:
+    img = app.get_graph(xray=True).draw_mermaid_png()
     
-#     # Save the image to a file
-#     with open('graph_no_transform_step.png', 'wb') as f:
-#         f.write(img)
-# except Exception as e:
-#     print(f"Error: {e}")
+    # Save the image to a file
+    with open('only-rag.png', 'wb') as f:
+        f.write(img)
+except Exception as e:
+    print(f"Error: {e}")
