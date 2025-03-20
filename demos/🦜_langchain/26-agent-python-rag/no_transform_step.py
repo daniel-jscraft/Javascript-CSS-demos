@@ -19,7 +19,7 @@ load_dotenv()
 
 docs = [
     Document(
-        page_content="Bella Vista is owned by Antonio Rossi, a renowned chef with over 20 years of experience in the culinary industry. He started Bella Vista to bring authentic Italian flavors to the community.",
+        page_content="Bella Vista is owned by Daniel Nastase, a renowned chef with over 20 years of experience in the culinary industry. He started Bella Vista to bring authentic Italian flavors to the community.",
         metadata={"source": "restaurant_info.txt"},
     ),
     Document(
@@ -34,27 +34,60 @@ docs = [
         page_content="Bella Vista offers a variety of menus including a lunch menu, dinner menu, and a special weekend brunch menu. The lunch menu features light Italian fare, the dinner menu offers a more extensive selection of traditional and contemporary dishes, and the brunch menu includes both classic breakfast items and Italian specialties.",
         metadata={"source": "restaurant_info.txt"},
     ),
+    Document(
+        page_content="I visited Istanbul a few years ago. The hammam, tea  and turkish delight where the highlights of the trip. ",
+        metadata={"source": "restaurant_info.txt"},
+    ), 
+    Document(
+        page_content="I visited Istanbul a few years ago. The hammam, tea  and turkish delight where the highlights of the trip. ",
+        metadata={"source": "restaurant_info.txt"},
+    )
 ]
 
+print(len(docs))
+
+
+class GraphState(TypedDict):
+    question: str
+    generation: str
+    web_search: str
+    documents: List[str]
+
+
+# 🟠 Retrive
 text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
     chunk_size=250, chunk_overlap=0
 )
 doc_splits = text_splitter.split_documents(docs)
 vectorstore = Chroma.from_documents(
     documents=doc_splits,
-    collection_name="rag-chroma",
+    collection_name="rag-chroma1",
     embedding=OpenAIEmbeddings(),
 )
 retriever = vectorstore.as_retriever()
+def retrieve(state):
+    print("---RETRIEVE---")
+    question = state["question"]
+    documents = retriever.invoke(question)
+    return {"documents": documents, "question": question}
 
+
+
+# 🟠 Generate
 rag_prompt = hub.pull("rlm/rag-prompt")
 rag_llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
 def format_docs(docs):
     return "\\n\\n".join(doc.page_content for doc in docs)
 rag_chain = rag_prompt | rag_llm | StrOutputParser()
+def generate(state):
+    print("---GENERATE---")
+    question, documents = state["question"], state["documents"]
+    generation = rag_chain.invoke({"context": documents, "question": question})
+    return {"documents": documents, "question": question, "generation": generation}
 
 
 
+# 🟠 Evaluate documents
 class RetrievalEvaluator(BaseModel):
     """Classify retrieved documents based on how relevant it is to the user's question."""
     binary_score: str = Field(
@@ -72,27 +105,6 @@ retrieval_evaluator_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 retrieval_grader = retrieval_evaluator_prompt | structured_llm_evaluator
-
-web_search_tool = TavilySearchResults(k=3)
-
-class GraphState(TypedDict):
-    question: str
-    generation: str
-    web_search: str
-    documents: List[str]
-
-def retrieve(state):
-    print("---RETRIEVE---")
-    question = state["question"]
-    documents = retriever.get_relevant_documents(question)
-    return {"documents": documents, "question": question}
-
-def generate(state):
-    print("---GENERATE---")
-    question, documents = state["question"], state["documents"]
-    generation = rag_chain.invoke({"context": documents, "question": question})
-    return {"documents": documents, "question": question, "generation": generation}
-
 def evaluate_documents(state):
     print("---CHECK DOCUMENT RELEVANCE TO QUESTION---")
     question = state["question"]
@@ -114,6 +126,8 @@ def evaluate_documents(state):
         web_search = "Yes"
     return {"documents": filtered_docs, "question": question, "web_search": web_search}
 
+# 🟠 Web search
+web_search_tool = TavilySearchResults(k=3)
 def web_search(state):
     print("---WEB SEARCH---")
     question, documents = state["question"], state["documents"]
@@ -122,6 +136,7 @@ def web_search(state):
     web_results = Document(page_content=web_results)
     documents.append(web_results)
     return {"documents": documents, "question": question}
+
 
 def decide_to_generate(state):
     print("---ASSESS GRADED DOCUMENTS---")
@@ -156,8 +171,10 @@ workflow.add_edge("web_search_node", "generate")
 workflow.add_edge("generate", END)
 app = workflow.compile()
 
-inputs = {"question": "What is the speed of light?"}
+# inputs = {"question": "What is the speed of light?"}
 # inputs = {"question": "When is Bella Vista open?"}
+# inputs = {"question": "When did I visited Istanbul?"}
+inputs = {"question": "Who is Daniel Nastase?"}
 for output in app.stream(inputs):
     for key, value in output.items():
         pprint(f"Node '{key}':")

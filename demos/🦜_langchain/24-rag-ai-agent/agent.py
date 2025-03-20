@@ -227,7 +227,7 @@ try:
     img = app.get_graph(xray=True).draw_mermaid_png()
     
     # Save the image to a file
-    with open('graph.png', 'wb') as f:
+    with open('graph1.png', 'wb') as f:
         f.write(img)
 except Exception as e:
     print(f"Error: {e}")
