@@ -1,0 +1,19 @@
+{
+    "name": "mcp-first",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "tsc && chmod 755 build/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+      "@anthropic-ai/sdk": "^0.39.0",
+      "@modelcontextprotocol/sdk": "^1.7.0",
+      "dotenv": "^16.4.7",
+      "express": "^5.0.1"
+    }
+  }
