@@ -51,6 +51,7 @@ class MCPClient {
   }
 
   async processQuery(query) {
+    console.log("------------ A ")
     const messages = [{ role: "user", content: query }];
     const response = await this.llm.chat.completions.create({
       model: "gpt-4-turbo",
@@ -58,24 +59,26 @@ class MCPClient {
       messages,
       tools: this.tools,
     });
-
+    console.log("------------ B ")
     const finalText = [];
     const toolResults = [];
     const responseMessage = response.choices[0].message;
-
+    console.log("------------ C ")
     if (responseMessage.content) {
       finalText.push(responseMessage.content);
     }
-
+    console.log("------------ D ")
     if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
       for (const toolCall of responseMessage.tool_calls) {
+        console.log("------------ 0 ")
         const toolName = toolCall.function.name;
         const toolArgs = JSON.parse(toolCall.function.arguments);
-
+        console.log("------ 1------")
+        console.log({toolName, toolArgs})
         const result = await this.mcp.callTool({ name: toolName, arguments: toolArgs });
         toolResults.push(result);
         finalText.push(`[Calling tool ${toolName} with args ${JSON.stringify(toolArgs)}]`);
-        
+        console.log("------ 2 ------")
         messages.push(responseMessage);
         messages.push({ 
           role: "tool", 
@@ -83,13 +86,13 @@ class MCPClient {
           name: toolName,
           content: JSON.stringify(result.content)
         });
-
+        console.log("------ 3 ------")
         const followUpResponse = await this.llm.chat.completions.create({
           model: "gpt-4-turbo",
           max_tokens: 1000,
           messages,
         });
-
+        console.log("------ 4 ------")
         finalText.push(followUpResponse.choices[0].message.content || "");
       }
     }
