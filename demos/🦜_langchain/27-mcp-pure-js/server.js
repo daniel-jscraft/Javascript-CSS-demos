@@ -1,9 +1,11 @@
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { 
+  StdioServerTransport 
+} from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+} from '@modelcontextprotocol/sdk/types.js'
 
 const server = new Server(
   {
@@ -15,7 +17,7 @@ const server = new Server(
       tools: {},
     },
   },
-);
+)
 
 // handler that returns list of available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -34,14 +36,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             required: ["city"]
         }
     }],
-  };
-});
+  }
+})
 
 // handler that invokes appropriate tool when called
 server.setRequestHandler(CallToolRequestSchema, async request => {
     console.log()
     if (request.params.name === "get_weather") {
-        const { city} = request.params.arguments;
+        const { city} = request.params.arguments
         return {
             content: [
               {
@@ -49,17 +51,17 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
                 text: "The weather in " + city + " is sunny, 45°.",
               },
             ],
-        };
+        }
     }
-    throw new McpError(ErrorCode.ToolNotFound, "Tool not found");
-});
+    throw new McpError(ErrorCode.ToolNotFound, "Tool not found")
+})
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
 }
 
 main().catch(error => {
-  console.error('Server error:', error);
-  process.exit(1);
-});
+  console.error('Server error:', error)
+  process.exit(1)
+})
